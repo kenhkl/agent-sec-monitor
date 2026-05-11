@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent 安全监控面板</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233b82f6'/%3E%3Cstop offset='100%25' style='stop-color:%232563eb'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='6' fill='%231e293b'/%3E%3Cpath d='M16 3L5 8v11c0 6.5 11 10 11 10s11-3.5 11-10V8L16 3z' fill='url(%23g)'/%3E%3Cpath d='M16 12a2 2 0 100 4 2 2 0 000-4zm0-2a4 4 0 110 8 4 4 0 010-8z' fill='%23e2e8f0'/%3E%3Ccircle cx='16' cy='14' r='1' fill='%23fff'/%3E%3C/svg%3E"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .container { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 24px 0 20px;
+    border-bottom: 1px solid #1e293b;
+    margin-bottom: 24px;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-logo {
+    width: 44px; height: 44px; padding: 4px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .header-logo svg { width: 100%; height: 100%; }
+  .header-title h1 {
+    font-size: 22px; font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-title .subtitle { font-size: 13px; color: #64748b; margin-top: 2px; }
+
+  .header-right { 
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    position: relative;
+  }
+
+  .date-nav {
+    display: flex; align-items: center; gap: 8px;
+    background: #1e293b; border-radius: 8px; padding: 4px;
+  }
+  .date-nav button {
+    background: none; border: none; color: #94a3b8; cursor: pointer;
+    width: 32px; height: 32px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: all .15s;
+  }
+  .date-nav button:hover { background: #334155; color: #e2e8f0; }
+  .date-nav button:disabled { opacity: .3; cursor: not-allowed; }
+  .date-nav .date-label {
+    font-size: 14px; font-weight: 600; color: #e2e8f0;
+    min-width: 110px; text-align: center; cursor: pointer;
+  }
+  .date-nav .date-label:hover { color: #60a5fa; }
+
+  .calendar-popup {
+    position: absolute; top: 100%; right: 0;
+    background: #1e293b; border: 1px solid #334155;
+    border-radius: 8px; padding: 12px; z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    min-width: 280px;
+  }
+  .calendar-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .calendar-title { font-weight: 600; color: #e2e8f0; }
+  .calendar-close {
+    background: none; border: none; color: #64748b; font-size: 20px;
+    cursor: pointer; padding: 0; line-height: 1;
+  }
+  .calendar-close:hover { color: #e2e8f0; }
+  .calendar-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+    max-height: 200px; overflow-y: auto;
+  }
+  .calendar-day {
+    padding: 6px; text-align: center; font-size: 12px;
+    color: #64748b; border-radius: 4px; cursor: default;
+  }
+  .calendar-day.has-data {
+    color: #e2e8f0; cursor: pointer;
+    background: #334155;
+  }
+  .calendar-day.has-data:hover { background: #475569; }
+  .calendar-day.today { border: 1px solid #60a5fa; }
+  .calendar-day.selected { background: #2563eb; color: #fff; }
+  .calendar-day.header { font-weight: 600; color: #94a3b8; cursor: default; }
+
+  .freshness {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: #64748b;
+  }
+  .freshness .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #22c55e; flex-shrink: 0;
+  }
+  .freshness .dot.stale { background: #eab308; }
+  .freshness .dot.error { background: #ef4444; }
+
+  /* Stats Dashboard */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: #1e293b; border-radius: 10px; padding: 16px 18px;
+    border: 1px solid #334155;
+  }
+  .stat-card .stat-label { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+  .stat-card .stat-value { font-size: 26px; font-weight: 700; }
+  .stat-card .stat-sub { font-size: 11px; color: #475569; margin-top: 2px; }
+
+  .stat-card.severity-critical .stat-value { color: #7f1d1d; }
+  .stat-card.severity-high .stat-value { color: #ef4444; }
+  .stat-card.severity-medium .stat-value { color: #eab308; }
+  .stat-card.severity-low .stat-value { color: #6b7280; }
+
+  .stat-card.product .stat-value { color: #60a5fa; font-size: 14px; font-weight: 600; }
+  .stat-card.total .stat-value { color: #a78bfa; }
+
+  /* Filter Bar */
+  .filter-bar {
+    display: flex; align-items: center; gap: 12px;
+    flex-wrap: wrap;
+    background: #1e293b; border-radius: 10px; padding: 12px 16px;
+    margin-bottom: 20px;
+    border: 1px solid #334155;
+  }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .filter-group label { font-size: 12px; color: #64748b; white-space: nowrap; }
+
+  .filter-bar select {
+    background: #0f172a; color: #e2e8f0; border: 1px solid #334155;
+    border-radius: 6px; padding: 6px 28px 6px 10px;
+    font-size: 13px; cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center;
+  }
+
+  .type-filter {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .type-filter .type-badge-filter {
+    padding: 3px 10px; border-radius: 12px; font-size: 11px; cursor: pointer;
+    border: 1px solid transparent; transition: all .15s;
+    user-select: none; opacity: .7;
+  }
+  .type-filter .type-badge-filter.active { opacity: 1; border-color: currentColor; }
+  .type-filter .type-badge-filter:hover { opacity: 1; }
+
+  .severity-filter {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .severity-filter .sev-btn {
+    padding: 3px 10px; border-radius: 12px; font-size: 11px; cursor: pointer;
+    border: 1px solid transparent; transition: all .15s;
+    user-select: none; opacity: .7; background: transparent; color: #e2e8f0;
+  }
+  .severity-filter .sev-btn.active { opacity: 1; border-color: currentColor; }
+  .severity-filter .sev-btn:hover { opacity: 1; }
+  .severity-filter .sev-btn.s-critical { color: #7f1d1d; }
+  .severity-filter .sev-btn.s-high { color: #ef4444; }
+  .severity-filter .sev-btn.s-medium { color: #eab308; }
+  .severity-filter .sev-btn.s-low { color: #6b7280; }
+
+  .search-bar {
+    flex: 1; min-width: 180px; position: relative;
+  }
+  .search-bar input {
+    width: 100%; background: #0f172a; border: 1px solid #334155;
+    border-radius: 6px; padding: 6px 12px 6px 32px;
+    color: #e2e8f0; font-size: 13px; outline: none;
+    transition: border-color .15s;
+  }
+  .search-bar input:focus { border-color: #3b82f6; }
+  .search-bar input::placeholder { color: #475569; }
+  .search-bar .search-icon {
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    color: #475569; font-size: 13px; pointer-events: none;
+  }
+
+  .filter-reset {
+    background: none; border: 1px solid #334155; color: #94a3b8;
+    border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer;
+    transition: all .15s;
+  }
+  .filter-reset:hover { background: #334155; color: #e2e8f0; }
+
+  /* Results info */
+  .results-info {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; font-size: 13px; color: #64748b;
+  }
+  .results-info .count em { color: #e2e8f0; font-style: normal; font-weight: 600; }
+
+  /* Card Grid */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: #1e293b; border-radius: 10px; padding: 18px 20px;
+    border: 1px solid #334155; cursor: pointer;
+    transition: all .2s; display: flex; flex-direction: column;
+  }
+  .card:hover { border-color: #475569; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,.3); }
+
+  .card-title {
+    font-size: 15px; font-weight: 600; color: #e2e8f0; margin-bottom: 10px;
+    line-height: 1.5; word-break: break-word;
+  }
+  .card-title a {
+    color: inherit; text-decoration: none;
+  }
+  .card-title a:hover { color: #60a5fa; }
+
+  .card-meta {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; line-height: 1.5;
+  }
+  .badge-type-unfixed { background: rgba(239,68,68,.2); color: #fca5a5; }
+  .badge-type-fixed { background: rgba(34,197,94,.2); color: #86efac; }
+  .badge-type-prompt-inject { background: rgba(249,115,22,.2); color: #fdba74; }
+  .badge-type-sandbox-escape { background: rgba(59,130,246,.2); color: #93c5fd; }
+  .badge-type-supply-chain { background: rgba(168,85,247,.2); color: #c4b5fd; }
+  .badge-type-reproducible { background: rgba(34,197,94,.2); color: #86efac; }
+  .badge-type-rce { background: rgba(239,68,68,.2); color: #fca5a5; }
+  .badge-type-auth-bypass { background: rgba(250,204,21,.2); color: #fde047; }
+  .badge-type-info-leak { background: rgba(14,165,233,.2); color: #7dd3fc; }
+  .badge-type-default { background: rgba(148,163,184,.2); color: #cbd5e1; }
+
+  .badge-severity-critical { background: rgba(127,29,29,.6); color: #fca5a5; }
+  .badge-severity-high { background: rgba(239,68,68,.2); color: #fca5a5; }
+  .badge-severity-medium { background: rgba(234,179,8,.2); color: #fde047; }
+  .badge-severity-low { background: rgba(107,114,128,.2); color: #9ca3af; }
+
+  .badge-product {
+    background: rgba(59,130,246,.15); color: #93c5fd;
+  }
+  .badge-source {
+    background: rgba(148,163,184,.12); color: #94a3b8;
+  }
+  .badge-cve {
+    background: rgba(239,68,68,.15); color: #fca5a5;
+  }
+
+  .card-desc {
+    font-size: 13px; color: #94a3b8; line-height: 1.7;
+    margin-bottom: 8px; flex: 1;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden; word-break: break-word;
+  }
+  .card-repro {
+    font-size: 13px; color: #8b9e7a; line-height: 1.7;
+    margin-bottom: 8px; margin-top: 4px;
+    word-break: break-word;
+  }
+  .repro-label { color: #6b8a5e; font-weight: 500; }
+  .card.expanded .card-desc {
+    display: block; -webkit-line-clamp: unset;
+  }
+  .card-desc .expand-hint {
+    display: inline; color: #60a5fa; cursor: pointer; font-size: 12px;
+    margin-left: 4px;
+  }
+  .card-desc .expand-hint:hover { text-decoration: underline; }
+
+  .card-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: #475569; margin-top: auto; padding-top: 8px;
+    border-top: 1px solid #334155;
+  }
+
+  /* No Data */
+  .no-data {
+    text-align: center; padding: 80px 20px; color: #64748b;
+  }
+  .no-data .icon { font-size: 56px; margin-bottom: 16px; opacity: .5; }
+  .no-data h3 { font-size: 18px; color: #94a3b8; margin-bottom: 8px; }
+  .no-data p { font-size: 14px; max-width: 400px; margin: 0 auto; line-height: 1.7; }
+  .no-data .retry-btn {
+    margin-top: 20px; background: #1e293b; border: 1px solid #334155;
+    color: #94a3b8; padding: 8px 20px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; transition: all .15s;
+  }
+  .no-data .retry-btn:hover { background: #334155; color: #e2e8f0; }
+
+  /* Loading */
+  .loading {
+    text-align: center; padding: 80px 20px; color: #64748b;
+  }
+  .loading .spinner {
+    width: 36px; height: 36px; border: 3px solid #1e293b;
+    border-top-color: #3b82f6; border-radius: 50%;
+    animation: spin .8s linear infinite; margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container { padding: 12px 16px; }
+    .header { flex-direction: column; align-items: flex-start; }
+    .header-right { width: 100%; justify-content: space-between; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .card-grid { grid-template-columns: 1fr; }
+    .filter-bar { flex-direction: column; align-items: stretch; }
+    .filter-group { flex-wrap: wrap; }
+    .search-bar { min-width: unset; }
+    .date-nav .date-label { min-width: 90px; font-size: 13px; }
+  }
+
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat-card .stat-value { font-size: 22px; }
+    .header-title h1 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="header-logo"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 3L5 8v11c0 6.5 11 10 11 10s11-3.5 11-10V8L16 3z" fill="white" opacity=".95"/><circle cx="18" cy="12.5" r="1" fill="#60a5fa"/><circle cx="14" cy="12.5" r="1" fill="#60a5fa"/><circle cx="16" cy="16" r="1.5" fill="#60a5fa"/><circle cx="16" cy="20.5" r="1" fill="#60a5fa" opacity=".7"/></svg></div>
+      <div class="header-title">
+        <h1>AI Agent 安全风险监控</h1>
+        <div class="subtitle">每日自动汇总主流 AI Agent 安全漏洞与可复现攻击</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="date-nav">
+        <button id="prevDay" title="前一天">&#9664;</button>
+        <span class="date-label" id="dateLabel">--</span>
+        <button id="nextDay" title="后一天">&#9654;</button>
+      </div>
+      <div id="calendarPopup" class="calendar-popup" style="display:none">
+        <div class="calendar-header">
+          <span class="calendar-title">选择日期</span>
+          <button class="calendar-close" id="calendarClose">&times;</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+      <div class="freshness">
+        <span class="dot" id="freshnessDot"></span>
+        <span id="freshnessText">加载中...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats" id="statsContainer">
+    <div class="stat-card total">
+      <div class="stat-label">总安全项</div>
+      <div class="stat-value" id="statTotal">--</div>
+      <div class="stat-sub">Total Items</div>
+    </div>
+    <div class="stat-card severity-critical">
+      <div class="stat-label">严重</div>
+      <div class="stat-value" id="statCritical">0</div>
+      <div class="stat-sub">Critical</div>
+    </div>
+    <div class="stat-card severity-high">
+      <div class="stat-label">高危</div>
+      <div class="stat-value" id="statHigh">0</div>
+      <div class="stat-sub">High</div>
+    </div>
+    <div class="stat-card severity-medium">
+      <div class="stat-label">中危</div>
+      <div class="stat-value" id="statMedium">0</div>
+      <div class="stat-sub">Medium</div>
+    </div>
+    <div class="stat-card severity-low">
+      <div class="stat-label">低危</div>
+      <div class="stat-value" id="statLow">0</div>
+      <div class="stat-sub">Low</div>
+    </div>
+    <div class="stat-card total" id="productStatsContainer" style="grid-column: 1 / -1;">
+      <div class="stat-label">产品分布</div>
+      <div id="productStats" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;"></div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>产品</label>
+      <select id="productFilter">
+        <option value="">全部</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>类型</label>
+      <div class="type-filter" id="typeFilter"></div>
+    </div>
+    <div class="filter-group">
+      <label>严重等级</label>
+      <div class="severity-filter" id="severityFilter">
+        <button class="sev-btn active" data-sev="">全部</button>
+        <button class="sev-btn s-critical" data-sev="严重">严重</button>
+        <button class="sev-btn s-high" data-sev="高危">高危</button>
+        <button class="sev-btn s-medium" data-sev="中危">中危</button>
+        <button class="sev-btn s-low" data-sev="低危">低危</button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">&#128269;</span>
+      <input type="text" id="searchInput" placeholder="搜索标题、描述、CVE...">
+    </div>
+    <button class="filter-reset" id="resetFilters">重置</button>
+  </div>
+
+  <!-- Results Info -->
+  <div class="results-info">
+    <span class="count">显示 <em id="displayCount">0</em> 条结果</span>
+    <span id="dataDateInfo"></span>
+  </div>
+
+  <!-- Card Grid -->
+  <div id="cardGrid" class="card-grid"></div>
+
+  <!-- Loading -->
+  <div id="loadingState" class="loading" style="display:none;">
+    <div class="spinner"></div>
+    <p>正在加载安全监控数据...</p>
+  </div>
+
+  <!-- No Data -->
+  <div id="noDataState" class="no-data" style="display:none;">
+    <div class="icon">&#128737;</div>
+    <h3>暂无安全数据</h3>
+    <p id="noDataMsg">该日期暂无可用安全监控数据。</p>
+    <button class="retry-btn" id="retryBtn">重试加载</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // State
+  let allData = [];
+  let filteredData = [];
+  let currentDate = new Date();
+  let availableDates = new Set();
+  let activeFilters = {
+    product: '',
+    types: [],
+    levels: [],
+    search: '',
+  };
+
+  const TYPE_COLORS = {
+    '未修复': 'badge-type-unfixed',
+    '已修复': 'badge-type-fixed',
+    '提示注入': 'badge-type-prompt-inject',
+    '沙箱逃逸': 'badge-type-sandbox-escape',
+    '供应链攻击': 'badge-type-supply-chain',
+    '可复现': 'badge-type-reproducible',
+    '远程代码执行': 'badge-type-rce',
+    '权限绕过': 'badge-type-auth-bypass',
+    '信息泄露': 'badge-type-info-leak',
+  };
+
+  const SEVERITY_LABELS = ['严重', '高危', '中危', '低危'];
+  const SEVERITY_DISPLAY = { '严重': '严重', '高危': '高危', '中危': '中危', '低危': '低危' };
+
+  // DOM refs
+  const dateLabel = document.getElementById('dateLabel');
+  const freshnessDot = document.getElementById('freshnessDot');
+  const freshnessText = document.getElementById('freshnessText');
+  const statTotal = document.getElementById('statTotal');
+  const statCritical = document.getElementById('statCritical');
+  const statHigh = document.getElementById('statHigh');
+  const statMedium = document.getElementById('statMedium');
+  const statLow = document.getElementById('statLow');
+  const productStats = document.getElementById('productStats');
+  const productFilter = document.getElementById('productFilter');
+  const typeFilterEl = document.getElementById('typeFilter');
+  const severityFilter = document.getElementById('severityFilter');
+  const searchInput = document.getElementById('searchInput');
+  const resetBtn = document.getElementById('resetFilters');
+  const cardGrid = document.getElementById('cardGrid');
+  const loadingState = document.getElementById('loadingState');
+  const noDataState = document.getElementById('noDataState');
+  const noDataMsg = document.getElementById('noDataMsg');
+  const retryBtn = document.getElementById('retryBtn');
+  const displayCount = document.getElementById('displayCount');
+  const dataDateInfo = document.getElementById('dataDateInfo');
+  const prevDayBtn = document.getElementById('prevDay');
+  const nextDayBtn = document.getElementById('nextDay');
+
+  // Format date as YYYY-MM-DD
+  function formatDate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
+
+  function formatDisplayDate(d) {
+    const ds = formatDate(d);
+    const today = formatDate(new Date());
+    if (ds === today) return ds + ' (今天)';
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (ds === formatDate(yesterday)) return ds + ' (昨天)';
+    return ds;
+  }
+
+  // Type badge CSS class
+  function getTypeClass(type) {
+    return TYPE_COLORS[type] || 'badge-type-default';
+  }
+
+  // Severity badge class
+  function getSeverityClass(sev) {
+    if (sev === '严重') return 'badge-severity-critical';
+    if (sev === '高危') return 'badge-severity-high';
+    if (sev === '中危') return 'badge-severity-medium';
+    if (sev === '低危') return 'badge-severity-low';
+    return 'badge-severity-high';
+  }
+
+  // Escape HTML
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  // Truncate description
+  function truncateDesc(text, maxLen = 200) {
+    if (!text) return '';
+    // Strip markdown-ish headers for display
+    let clean = text.replace(/^#{1,6}\s+/gm, '').replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n');
+    if (clean.length <= maxLen) return esc(clean);
+    return esc(clean.substring(0, maxLen)) + '... <span class="expand-hint">展开</span>';
+  }
+
+  // Build card HTML
+  function createCardHTML(item) {
+    const typesHtml = (item.type || []).map(t =>
+      '<span class="badge ' + getTypeClass(t) + '">' + esc(t) + '</span>'
+    ).join(' ');
+
+    const sevHtml = '<span class="badge ' + getSeverityClass(item.level) + '">' + esc(item.level) + '</span>';
+
+    const productHtml = item.product ? '<span class="badge badge-product">' + esc(item.product) + '</span>' : '';
+    const sourceHtml = item.source ? '<span class="badge badge-source">' + esc(item.source) + '</span>' : '';
+    const cveStr = Array.isArray(item.cve) ? item.cve.filter(Boolean).join(', ') : (item.cve || '');
+    const cveHtml = cveStr ? '<span class="badge badge-cve">' + esc(cveStr) + '</span>' : '';
+
+    // 显示摘要（优先 LLM 总结）
+    const summary = item.llm_summary || item.desc || '';
+    const descHtml = summary ? '<div class="card-desc">' + truncateDesc(summary) + '</div>' : '';
+
+    // LLM 复现步骤
+    const reproHtml = item.llm_reproduction && item.llm_reproduction !== '暂无'
+      ? '<div class="card-repro"><span class="repro-label">🔬 复现步骤：</span>' + esc(item.llm_reproduction) + '</div>'
+      : '';
+
+    // 根据来源生成日期标签
+    const dateRaw = item.updated_at ? item.updated_at.substring(0, 10) : (item.created_at ? item.created_at.substring(0, 10) : '');
+    var dateLabel = '';
+    if (dateRaw) {
+      var src = (item.source || '').toLowerCase();
+      if (src.indexOf('issue') !== -1) dateLabel = '最近更新: ' + dateRaw;
+      else if (src.indexOf('advisory') !== -1) dateLabel = '公告发布: ' + dateRaw;
+      else if (src.indexOf('osv') !== -1) dateLabel = '漏洞收录: ' + dateRaw;
+      else if (src.indexOf('hacker news') !== -1) dateLabel = '发布时间: ' + dateRaw;
+      else if (src.indexOf('hn') !== -1) dateLabel = '发布时间: ' + dateRaw;
+      else dateLabel = '时间: ' + dateRaw;
+    }
+
+    const displayTitle = item.llm_title || item.title || '';
+    const origTitle = item.llm_title ? ' title="' + esc(item.title || '') + '"' : '';
+
+    return '<div class="card" data-index="">' +
+      '<div class="card-title"><a href="' + esc(item.url || '#') + '" target="_blank" rel="noopener"' + origTitle + '>' + esc(displayTitle) + '</a></div>' +
+      '<div class="card-meta">' + typesHtml + ' ' + sevHtml + ' ' + productHtml + ' ' + sourceHtml + ' ' + cveHtml + '</div>' +
+      descHtml +
+      reproHtml +
+      '<div class="card-footer"><span>' + dateLabel + '</span></div>' +
+      '</div>';
+  }
+
+  // Render cards
+  function render() {
+    const product = activeFilters.product;
+    const types = activeFilters.types;
+    const levels = activeFilters.levels;
+    const search = activeFilters.search.toLowerCase().trim();
+
+    filteredData = allData.filter(function(item) {
+      if (product && item.product !== product) return false;
+      if (types.length > 0) {
+        const itemTypes = item.type || [];
+        const hasAll = types.every(function(t) { return itemTypes.indexOf(t) !== -1; });
+        if (!hasAll) return false;
+      }
+      if (levels.length > 0) {
+        if (levels.indexOf(item.level) === -1) return false;
+      }
+      if (search) {
+        const haystack = (item.title + ' ' + (item.desc || '') + ' ' + (item.cve || '') + ' ' + (item.source || '')).toLowerCase();
+        if (haystack.indexOf(search) === -1) return false;
+      }
+      return true;
+    });
+
+    displayCount.textContent = filteredData.length;
+
+    if (filteredData.length === 0) {
+      cardGrid.innerHTML = '<div class="no-data" style="grid-column:1/-1;padding:40px 20px"><div class="icon">&#128269;</div><h3>无匹配结果</h3><p>尝试调整筛选条件或搜索关键词</p></div>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < filteredData.length; i++) {
+      html += createCardHTML(filteredData[i]);
+    }
+    cardGrid.innerHTML = html;
+
+    // Attach click-to-expand
+    var cards = cardGrid.querySelectorAll('.card');
+    for (var j = 0; j < cards.length; j++) {
+      (function(card, idx) {
+        card.addEventListener('click', function(e) {
+          if (e.target.tagName === 'A' || e.target.closest('a')) return;
+          card.classList.toggle('expanded');
+          var descEl = card.querySelector('.card-desc');
+          if (descEl) {
+            if (card.classList.contains('expanded')) {
+              descEl.innerHTML = esc(filteredData[idx].desc || '');
+            } else {
+              descEl.innerHTML = truncateDesc(filteredData[idx].desc);
+            }
+          }
+        });
+        card.setAttribute('data-index', idx);
+      })(cards[j], j);
+    }
+  }
+
+  // Update stats
+  function updateStats(data) {
+    var total = data.length;
+    var critical = 0, high = 0, medium = 0, low = 0;
+    var prodMap = {};
+
+    for (var i = 0; i < data.length; i++) {
+      var item = data[i];
+      if (item.level === '严重') critical++;
+      else if (item.level === '高危') high++;
+      else if (item.level === '中危') medium++;
+      else if (item.level === '低危') low++;
+      else high++;
+
+      if (item.product) {
+        prodMap[item.product] = (prodMap[item.product] || 0) + 1;
+      }
+    }
+
+    statTotal.textContent = total;
+    statCritical.textContent = critical;
+    statHigh.textContent = high;
+    statMedium.textContent = medium;
+    statLow.textContent = low;
+
+    var prodHtml = '';
+    var prodKeys = Object.keys(prodMap).sort();
+    for (var j = 0; j < prodKeys.length; j++) {
+      var k = prodKeys[j];
+      prodHtml += '<div class="stat-card product" style="padding:8px 14px;flex:1;min-width:100px">' +
+        '<div class="stat-label">' + esc(k) + '</div>' +
+        '<div class="stat-value" style="font-size:20px">' + prodMap[k] + '</div>' +
+        '</div>';
+    }
+    productStats.innerHTML = prodHtml || '<span style="color:#64748b;font-size:13px">暂无产品数据</span>';
+  }
+
+  // Update filter UI
+  function updateFilters(data) {
+    // Product dropdown
+    var prodSet = {};
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].product) {
+        if (!prodSet[data[i].product]) prodSet[data[i].product] = 0;
+        prodSet[data[i].product]++;
+      }
+    }
+    var prodKeys = Object.keys(prodSet).sort();
+    var curVal = productFilter.value;
+    productFilter.innerHTML = '<option value="">全部产品</option>';
+    for (var j = 0; j < prodKeys.length; j++) {
+      var opt = document.createElement('option');
+      opt.value = prodKeys[j];
+      opt.textContent = prodKeys[j] + ' (' + prodSet[prodKeys[j]] + ')';
+      productFilter.appendChild(opt);
+    }
+    if (prodKeys.indexOf(curVal) !== -1) productFilter.value = curVal;
+    else if (curVal !== '') productFilter.value = '';
+
+    // Type badges
+    var typeSet = {};
+    for (var k = 0; k < data.length; k++) {
+      var types = data[k].type || [];
+      for (var m = 0; m < types.length; m++) {
+        typeSet[types[m]] = true;
+      }
+    }
+    var typeKeys = Object.keys(typeSet).sort();
+    typeFilterEl.innerHTML = '<span class="type-badge-filter active" data-type="" style="opacity:1;border-color:#64748b;color:#94a3b8">全部</span>';
+    for (var n = 0; n < typeKeys.length; n++) {
+      var badge = document.createElement('span');
+      badge.className = 'type-badge-filter badge-type-default';
+      badge.className = 'type-badge-filter ' + (TYPE_COLORS[typeKeys[n]] || 'badge-type-default');
+      badge.textContent = typeKeys[n];
+      badge.setAttribute('data-type', typeKeys[n]);
+      if (activeFilters.types.indexOf(typeKeys[n]) !== -1) {
+        badge.classList.add('active');
+      }
+      typeFilterEl.appendChild(badge);
+    }
+  }
+
+  // Load data for a specific date
+  function loadData(dateStr) {
+    loadingState.style.display = 'block';
+    noDataState.style.display = 'none';
+    cardGrid.innerHTML = '';
+    freshnessDot.className = 'dot';
+    freshnessText.textContent = '加载中...';
+
+    // 方式1: fetch JSON（HTTP 服务器模式下使用）
+    fetch('data/' + dateStr + '.json')
+      .then(function(resp) {
+        if (!resp.ok) throw new Error('Not found');
+        return resp.json();
+      })
+      .then(function(data) {
+        onDataLoaded(dateStr, data);
+      })
+      .catch(function() {
+        // 方式2: 动态加载 .js 文件（file:// 本地打开时使用）
+        loadDataViaScript(dateStr);
+      });
+  }
+
+  // 通过 <script> 标签加载数据（支持 file:// 协议）
+  function loadDataViaScript(dateStr) {
+    // 清理旧的 script 标签和过期数据
+    var oldScript = document.getElementById('data-script');
+    if (oldScript) oldScript.remove();
+    delete window.__agentSecData;
+
+    var script = document.createElement('script');
+    script.id = 'data-script';
+    script.src = 'data/' + dateStr + '.js';
+    script.onload = function() {
+      if (window.__agentSecData) {
+        onDataLoaded(dateStr, window.__agentSecData);
+      } else {
+        onDataFailed(dateStr);
+      }
+    };
+    script.onerror = function() {
+      onDataFailed(dateStr);
+    };
+    document.head.appendChild(script);
+  }
+
+  function onDataLoaded(dateStr, rawData) {
+    var items = Array.isArray(rawData) ? rawData : (rawData.items || []);
+    loadingState.style.display = 'none';
+    availableDates.add(dateStr);
+
+    allData = items;
+    currentDate = new Date(dateStr.replace(/-/g, '/'));
+
+    dateLabel.textContent = formatDisplayDate(currentDate);
+    freshnessDot.className = 'dot';
+    freshnessText.textContent = '数据已加载 (' + items.length + ' 条)';
+
+    updateStats(items);
+    updateFilters(items);
+    activeFilters.product = '';
+    activeFilters.types = [];
+    activeFilters.levels = [];
+    activeFilters.search = '';
+    productFilter.value = '';
+    searchInput.value = '';
+    document.querySelectorAll('.type-badge-filter').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.sev-btn').forEach(function(el) { el.classList.remove('active'); });
+    // 只点亮"全部"
+    var ta = typeFilterEl.querySelector('[data-type=""]');
+    if (ta) ta.classList.add('active');
+    var sa = severityFilter.querySelector('[data-sev=""]');
+    if (sa) sa.classList.add('active');
+
+    render();
+    updateDateNav();
+  }
+
+  function onDataFailed(dateStr) {
+    loadingState.style.display = 'none';
+    // 尝试寻找附近有数据的日期
+    tryFallbackDates(dateStr, 1);
+  }
+
+  function tryFallbackDates(baseStr, depth) {
+    if (depth > 14) {
+      // 前后都找不到数据
+      noDataState.style.display = 'block';
+      noDataMsg.textContent = '未找到可用的安全数据。';
+      freshnessDot.className = 'dot error';
+      freshnessText.textContent = '无可用数据';
+      dateLabel.textContent = baseStr;
+      return;
+    }
+
+    // 先尝试找之前的有数据日期
+    var d1 = new Date(baseStr.replace(/-/g, '/'));
+    d1.setDate(d1.getDate() - depth);
+    var prevStr = formatDate(d1);
+
+    // 再尝试找之后的有数据日期
+    var d2 = new Date(baseStr.replace(/-/g, '/'));
+    d2.setDate(d2.getDate() + depth);
+    var nextStr = formatDate(d2);
+
+    // 优先使用之前日期（更接近目标日期）
+    var tryDate = prevStr;
+    var tryDir = 'prev';
+
+    fetch('data/' + tryDate + '.json')
+      .then(function(r) {
+        if (!r.ok) throw new Error('Not found');
+        return r.json();
+      })
+      .then(function(data) {
+        onDataLoaded(tryDate, data);
+        dateLabel.textContent = formatDisplayDate(d1);
+        freshnessDot.className = 'dot stale';
+        freshnessText.textContent = '使用 ' + tryDate + ' 数据';
+      })
+      .catch(function() {
+        // fetch JSON 失败，尝试 script 方式
+        tryFallbackViaScript(tryDate, baseStr, depth, tryDir);
+      });
+  }
+
+  function tryFallbackViaScript(tryDate, baseStr, depth, tryDir) {
+    var oldScript = document.getElementById('data-script');
+    if (oldScript) oldScript.remove();
+    delete window.__agentSecData;
+
+    var script = document.createElement('script');
+    script.id = 'data-script';
+    script.src = 'data/' + tryDate + '.js';
+    script.onload = function() {
+      if (window.__agentSecData) {
+        var d = new Date(tryDate.replace(/-/g, '/'));
+        onDataLoaded(tryDate, window.__agentSecData);
+        dateLabel.textContent = formatDisplayDate(d);
+        freshnessDot.className = 'dot stale';
+        freshnessText.textContent = '使用 ' + tryDate + ' 数据';
+      } else {
+        // 这个方向找不到，尝试另一个方向
+        var d2 = new Date(baseStr.replace(/-/g, '/'));
+        d2.setDate(d2.getDate() + depth);
+        var nextStr = formatDate(d2);
+        tryFallbackViaScript(nextStr, baseStr, depth, 'next');
+      }
+    };
+    script.onerror = function() {
+      // 尝试另一个方向
+      var d2 = new Date(baseStr.replace(/-/g, '/'));
+      d2.setDate(d2.getDate() + depth);
+      var nextStr = formatDate(d2);
+      tryFallbackViaScript(nextStr, baseStr, depth, 'next');
+    };
+    document.head.appendChild(script);
+  }
+
+  function updateDateNav() {
+    prevDayBtn.disabled = false;
+    nextDayBtn.disabled = false;
+  }
+
+  // Navigate date
+  function goToDate(offset) {
+    var d = new Date(currentDate);
+    d.setDate(d.getDate() + offset);
+    var ds = formatDate(d);
+    dateLabel.textContent = '加载中...';
+    loadData(ds);
+  }
+
+  // Reset filters
+  function resetFilters() {
+    activeFilters.product = '';
+    activeFilters.types = [];
+    activeFilters.levels = [];
+    activeFilters.search = '';
+    productFilter.value = '';
+    searchInput.value = '';
+    document.querySelectorAll('.type-badge-filter').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.sev-btn').forEach(function(el) { el.classList.remove('active'); });
+    var ta2 = typeFilterEl.querySelector('[data-type=""]');
+    if (ta2) ta2.classList.add('active');
+    var sa2 = severityFilter.querySelector('[data-sev=""]');
+    if (sa2) sa2.classList.add('active');
+    render();
+  }
+
+  // Init
+  function init() {
+    var today = formatDate(new Date());
+
+    // Event listeners
+    productFilter.addEventListener('change', function() {
+      activeFilters.product = this.value;
+      render();
+    });
+
+    typeFilterEl.addEventListener('click', function(e) {
+      var badge = e.target.closest('.type-badge-filter');
+      if (!badge) return;
+      var type = badge.getAttribute('data-type');
+      if (!type) {
+        // "全部" — 清空所有选中
+        activeFilters.types = [];
+        typeFilterEl.querySelectorAll('.type-badge-filter').forEach(function(el) { el.classList.remove('active'); });
+        badge.classList.add('active');
+        render();
+        return;
+      }
+      var idx = activeFilters.types.indexOf(type);
+      if (idx !== -1) {
+        // 取消选中
+        activeFilters.types.splice(idx, 1);
+        badge.classList.remove('active');
+      } else {
+        // 选中
+        activeFilters.types.push(type);
+        badge.classList.add('active');
+      }
+      // 如果空选，点亮"全部"
+      var allBadge = typeFilterEl.querySelector('[data-type=""]');
+      if (allBadge) {
+        if (activeFilters.types.length === 0) allBadge.classList.add('active');
+        else allBadge.classList.remove('active');
+      }
+      render();
+    });
+
+    severityFilter.addEventListener('click', function(e) {
+      var btn = e.target.closest('.sev-btn');
+      if (!btn) return;
+      var sev = btn.getAttribute('data-sev');
+      if (!sev) {
+        // "全部" — 清空所有选中
+        activeFilters.levels = [];
+        severityFilter.querySelectorAll('.sev-btn').forEach(function(el) { el.classList.remove('active'); });
+        btn.classList.add('active');
+        render();
+        return;
+      }
+      var idx = activeFilters.levels.indexOf(sev);
+      if (idx !== -1) {
+        activeFilters.levels.splice(idx, 1);
+        btn.classList.remove('active');
+      } else {
+        activeFilters.levels.push(sev);
+        btn.classList.add('active');
+      }
+      var allBtn = severityFilter.querySelector('[data-sev=""]');
+      if (allBtn) {
+        if (activeFilters.levels.length === 0) allBtn.classList.add('active');
+        else allBtn.classList.remove('active');
+      }
+      render();
+    });
+
+    var searchTimer;
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function() {
+        activeFilters.search = searchInput.value;
+        render();
+      }, 250);
+    });
+
+    resetBtn.addEventListener('click', resetFilters);
+
+    prevDayBtn.addEventListener('click', function() { goToDate(-1); });
+    nextDayBtn.addEventListener('click', function() { goToDate(1); });
+
+    // 日历选择器
+    const calendarPopup = document.getElementById('calendarPopup');
+    const calendarGrid = document.getElementById('calendarGrid');
+    const calendarClose = document.getElementById('calendarClose');
+
+    dateLabel.addEventListener('click', function(e) {
+      e.stopPropagation();
+      showCalendar();
+    });
+
+    calendarClose.addEventListener('click', function() {
+      calendarPopup.style.display = 'none';
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!calendarPopup.contains(e.target) && e.target !== dateLabel) {
+        calendarPopup.style.display = 'none';
+      }
+    });
+
+    function showCalendar() {
+      const dates = Array.from(availableDates).sort();
+      calendarGrid.innerHTML = '';
+
+      // 星期标题
+      const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+      weekDays.forEach(function(d) {
+        var el = document.createElement('div');
+        el.className = 'calendar-day header';
+        el.textContent = d;
+        calendarGrid.appendChild(el);
+      });
+
+      // 生成最近30天的日历
+      var today = new Date();
+      for (let i = 29; i >= 0; i--) {
+        var d = new Date(today);
+        d.setDate(d.getDate() - i);
+        let dateStr = formatDate(d);
+        var hasData = availableDates.has(dateStr);
+        var isSelected = dateStr === formatDate(currentDate);
+
+        var el = document.createElement('div');
+        el.className = 'calendar-day';
+        if (hasData) el.classList.add('has-data');
+        if (i === 0) el.classList.add('today');
+        if (isSelected) el.classList.add('selected');
+        el.textContent = d.getDate();
+
+        if (hasData) {
+          el.addEventListener('click', function() {
+            loadData(dateStr);
+            calendarPopup.style.display = 'none';
+          });
+        }
+
+        calendarGrid.appendChild(el);
+      }
+
+      calendarPopup.style.display = 'block';
+    }
+
+    retryBtn.addEventListener('click', function() {
+      loadData(formatDate(new Date()));
+    });
+
+    // Load today's data
+    loadData(today);
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
