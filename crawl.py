@@ -82,6 +82,13 @@ TARGET_REPOS = [
     "Aider-AI/aider",               # Aider
     "continuedev/continue",         # Continue
     "TabbyML/tabby",                # TabbyML
+    "anomalyco/opencode",           # OpenCode（61k+ stars，CVE-2026-22812 未认证RCE）
+    "NousResearch/hermes-agent",    # Hermes Agent（43k+ stars，自我进化AI框架）
+    "zeroclaw-labs/zeroclaw",       # ZeroClaw（31k+ stars，Rust 实现轻量AI助手）
+    "nanocoai/nanoclaw",            # NanoClaw（28k+ stars，容器隔离安全版OpenClaw替代）
+    "HKUDS/nanobot",                # NanoBot（42k+ stars，超轻量Python AI Agent 仅4k行）
+    "sipeed/picoclaw",              # PicoClaw（28k+ stars，Go实现 <10MB内存 $10硬件）
+    "nearai/ironclaw",              # IronClaw（12k+ stars，Rust WASM沙盒 隐私优先Agent OS）
 ]
 
 CLOSED_SOURCE_TOOLS = ["Cursor", "Windsurf", "Copilot", "Devin"]
@@ -98,6 +105,10 @@ HN_KEYWORDS = [
     "AI agent security vulnerability",
     "claude code cursor sandbox exploit",
     "coding agent prompt injection RCE",
+    "opencode security vulnerability CVE",
+    "hermes agent security exploit",
+    "openclaw security vulnerability zeroclaw nanoclaw",
+    "nanobot picoclaw ironclaw AI agent exploit",
 ]
 
 HEADERS = {
@@ -200,6 +211,20 @@ def detect_product(text, repo=""):
         return "Continue"
     if "tabby" in text_lower or "tabbyml/tabby" in repo:
         return "TabbyML"
+    if "opencode" in text_lower or "anomalyco/opencode" in repo:
+        return "OpenCode"
+    if "hermes" in text_lower or "nousresearch/hermes-agent" in repo:
+        return "Hermes Agent"
+    if "zeroclaw" in text_lower or "zeroclaw-labs/zeroclaw" in repo:
+        return "ZeroClaw"
+    if "nanoclaw" in text_lower or "nanocoai/nanoclaw" in repo:
+        return "NanoClaw"
+    if "nanobot" in text_lower or "hkuds/nanobot" in repo:
+        return "NanoBot"
+    if "picoclaw" in text_lower or "sipeed/picoclaw" in repo:
+        return "PicoClaw"
+    if "ironclaw" in text_lower or "nearai/ironclaw" in repo:
+        return "IronClaw"
     if "cursor" in text_lower:
         return "Cursor"
     if "windsurf" in text_lower:
@@ -399,7 +424,7 @@ def crawl_github_security_advisories():
         product = detect_product(combined, repo_name)
 
         is_agent_repo = any(r in repo_name for r in TARGET_REPOS)
-        is_agent_tool = any(t.lower() in combined.lower() for t in CLOSED_SOURCE_TOOLS + ["claude", "cline", "aider", "continue", "opencode", "tabby"])
+        is_agent_tool = any(t.lower() in combined.lower() for t in CLOSED_SOURCE_TOOLS + ["claude", "cline", "aider", "continue", "opencode", "tabby", "hermes", "zeroclaw", "nanoclaw", "nanobot", "picoclaw", "ironclaw"])
 
         if not is_agent_repo and not is_agent_tool:
             continue
@@ -444,8 +469,21 @@ def crawl_osv():
         ("npm", "@continuedev/continue"),
         ("npm", "opencode"),
         ("PyPI", "opencode"),
+        ("Go", "github.com/anomalyco/opencode"),
         ("npm", "tabby"),
         ("Go", "github.com/TabbyML/tabby"),
+        ("PyPI", "hermes-agent"),
+        ("npm", "hermes-agent"),
+        ("Go", "github.com/NousResearch/hermes-agent"),
+        ("npm", "zeroclaw"),
+        ("Go", "github.com/zeroclaw-labs/zeroclaw"),
+        ("npm", "nanoclaw"),
+        ("Go", "github.com/nanocoai/nanoclaw"),
+        ("npm", "nanobot"),
+        ("PyPI", "nanobot"),
+        ("Go", "github.com/HKUDS/nanobot"),
+        ("Go", "github.com/sipeed/picoclaw"),
+        ("Go", "github.com/nearai/ironclaw"),
     ]
 
     for ecosystem, pkg in package_queries:
@@ -785,7 +823,15 @@ def analyze_with_llm(items, force=False):
             failed_count += 1
         elif result.get("is_relevant"):
             item = new_items[i]
-            item["product"] = result.get("product", item.get("product", ""))
+            # 产品标签：关键词识别结果优先（基于repo/URL精确匹配），LLM结果仅作为补充
+            kw_product = item.get("product", "")
+            llm_product = result.get("product", "")
+            if kw_product and kw_product != "通用AI编程工具":
+                item["product"] = kw_product
+            elif llm_product and llm_product != "通用AI编程工具":
+                item["product"] = llm_product
+            else:
+                item["product"] = kw_product or llm_product or "通用AI编程工具"
             item["type"] = result.get("type", item.get("type", []))
             item["level"] = result.get("level", item.get("level", ""))
             item["llm_title"] = result.get("title_cn", "")
@@ -883,7 +929,7 @@ def _process_batch(url, batch, batch_start, batch_results):
 
 def crawl_all(force=False):
     print(f"\n{'='*60}")
-    print(f"  AI 编程助手安全漏洞爬虫")
+    print(f"  AI Agent 安全风险监控爬虫")
     print(f"  运行时间: {TIMESTAMP}")
     print(f"  目标仓库: {', '.join(TARGET_REPOS)}")
     print(f"  闭源工具: {', '.join(CLOSED_SOURCE_TOOLS)}")
