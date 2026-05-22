@@ -78,7 +78,13 @@
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 10px;
   }
-  .calendar-title { font-weight: 600; color: #e2e8f0; }
+  .calendar-title { font-weight: 600; color: #e2e8f0; cursor: default; }
+  .calendar-nav-btn {
+    background: none; border: none; color: #64748b; cursor: pointer;
+    padding: 2px 6px; border-radius: 4px; font-size: 14px;
+    transition: all .15s;
+  }
+  .calendar-nav-btn:hover { background: #334155; color: #e2e8f0; }
   .calendar-close {
     background: none; border: none; color: #64748b; font-size: 20px;
     cursor: pointer; padding: 0; line-height: 1;
@@ -359,7 +365,9 @@
       </div>
       <div id="calendarPopup" class="calendar-popup" style="display:none">
         <div class="calendar-header">
-          <span class="calendar-title">选择日期</span>
+          <button class="calendar-nav-btn" id="calPrevMonth">&#9664;</button>
+          <span class="calendar-title" id="calMonthTitle"></span>
+          <button class="calendar-nav-btn" id="calNextMonth">&#9654;</button>
           <button class="calendar-close" id="calendarClose">&times;</button>
         </div>
         <div class="calendar-grid" id="calendarGrid"></div>
@@ -832,79 +840,82 @@
     tryFallbackDates(dateStr, 1);
   }
 
-  function tryFallbackDates(baseStr, depth) {
-    if (depth > 14) {
-      // 前后都找不到数据
-      noDataState.style.display = 'block';
-      noDataMsg.textContent = '未找到可用的安全数据。';
-      freshnessDot.className = 'dot error';
-      freshnessText.textContent = '无可用数据';
-      dateLabel.textContent = baseStr;
-      return;
-    }
-
-    // 先尝试找之前的有数据日期
-    var d1 = new Date(baseStr.replace(/-/g, '/'));
-    d1.setDate(d1.getDate() - depth);
-    var prevStr = formatDate(d1);
-
-    // 再尝试找之后的有数据日期
-    var d2 = new Date(baseStr.replace(/-/g, '/'));
-    d2.setDate(d2.getDate() + depth);
-    var nextStr = formatDate(d2);
-
-    // 优先使用之前日期（更接近目标日期）
-    var tryDate = prevStr;
-    var tryDir = 'prev';
-
-    fetch('data/' + tryDate + '.json')
+  // 尝试加载某个日期的数据（先 fetch JSON，再 script 方式），通过 callback 通知结果
+  function tryLoadDate(dateStr, callback) {
+    // 方式1: fetch JSON
+    fetch('data/' + dateStr + '.json')
       .then(function(r) {
-        if (!r.ok) throw new Error('Not found');
+        if (!r.ok) return Promise.reject('Not found');
         return r.json();
       })
       .then(function(data) {
-        onDataLoaded(tryDate, data);
-        dateLabel.textContent = formatDisplayDate(d1);
-        freshnessDot.className = 'dot stale';
-        freshnessText.textContent = '使用 ' + tryDate + ' 数据';
+        onFallbackDataLoaded(dateStr, data);
+        callback(true);
       })
       .catch(function() {
-        // fetch JSON 失败，尝试 script 方式
-        tryFallbackViaScript(tryDate, baseStr, depth, tryDir);
+        // 方式2: 动态加载 JS 脚本
+        tryLoadDateViaScript(dateStr, callback);
       });
   }
 
-  function tryFallbackViaScript(tryDate, baseStr, depth, tryDir) {
+  function tryLoadDateViaScript(dateStr, callback) {
     var oldScript = document.getElementById('data-script');
     if (oldScript) oldScript.remove();
     delete window.__agentSecData;
 
     var script = document.createElement('script');
     script.id = 'data-script';
-    script.src = 'data/' + tryDate + '.js';
+    script.src = 'data/' + dateStr + '.js';
     script.onload = function() {
       if (window.__agentSecData) {
-        var d = new Date(tryDate.replace(/-/g, '/'));
-        onDataLoaded(tryDate, window.__agentSecData);
-        dateLabel.textContent = formatDisplayDate(d);
-        freshnessDot.className = 'dot stale';
-        freshnessText.textContent = '使用 ' + tryDate + ' 数据';
+        onFallbackDataLoaded(dateStr, window.__agentSecData);
+        callback(true);
       } else {
-        // 这个方向找不到，尝试另一个方向
-        var d2 = new Date(baseStr.replace(/-/g, '/'));
-        d2.setDate(d2.getDate() + depth);
-        var nextStr = formatDate(d2);
-        tryFallbackViaScript(nextStr, baseStr, depth, 'next');
+        callback(false);
       }
     };
     script.onerror = function() {
-      // 尝试另一个方向
-      var d2 = new Date(baseStr.replace(/-/g, '/'));
-      d2.setDate(d2.getDate() + depth);
-      var nextStr = formatDate(d2);
-      tryFallbackViaScript(nextStr, baseStr, depth, 'next');
+      callback(false);
     };
     document.head.appendChild(script);
+  }
+
+  function onFallbackDataLoaded(dateStr, data) {
+    onDataLoaded(dateStr, data);
+    freshnessDot.className = 'dot stale';
+    freshnessText.textContent = '使用 ' + dateStr + ' 数据';
+  }
+
+  function tryFallbackDates(baseStr, depth) {
+    if (depth > 14) {
+      // 前后都找不到数据
+      noDataState.style.display = 'block';
+      noDataMsg.textContent = '未找到可用的安全数据（已搜索 ' + baseStr + ' 前后 14 天）。';
+      freshnessDot.className = 'dot error';
+      freshnessText.textContent = '无可用数据';
+      dateLabel.textContent = baseStr;
+      return;
+    }
+
+    // 尝试之前日期（优先）
+    var dPrev = new Date(baseStr.replace(/-/g, '/'));
+    dPrev.setDate(dPrev.getDate() - depth);
+    var prevStr = formatDate(dPrev);
+
+    // 尝试之后日期
+    var dNext = new Date(baseStr.replace(/-/g, '/'));
+    dNext.setDate(dNext.getDate() + depth);
+    var nextStr = formatDate(dNext);
+
+    tryLoadDate(prevStr, function(found) {
+      if (found) return;
+      // 之前方向没找到，尝试之后方向
+      tryLoadDate(nextStr, function(found2) {
+        if (found2) return;
+        // 两个方向都没找到，增加 depth 继续搜索
+        tryFallbackDates(baseStr, depth + 1);
+      });
+    });
   }
 
   function updateDateNav() {
@@ -1025,9 +1036,19 @@
     const calendarPopup = document.getElementById('calendarPopup');
     const calendarGrid = document.getElementById('calendarGrid');
     const calendarClose = document.getElementById('calendarClose');
+    const calMonthTitle = document.getElementById('calMonthTitle');
+    const calPrevMonth = document.getElementById('calPrevMonth');
+    const calNextMonth = document.getElementById('calNextMonth');
+
+    // 当前查看的日历月份
+    let calendarViewYear = new Date().getFullYear();
+    let calendarViewMonth = new Date().getMonth(); // 0-11
 
     dateLabel.addEventListener('click', function(e) {
       e.stopPropagation();
+      // 打开日历时，默认定位到当前选中日期的月份
+      calendarViewYear = currentDate.getFullYear();
+      calendarViewMonth = currentDate.getMonth();
       showCalendar();
     });
 
@@ -1041,8 +1062,30 @@
       }
     });
 
+    calPrevMonth.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (calendarViewMonth === 0) {
+        calendarViewMonth = 11;
+        calendarViewYear--;
+      } else {
+        calendarViewMonth--;
+      }
+      showCalendar();
+    });
+
+    calNextMonth.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (calendarViewMonth === 11) {
+        calendarViewMonth = 0;
+        calendarViewYear++;
+      } else {
+        calendarViewMonth++;
+      }
+      showCalendar();
+    });
+
     function showCalendar() {
-      const dates = Array.from(availableDates).sort();
+      calMonthTitle.textContent = calendarViewYear + '年 ' + (calendarViewMonth + 1) + '月';
       calendarGrid.innerHTML = '';
 
       // 星期标题
@@ -1054,27 +1097,45 @@
         calendarGrid.appendChild(el);
       });
 
-      // 生成最近30天的日历
-      var today = new Date();
-      for (let i = 29; i >= 0; i--) {
-        var d = new Date(today);
-        d.setDate(d.getDate() - i);
-        let dateStr = formatDate(d);
+      // 当月第一天是星期几（0=周日）
+      var firstDay = new Date(calendarViewYear, calendarViewMonth, 1).getDay();
+      // 当月总天数
+      var daysInMonth = new Date(calendarViewYear, calendarViewMonth + 1, 0).getDate();
+
+      var todayStr = formatDate(new Date());
+      var selectedStr = formatDate(currentDate);
+
+      // 填充前面的空白
+      for (var i = 0; i < firstDay; i++) {
+        var emptyEl = document.createElement('div');
+        emptyEl.className = 'calendar-day';
+        calendarGrid.appendChild(emptyEl);
+      }
+
+      // 填充日期
+      for (var day = 1; day <= daysInMonth; day++) {
+        var dateStr = calendarViewYear + '-' +
+          String(calendarViewMonth + 1).padStart(2, '0') + '-' +
+          String(day).padStart(2, '0');
+
         var hasData = availableDates.has(dateStr);
-        var isSelected = dateStr === formatDate(currentDate);
+        var isToday = dateStr === todayStr;
+        var isSelected = dateStr === selectedStr;
 
         var el = document.createElement('div');
         el.className = 'calendar-day';
         if (hasData) el.classList.add('has-data');
-        if (i === 0) el.classList.add('today');
+        if (isToday) el.classList.add('today');
         if (isSelected) el.classList.add('selected');
-        el.textContent = d.getDate();
+        el.textContent = day;
 
         if (hasData) {
-          el.addEventListener('click', function() {
-            loadData(dateStr);
-            calendarPopup.style.display = 'none';
-          });
+          (function(ds) {
+            el.addEventListener('click', function() {
+              loadData(ds);
+              calendarPopup.style.display = 'none';
+            });
+          })(dateStr);
         }
 
         calendarGrid.appendChild(el);
