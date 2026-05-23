@@ -144,7 +144,6 @@ jobs:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_REGION: ${{ secrets.COS_REGION }}
         run: |
-          TODAY=$(date '+%Y-%m-%d')
           echo "📤 上传文件到 COS..."
 
           python3 -c "
@@ -168,17 +167,18 @@ jobs:
           with open('index.html', 'rb') as f:
               client.put_object(Bucket=bucket, Key='index.html', Body=f)
 
-          # 上传今日数据
-          today = os.popen('date +%Y-%m-%d').read().strip()
-          for ext in ['.json', '.js']:
-              fname = f'data/{today}{ext}'
-              cos_key = f'data/{today}{ext}'
-              if os.path.exists(fname):
-                  with open(fname, 'rb') as f:
+          # 上传所有 data/ 下的文件（含历史数据 + 今日新生成）
+          uploaded = 0
+          for root, dirs, files in os.walk('data'):
+              for fname in files:
+                  local = os.path.join(root, fname)
+                  cos_key = local  # data/2026-05-23.json
+                  size = os.path.getsize(local)
+                  with open(local, 'rb') as f:
                       client.put_object(Bucket=bucket, Key=cos_key, Body=f)
-                  size = os.path.getsize(fname)
-                  print(f'  ✅ 已上传 {cos_key} ({size} bytes)')
-          print('✅ COS 上传完成')
+                  print(f'  ✅ {cos_key} ({size} bytes)')
+                  uploaded += 1
+          print(f'✅ COS 上传完成（共 {uploaded} 个文件）')
           "
 
       - name: 发送告警（失败时）
