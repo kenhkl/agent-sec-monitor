@@ -842,6 +842,7 @@ def analyze_with_llm(items, force=False):
                     item["type"].append("可复现")
             analyzed.append(item)
         else:
+            new_items[i]["llm_summary"] = "[noise]"
             irrelevant_count += 1
 
     if failed_count:
