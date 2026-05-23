@@ -188,7 +188,20 @@ jobs:
                       )
                   print(f'  ✅ {cos_key} ({size} bytes)')
                   uploaded += 1
-          print(f'✅ COS 上传完成（共 {uploaded} 个文件）')
+
+          # 生成 manifest.json（供前端日历高亮用）
+          import json as _json
+          date_files = [f for f in os.listdir('data') if f.endswith('.json')]
+          dates = sorted([f.replace('.json', '') for f in date_files])
+          manifest = {'available_dates': dates, 'updated_at': os.popen('date -Iseconds').read().strip()}
+          manifest_body = _json.dumps(manifest, ensure_ascii=False)
+          client.put_object(
+              Bucket=bucket, Key='data/manifest.json', Body=manifest_body.encode('utf-8'),
+              ContentType='application/json; charset=utf-8'
+          )
+          print(f'  ✅ data/manifest.json ({len(dates)} dates)')
+
+          print(f'✅ COS 上传完成（共 {uploaded} 个文件 + manifest）')
           "
 
       - name: 发送告警（失败时）
