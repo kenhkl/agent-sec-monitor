@@ -201,6 +201,14 @@ jobs:
           )
           print(f'  ✅ data/manifest.json ({len(dates)} dates)')
 
+          # 同时生成 manifest.js（支持 file:// 协议本地打开）
+          js_body = 'window.__agentSecManifest = ' + manifest_body + ';'
+          client.put_object(
+              Bucket=bucket, Key='data/manifest.js', Body=js_body.encode('utf-8'),
+              ContentType='application/javascript; charset=utf-8'
+          )
+          print(f'  ✅ data/manifest.js ({len(dates)} dates)')
+
           print(f'✅ COS 上传完成（共 {uploaded} 个文件 + manifest）')
           "
 

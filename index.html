@@ -955,21 +955,49 @@
 
   // 加载可用日期清单（供日历高亮用）
   function loadManifest(callback) {
+    // 方式1: fetch JSON（HTTP 服务器）
     fetch('data/manifest.json')
       .then(function(r) { if (!r.ok) throw Error('no manifest'); return r.json(); })
       .then(function(manifest) {
-        var dates = manifest.available_dates || [];
-        for (var i = 0; i < dates.length; i++) {
-          availableDates.add(dates[i]);
-        }
-        console.log('✅ Manifest 已加载: ' + dates.length + ' 个可用日期');
+        fillAvailableDates(manifest);
         callback();
       })
       .catch(function() {
-        // 没有 manifest 文件时降级，仅标记当前已知日期
+        // 方式2: 动态加载 .js（file:// 协议本地打开）
+        loadManifestViaScript(callback);
+      });
+  }
+
+  function loadManifestViaScript(callback) {
+    var oldScript = document.getElementById('manifest-script');
+    if (oldScript) oldScript.remove();
+    delete window.__agentSecManifest;
+
+    var script = document.createElement('script');
+    script.id = 'manifest-script';
+    script.src = 'data/manifest.js';
+    script.onload = function() {
+      if (window.__agentSecManifest) {
+        fillAvailableDates(window.__agentSecManifest);
+        callback();
+      } else {
         console.warn('⚠️  Manifest 不可用，日历高亮仅对已加载日期生效');
         callback();
-      });
+      }
+    };
+    script.onerror = function() {
+      console.warn('⚠️  Manifest 不可用，日历高亮仅对已加载日期生效');
+      callback();
+    };
+    document.head.appendChild(script);
+  }
+
+  function fillAvailableDates(manifest) {
+    var dates = manifest.available_dates || [];
+    for (var i = 0; i < dates.length; i++) {
+      availableDates.add(dates[i]);
+    }
+    console.log('✅ Manifest 已加载: ' + dates.length + ' 个可用日期');
   }
 
   // Init
