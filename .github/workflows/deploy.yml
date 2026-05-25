@@ -222,12 +222,33 @@ jobs:
             exit 0
           fi
 
-          TODAY=$(date '+%Y-%m-%d')
-          curl -s -X POST "${ALERT_WEBHOOK_URL}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"msgtype\": \"text\",
-              \"text\": {
-                \"content\": \"【Agent 安全监控】GitHub Actions 执行失败\n日期: ${TODAY}\nAction: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}\"
-              }
-            }"
+          TODAY=$(date '+%Y-%m-%d %H:%M')
+          ACTION_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          # 自动识别通知渠道
+          if echo "${ALERT_WEBHOOK_URL}" | grep -q "sctapi.ftqq.com"; then
+            # Server 酱（推送到微信）
+            TITLE="【Agent安全监控】${TODAY} 执行失败"
+            DESP="日期: ${TODAY}\n详情: ${ACTION_URL}\n请检查 LLM API 或 GitHub Token 是否正常"
+            curl -s -X POST "${ALERT_WEBHOOK_URL}" \
+              -d "title=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${TITLE}'))")" \
+              -d "desp=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${DESP}'))")"
+            echo "✅ 已通过 Server 酱推送微信通知"
+          elif echo "${ALERT_WEBHOOK_URL}" | grep -q "pushplus"; then
+            # PushPlus（推送到微信）
+            curl -s -X POST "${ALERT_WEBHOOK_URL}" \
+              -H "Content-Type: application/json" \
+              -d "{\"title\":\"【Agent安全监控】执行失败\",\"content\":\"<p>日期: ${TODAY}</p><p><a href='${ACTION_URL}'>查看详情</a></p>\"}"
+            echo "✅ 已通过 PushPlus 推送通知"
+          else
+            # 企业微信 / 钉钉 / 飞书 机器人
+            curl -s -X POST "${ALERT_WEBHOOK_URL}" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"msgtype\": \"text\",
+                \"text\": {
+                  \"content\": \"【Agent 安全监控】执行失败\n${TODAY}\n${ACTION_URL}\"
+                }
+              }"
+            echo "✅ 已通过 Webhook 推送通知"
+          fi
