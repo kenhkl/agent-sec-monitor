@@ -217,22 +217,25 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
+          # 只提交 data/ 目录，无变化则跳过
+          if git diff --quiet data/; then
+            echo "📦 data/ 无变化，跳过提交"
+            exit 0
+          fi
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # 拉取远程最新（防止冲突）
+          # stash 暂存未提交的改动，拉取远程最新后再恢复
+          git stash
           git pull --rebase origin master
+          git stash pop
 
-          # 只提交 data/ 目录
-          if git diff --quiet data/; then
-            echo "📦 data/ 无变化，跳过提交"
-          else
-            TODAY=$(date '+%Y-%m-%d')
-            git add data/
-            git commit -m "data: 自动备份 ${TODAY} 安全数据"
-            git push "https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git" master
-            echo "✅ 已备份到 Git 仓库"
-          fi
+          TODAY=$(date '+%Y-%m-%d')
+          git add data/
+          git commit -m "data: 自动备份 ${TODAY} 安全数据"
+          git push "https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git" master
+          echo "✅ 已备份到 Git 仓库"
 
       - name: 发送告警（失败时）
         if: failure() || steps.crawl.outputs.data_exists != 'true'
