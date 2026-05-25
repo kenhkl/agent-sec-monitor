@@ -1026,6 +1026,9 @@ def crawl_all(force=False):
         json.dump(output, f, ensure_ascii=False)
         f.write("; })();\n")
 
+    # 更新 manifest（供前端日历高亮用）
+    _update_manifest()
+
     print(f"\n{'='*60}")
     print(f"  ✅ 数据已保存: {filepath}")
     print(f"  ✅ JS 已生成:  {js_filepath}")
@@ -1038,6 +1041,20 @@ def crawl_all(force=False):
     print(f"{'='*60}\n")
 
     return output
+
+
+def _update_manifest():
+    """扫描 data/ 目录，生成 manifest.json 和 manifest.js（供前端日历高亮）"""
+    files = [f for f in os.listdir(DATA_DIR) if f.endswith('.json') and f != 'manifest.json']
+    dates = sorted([f.replace('.json', '') for f in files])
+    manifest = {"available_dates": dates, "updated_at": NOW.isoformat()}
+
+    body = json.dumps(manifest, ensure_ascii=False)
+    with open(os.path.join(DATA_DIR, "manifest.json"), "w", encoding="utf-8") as f:
+        f.write(body)
+    with open(os.path.join(DATA_DIR, "manifest.js"), "w", encoding="utf-8") as f:
+        f.write("window.__agentSecManifest = " + body + ";\n")
+    print(f"  ✅ Manifest 已更新: {len(dates)} 个日期")
 
 
 if __name__ == "__main__":
