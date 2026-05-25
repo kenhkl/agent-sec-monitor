@@ -15,6 +15,8 @@ jobs:
   crawl-and-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write
 
     steps:
       - name: 检出代码
@@ -215,9 +217,8 @@ jobs:
       - name: 数据备份到 Git 仓库
         if: steps.crawl.outputs.data_exists == 'true'
         env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 只提交 data/ 目录，无变化则跳过
           if git diff --quiet data/; then
             echo "📦 data/ 无变化，跳过提交"
             exit 0
@@ -229,19 +230,8 @@ jobs:
           TODAY=$(date '+%Y-%m-%d')
           git add data/
           git commit -m "data: 自动备份 ${TODAY} 安全数据"
-
-          # 绕过 actions/checkout 设的 credential helper，直接用 GH_PAT 鉴权
-          git remote set-url origin "https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git"
-          unset GIT_ASKPASS
-
-          if git push origin master 2>&1; then
-            echo "✅ 已备份到 Git 仓库"
-          else
-            echo "⚠️  push 失败，拉取远程后重试..."
-            git pull --rebase origin master
-            git push origin master
-            echo "✅ 已备份到 Git 仓库（重试成功）"
-          fi
+          git push
+          echo "✅ 已备份到 Git 仓库"
 
       - name: 发送告警（失败时）
         if: failure() || steps.crawl.outputs.data_exists != 'true'
