@@ -229,7 +229,16 @@ jobs:
           # stash 暂存未提交的改动，拉取远程最新后再恢复
           git stash
           git pull --rebase origin master
-          git stash pop
+
+          # 恢复 stash，若 data/ 冲突则取当前最新版本
+          if git stash pop; then
+            echo "✅ stash 恢复成功，无冲突"
+          else
+            echo "⚠️  stash pop 冲突，data/ 文件取当前最新版本"
+            git checkout --theirs data/
+            git add data/
+            git stash drop  # 清理残留 stash
+          fi
 
           TODAY=$(date '+%Y-%m-%d')
           git add data/
