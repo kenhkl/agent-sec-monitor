@@ -4,7 +4,7 @@ import re
 import sys
 import time
 import configparser
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 import requests
 
@@ -125,7 +125,8 @@ if PROXY_HTTPS:
     PROXIES["https"] = PROXY_HTTPS
 
 DATA_DIR = "data"
-NOW = datetime.now(timezone.utc)
+TZ_BEIJING = timezone(timedelta(hours=8))
+NOW = datetime.now(TZ_BEIJING)
 TODAY_STR = NOW.strftime("%Y-%m-%d")
 TIMESTAMP = NOW.isoformat()
 
