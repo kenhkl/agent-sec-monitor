@@ -212,6 +212,28 @@ jobs:
           print(f'✅ COS 上传完成（共 {uploaded} 个文件 + manifest）')
           "
 
+      - name: 数据备份到 Git 仓库
+        if: steps.crawl.outputs.data_exists == 'true'
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 拉取远程最新（防止冲突）
+          git pull --rebase origin master
+
+          # 只提交 data/ 目录
+          if git diff --quiet data/; then
+            echo "📦 data/ 无变化，跳过提交"
+          else
+            TODAY=$(date '+%Y-%m-%d')
+            git add data/
+            git commit -m "data: 自动备份 ${TODAY} 安全数据"
+            git push "https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git" master
+            echo "✅ 已备份到 Git 仓库"
+          fi
+
       - name: 发送告警（失败时）
         if: failure() || steps.crawl.outputs.data_exists != 'true'
         env:
