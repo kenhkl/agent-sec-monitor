@@ -230,15 +230,16 @@ jobs:
           git add data/
           git commit -m "data: 自动备份 ${TODAY} 安全数据"
 
-          REPO_URL="https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+          # 绕过 actions/checkout 设的 credential helper，直接用 GH_PAT 鉴权
+          git remote set-url origin "https://${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+          unset GIT_ASKPASS
 
-          # 尝试直接 push，失败则拉取后重试
-          if git push "$REPO_URL" master 2>&1; then
+          if git push origin master 2>&1; then
             echo "✅ 已备份到 Git 仓库"
           else
             echo "⚠️  push 失败，拉取远程后重试..."
-            git pull --rebase "$REPO_URL" master
-            git push "$REPO_URL" master
+            git pull --rebase origin master
+            git push origin master
             echo "✅ 已备份到 Git 仓库（重试成功）"
           fi
 
