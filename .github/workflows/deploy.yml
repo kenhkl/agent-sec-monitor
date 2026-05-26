@@ -227,11 +227,21 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          TODAY=$(date '+%Y-%m-%d')
           git add data/
-          git commit -m "data: 自动备份 ${TODAY} 安全数据"
-          git push
-          echo "✅ 已备份到 Git 仓库"
+          git commit -m "data: 自动备份 $(TZ='Asia/Shanghai' date '+%Y-%m-%d') 安全数据"
+
+          # 拉取远程最新 + 重试 push（应对 GitHub 服务端瞬时错误）
+          git pull --rebase origin master
+          for i in 1 2 3; do
+            if git push origin master 2>&1; then
+              echo "✅ 已备份到 Git 仓库"
+              exit 0
+            fi
+            echo "⚠️  push 失败（第 ${i} 次），10 秒后重试..."
+            sleep 10
+          done
+          echo "❌ push 失败 3 次，放弃"
+          exit 1
 
       - name: 发送告警（失败时）
         if: failure() || steps.crawl.outputs.data_exists != 'true'
