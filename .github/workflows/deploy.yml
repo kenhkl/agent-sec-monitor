@@ -14,7 +14,7 @@ on:
 jobs:
   crawl-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     permissions:
       contents: write
 
@@ -164,12 +164,14 @@ jobs:
           config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key)
           client = CosS3Client(config)
 
+          CC = 'max-age=60'
+
           # 上传 index.html（必须设置 ContentType 否则浏览器会下载）
           print('📤 上传 index.html')
           with open('index.html', 'rb') as f:
               client.put_object(
                   Bucket=bucket, Key='index.html', Body=f,
-                  ContentType='text/html; charset=utf-8'
+                  ContentType='text/html; charset=utf-8', CacheControl=CC
               )
 
           # 上传所有 data/ 下的文件（含历史数据 + 今日新生成）
@@ -186,7 +188,7 @@ jobs:
                   with open(local, 'rb') as f:
                       client.put_object(
                           Bucket=bucket, Key=cos_key, Body=f,
-                          ContentType=ct
+                          ContentType=ct, CacheControl=CC
                       )
                   print(f'  ✅ {cos_key} ({size} bytes)')
                   uploaded += 1
@@ -199,7 +201,7 @@ jobs:
           manifest_body = _json.dumps(manifest, ensure_ascii=False)
           client.put_object(
               Bucket=bucket, Key='data/manifest.json', Body=manifest_body.encode('utf-8'),
-              ContentType='application/json; charset=utf-8'
+              ContentType='application/json; charset=utf-8', CacheControl=CC
           )
           print(f'  ✅ data/manifest.json ({len(dates)} dates)')
 
@@ -207,7 +209,7 @@ jobs:
           js_body = 'window.__agentSecManifest = ' + manifest_body + ';'
           client.put_object(
               Bucket=bucket, Key='data/manifest.js', Body=js_body.encode('utf-8'),
-              ContentType='application/javascript; charset=utf-8'
+              ContentType='application/javascript; charset=utf-8', CacheControl=CC
           )
           print(f'  ✅ data/manifest.js ({len(dates)} dates)')
 
@@ -231,7 +233,8 @@ jobs:
           git commit -m "data: 自动备份 $(TZ='Asia/Shanghai' date '+%Y-%m-%d') 安全数据"
 
           # 拉取远程最新 + 重试 push（应对 GitHub 服务端瞬时错误）
-          git pull --rebase origin master
+          # GIT_EDITOR=true 防止 rebase 冲突时等待交互输入导致 CI 卡死
+          GIT_EDITOR=true git pull --rebase origin master || true
           for i in 1 2 3; do
             if git push origin master 2>&1; then
               echo "✅ 已备份到 Git 仓库"
