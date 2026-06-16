@@ -1,44 +1,44 @@
 {
   "summary": {
-    "total": 129,
-    "generated_at": "2026-06-17T02:40:39.143423+08:00",
+    "total": 154,
+    "generated_at": "2026-06-17T06:58:53.721300+08:00",
     "date": "2026-06-17",
     "by_type": {
-      "权限绕过": 56,
-      "可复现": 31,
-      "提示注入": 22,
-      "信息泄露": 22,
-      "沙箱逃逸": 21,
-      "远程代码执行": 20,
-      "已修复": 18,
-      "供应链攻击": 12,
-      "未修复": 2
+      "权限绕过": 67,
+      "可复现": 35,
+      "远程代码执行": 27,
+      "信息泄露": 27,
+      "提示注入": 25,
+      "沙箱逃逸": 23,
+      "已修复": 23,
+      "供应链攻击": 16,
+      "未修复": 4
     },
     "by_level": {
-      "高危": 87,
-      "中危": 34,
-      "严重": 6,
+      "高危": 101,
+      "中危": 41,
+      "严重": 10,
       "低危": 2
     },
     "by_product": {
-      "Claude Code": 33,
-      "NanoBot": 16,
-      "OpenClaw": 12,
+      "Claude Code": 37,
+      "NanoBot": 17,
+      "OpenClaw": 15,
+      "Hermes Agent": 14,
+      "PicoClaw": 12,
+      "Cline": 11,
       "NanoClaw": 10,
-      "Cline": 9,
-      "Hermes Agent": 9,
-      "PicoClaw": 9,
+      "Continue": 9,
       "Aider": 8,
-      "Continue": 6,
       "通用AI编程工具": 6,
-      "ZeroClaw": 4,
-      "OpenCode": 3,
-      "IronClaw": 3,
-      "Copilot": 1
+      "OpenCode": 5,
+      "IronClaw": 5,
+      "ZeroClaw": 3,
+      "Copilot": 2
     },
     "by_source": {
-      "GitHub Issues": 110,
-      "Hacker News": 16,
+      "GitHub Issues": 133,
+      "Hacker News": 18,
       "OSV.dev": 3
     },
     "target_repos": [
@@ -233,6 +233,39 @@
       "state": "open",
       "llm_title": "OpenClaw 认证存储明文泄露",
       "llm_summary": "修复了多个安全问题：网关RPC请求可能无限期挂起导致状态泄露；认证信息存储在磁盘上为明文；文件追加写入后未重新设置严格权限，可能导致敏感信息泄露。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "fix(security): close active April 4 transport and auth gaps",
+      "url": "https://github.com/openclaw/openclaw/pull/60488",
+      "desc": "## Summary\n\n- Problem: config-time explicit provider proxies accepted blocked internal hosts, `config.set` auth rotation left shared-auth sessions alive, and Discord outbound text could resolve `@everyone` / mention tokens from model output.\n- Why it matters: these gaps leave room for SSRF via operator config, stale access after token rotation, and prompt-injected Discord-wide pings.\n- What changed: added config-time proxy URL validation for explicit provider proxies, disconnected shared-auth cl...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "权限绕过",
+        "信息泄露"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "channel: discord",
+        "gateway",
+        "agents",
+        "maintainer",
+        "size: S",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 message-delivery",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-04-03T19:02:06Z",
+      "updated_at": "2026-06-15T23:13:01Z",
+      "state": "open",
+      "llm_title": "OpenClaw 代理配置与认证会话安全缺陷",
+      "llm_summary": "该漏洞涉及OpenClaw的代理配置和认证会话管理。攻击者可能通过配置代理URL绕过内部主机限制（SSRF），或利用认证轮换后仍存活的共享会话获得未授权访问。此外，模型输出可能在Discord中触发不当提及。",
       "llm_reproduction": "暂无"
     },
     {
@@ -490,39 +523,6 @@
       "llm_reproduction": "暂无"
     },
     {
-      "title": "fix(security): close active April 4 transport and auth gaps",
-      "url": "https://github.com/openclaw/openclaw/pull/60488",
-      "desc": "## Summary\n\n- Problem: config-time explicit provider proxies accepted blocked internal hosts, `config.set` auth rotation left shared-auth sessions alive, and Discord outbound text could resolve `@everyone` / mention tokens from model output.\n- Why it matters: these gaps leave room for SSRF via operator config, stale access after token rotation, and prompt-injected Discord-wide pings.\n- What changed: added config-time proxy URL validation for explicit provider proxies, disconnected shared-auth cl...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "权限绕过",
-        "信息泄露"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "channel: discord",
-        "gateway",
-        "agents",
-        "maintainer",
-        "size: S",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 message-delivery",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-04-03T19:02:06Z",
-      "updated_at": "2026-06-15T23:13:01Z",
-      "state": "open",
-      "llm_title": "OpenClaw 代理配置与认证会话安全缺陷",
-      "llm_summary": "该漏洞涉及OpenClaw的代理配置和认证会话管理。攻击者可能通过配置代理URL绕过内部主机限制（SSRF），或利用认证轮换后仍存活的共享会话获得未授权访问。此外，模型输出可能在Discord中触发不当提及。",
-      "llm_reproduction": "暂无"
-    },
-    {
       "title": "security: remediate workflow and core logic vulnerabilities (#68428)",
       "url": "https://github.com/openclaw/openclaw/pull/78392",
       "desc": "### Description\r\n\r\nRemediates the workflow template-injection findings reported in #68428 and hardens related input-validation paths in the Docker sandbox and thread-ownership gateway.\r\n\r\nThis patch addresses critical input-handling flaws across workflow execution and runtime trust boundaries that could permit command injection, template breakout, or path manipulation when processing attacker-controlled input.\r\n\r\nThe workflow issue was particularly severe because successful exploitation could al...",
@@ -585,76 +585,6 @@
       "llm_reproduction": "原PR描述中未提供具体复现步骤，仅提及验证通过测试覆盖。"
     },
     {
-      "title": "[Security]: loadProjectContextFiles walks ancestor directories to filesystem root — untrusted file injection outside workspace boundary",
-      "url": "https://github.com/openclaw/openclaw/issues/92561",
-      "desc": "## Bug type\nSecurity boundary issue\n\n## Summary\n\n`loadProjectContextFiles()` walks from `cwd` up through every ancestor directory to the filesystem root (`/`), looking for `AGENTS.md` / `CLAUDE.md` files in each. There is no boundary check to stop the walk at the workspace root. This means any `AGENTS.md` file placed anywhere in the ancestor path — including directories outside the agent's workspace — will be silently loaded into the agent's system prompt context.\n\nOn a multi-tenant host or shar...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "Claude Code",
-      "type": [
-        "权限绕过",
-        "提示注入",
-        "未修复",
-        "可复现"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "P1",
-        "clawsweeper:no-new-fix-pr",
-        "clawsweeper:needs-security-review",
-        "clawsweeper:source-repro",
-        "clawsweeper:linked-pr-open",
-        "impact:session-state",
-        "impact:security",
-        "issue-rating: 🦞 diamond lobster"
-      ],
-      "created_at": "2026-06-13T00:49:08Z",
-      "updated_at": "2026-06-15T18:58:03Z",
-      "state": "open",
-      "llm_title": "OpenClaw 项目上下文加载路径绕过",
-      "llm_summary": "该漏洞存在于`loadProjectContextFiles`函数中，它未设置文件系统遍历边界。攻击者可通过在工作区的上级目录放置恶意`AGENTS.md`或`CLAUDE.md`文件，将不受信任的内容注入到AI代理的系统提示中，实现提示注入。",
-      "llm_reproduction": "1. 在一个多租户或共享环境中，于AI编程代理工作区之外的某个上级目录（如`/etc`或`/var`）创建恶意`CLAUDE.md`文件，其中包含提示注入指令。\n2. 在该工作区的子目录中启动AI编程代理。\n3. 代理启动时会向上遍历目录直至根目录，加载该恶意文件，将其内容作为系统上下文的一部分，可能导致代理执行非预期行为。"
-    },
-    {
-      "title": "[Aikido] Fix 15 security issues in dompurify, @ungap/structured-clone, lodash-es and 1 more",
-      "url": "https://github.com/cline/cline/pull/11485",
-      "desc": "Upgrade DOMPurify, @ungap/structured-clone, lodash-es, and mermaid to fix multiple XSS vulnerabilities including prototype pollution bypass, template injection, and URI scheme validation gaps. This update includes <b>breaking changes</b> that require manual migration.\n\r<details>\n\r<summary>⚠️ Code affected by breaking changes.</summary>\n\r<br>\n\r\n\r⚠️ The mermaid upgrade contains breaking changes that affect this codebase:\n\r\n\r**Breaking Change 1: Flowchart edge curve defaults from `basis` to `rounde...",
-      "source": "GitHub Issues",
-      "repo": "cline/cline",
-      "product": "Cline",
-      "type": [
-        "提示注入",
-        "供应链攻击"
-      ],
-      "level": "中危",
-      "cve": [
-        "CVE-2026-41238",
-        "CVE-2026-41238",
-        "CVE-2026-41239",
-        "CVE-2026-41239",
-        "CVE-2026-41240",
-        "CVE-2026-41240",
-        "CVE-2026-2950",
-        "CVE-2026-2950",
-        "CVE-2026-41148",
-        "CVE-2026-41148",
-        "CVE-2026-41149",
-        "CVE-2026-41149",
-        "CVE-2026-41150",
-        "CVE-2026-41150",
-        "CVE-2026-41159",
-        "CVE-2026-41159"
-      ],
-      "labels": [],
-      "created_at": "2026-06-11T22:47:05Z",
-      "updated_at": "2026-06-11T22:50:39Z",
-      "state": "open",
-      "llm_title": "Cline 多依赖 XSS 供应链漏洞修复",
-      "llm_summary": "Cline 依赖的 DOMPurify、lodash-es 等多个前端库存在 XSS 漏洞，包括原型污染绕过、模板注入等。攻击者可能利用这些漏洞进行提示注入或控制前端行为。",
-      "llm_reproduction": "暂无"
-    },
-    {
       "title": "💡 Suggestion: MCP server security scanning before connection",
       "url": "https://github.com/cline/cline/issues/9786",
       "desc": "## Problem\n\nCline connects to MCP servers that can register arbitrary tools with descriptions that may contain prompt injection, tool shadowing, or other security risks. Currently there's no automated way to assess the security of an MCP server configuration before connecting.\n\nRecent research ([Invariant Labs](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks), [Snyk Agent Scan](https://snyk.io/blog/agent-scan)) has highlighted growing concerns around:\n\n- **Tool Poi...",
@@ -672,46 +602,6 @@
       "state": "open",
       "llm_title": "Cline MCP 服务器连接缺乏安全审计",
       "llm_summary": "Cline 在连接 MCP 服务器时未进行安全扫描，恶意服务器可通过注册的工具描述实施提示注入、工具影子攻击，对 AI 代理构成直接安全威胁。",
-      "llm_reproduction": "暂无"
-    },
-    {
-      "title": "[Aikido] Fix 4 security issues in glib, http, serde_with",
-      "url": "https://github.com/cline/cline/pull/11322",
-      "desc": "Upgrade glib, http, and serde_with to fix memory safety vulnerabilities including use-after-free, double-free, and denial-of-service issues.\n\r<details>\n\r<summary>✅ 4 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[GHSA-wrw7-89jp-8q8g](https://app.aikido.dev/issues/28407729/detail?groupId=39595#GHSA-wrw7-89jp-8q8g)</pre> | <pre>MEDIU...",
-      "source": "GitHub Issues",
-      "repo": "cline/cline",
-      "product": "Cline",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-06-05T22:52:35Z",
-      "updated_at": "2026-06-05T23:01:00Z",
-      "state": "open",
-      "llm_title": "Cline 多依赖内存安全漏洞修复",
-      "llm_summary": "Cline 依赖的 glib、http 等库存在 use-after-free、double-free 等内存安全漏洞，可能导致远程代码执行或拒绝服务，威胁代理运行环境安全。",
-      "llm_reproduction": "暂无"
-    },
-    {
-      "title": "[Aikido] Fix 6 security issues in glib, http, serde_with and 2 more",
-      "url": "https://github.com/cline/cline/pull/11323",
-      "desc": "Upgrade glib, http, serde_with, once_cell, rand to fix memory safety issues including use-after-free, double-free, undefined behavior, and DoS vulnerabilities.\n\r<details>\n\r<summary>✅ 6 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[GHSA-wrw7-89jp-8q8g](https://app.aikido.dev/issues/28407729/detail?groupId=39595#GHSA-wrw7-89jp-8q8g)...",
-      "source": "GitHub Issues",
-      "repo": "cline/cline",
-      "product": "Cline",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-06-05T22:52:38Z",
-      "updated_at": "2026-06-05T22:53:43Z",
-      "state": "open",
-      "llm_title": "Cline 依赖内存安全漏洞修复",
-      "llm_summary": "Cline 升级了 glib、http 等依赖以修复多个内存安全漏洞，包括 use-after-free 和未定义行为，这些漏洞可能被利用执行恶意代码或导致服务中断。",
       "llm_reproduction": "暂无"
     },
     {
@@ -1427,36 +1317,6 @@
       "llm_reproduction": "暂无"
     },
     {
-      "title": "fix(config): warn on unknown security.otp.gated_actions entries (#5810)",
-      "url": "https://github.com/zeroclaw-labs/zeroclaw/pull/6626",
-      "desc": "## Summary\n\nFixes #5810. `security.otp.gated_actions` accepted any arbitrary string without feedback — the example from the issue,\n\n```toml\n[security.otp]\nenabled = true\ngated_actions = [\"kubectl_write\"]\n```\n\nloads cleanly even though `kubectl_write` corresponds to no registered tool, so the operator believes they've added a TOTP gate on a destructive action that cannot in fact be gated. This is a silent failure mode on a knob operators specifically reach for to harden destructive flows.\n\nThis P...",
-      "source": "GitHub Issues",
-      "repo": "zeroclaw-labs/zeroclaw",
-      "product": "Claude Code",
-      "type": [
-        "权限绕过"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "bug",
-        "size: S",
-        "risk: high",
-        "config",
-        "security",
-        "security: otp_prompt",
-        "priority:p1",
-        "needs-author-action",
-        "stale-candidate"
-      ],
-      "created_at": "2026-05-13T13:24:52Z",
-      "updated_at": "2026-06-15T11:04:01Z",
-      "state": "open",
-      "llm_title": "OpenClaw安全配置未知条目警告修复",
-      "llm_summary": "security.otp.gated_actions配置项接受未知字符串而不报错，导致操作员认为已设置安全门控但实际未生效，可能绕过保护措施。此修复添加了对无效条目的警告。",
-      "llm_reproduction": "暂无"
-    },
-    {
       "title": "feat(skills): per-skill security permissions — scoped allow_scripts and allowed_commands",
       "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/5775",
       "desc": "## Problem\n\n`allow_scripts` and `allowed_commands` are global config flags. Enabling them for one Python-based skill opens the same permissions for every installed skill and the agent itself.\n\nExample: installing a portfolio analysis skill that needs `python3` requires setting:\n\n```toml\n[skills]\nallow_scripts = true\n\n[autonomy]\nallowed_commands = [\"python3\", ...]\n```\n\nThis also allows every other skill to run Python scripts and any agent conversation to invoke `python3`.\n\n## Proposed: Per-Skill ...",
@@ -1541,50 +1401,6 @@
       "llm_title": "通用AI编程工具MQTT依赖库存在供应链风险",
       "llm_summary": "AI编程代理项目依赖的第三方MQTT客户端库（rumqttc）引入了多个存在已知安全漏洞的传递性依赖（如rustls-webpki），这些漏洞可能影响代理的TLS连接安全性。",
       "llm_reproduction": "暂无"
-    },
-    {
-      "title": "RFC: Security UX, runtime credential boundaries, and isolation defaults",
-      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/6971",
-      "desc": "## Summary\n\nUse this RFC to decide how ZeroClaw should make its security posture easier to verify and safer by default across credential handling, runtime isolation, and user-visible trust signals.\n\nThe goal is not to replace ZeroClaw's safety primitives. The RFC should inventory and verify security areas such as autonomy profiles, workspace policy, sandboxing, environment handling, config secret handling, redaction/leak checks, tool receipts, channel authorization, and gateway pairing. The curr...",
-      "source": "GitHub Issues",
-      "repo": "zeroclaw-labs/zeroclaw",
-      "product": "ZeroClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "enhancement",
-        "risk: high",
-        "config",
-        "runtime",
-        "security",
-        "priority:p2",
-        "type:rfc",
-        "status:accepted"
-      ],
-      "created_at": "2026-05-27T19:22:34Z",
-      "updated_at": "2026-06-08T13:39:59Z",
-      "state": "open"
-    },
-    {
-      "title": "docs/SECURITY.md describes the retired v1 trust model and references a non-existent skill",
-      "url": "https://github.com/nanocoai/nanoclaw/issues/2783",
-      "desc": "`docs/SECURITY.md` predates the role-based v2 rewrite and documents a security model the current code no longer implements. Since it's the canonical security doc (linked from `docs/README.md` and `docs/build-and-runtime.md`), the drift seems worth correcting. All checks below are against `main` (ee7f891).\n\n### 1. References a skill that doesn't exist\nThe Egress Lockdown config table says lockdown is \"Enabled automatically by `/add-golden-registry`.\" No such skill exists in the repo:\n```\ngit ls-t...",
-      "source": "GitHub Issues",
-      "repo": "nanocoai/nanoclaw",
-      "product": "Claude Code",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-06-16T15:32:31Z",
-      "updated_at": "2026-06-16T15:32:31Z",
-      "state": "open"
     },
     {
       "title": "[Security] NanoClaw `add_mcp_server` approval flow allows hidden `args` and `env` to be approved and persisted without being shown to the approver",
@@ -2931,29 +2747,6 @@
       "llm_reproduction": "1. 在Vercel技能仓库或GitHub上发现一个官方技能包。2. 在该技能包的代码中嵌入恶意Python代码，用于读取并外泄系统环境变量（env vars）、Git历史（git history）等敏感数据。3. 将修改后的技能包发布或提交拉取请求。4. 当用户通过支持的AI代理（如Cursor）安装并使用该技能时，恶意代码被触发执行。"
     },
     {
-      "title": "Show HN: A policy gate that runs before your AI coding agent's tool calls",
-      "url": "https://sigmashake.com",
-      "desc": "As a Security Engineer with over 10+ years in industry, I kept running into the same problem with coding agents: Instructions are not guarantees.<p>I put guidance in `CLAUDE.md`, `AGENTS.md`, memory files, MCP descriptions, and tool documentation. I explicitly told the agent things like:<p>* Use the code graph for architecture questions instead of grepping the repository.\n* Do not use deprecated APIs or Unsafe code.\n* Prefer specific tools for specific tasks.<p>The agent would still ignore those...",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "Claude Code",
-      "type": [
-        "权限绕过",
-        "可复现"
-      ],
-      "level": "中危",
-      "cve": [],
-      "hn_id": "48558502",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "hn_author": "cavalrytactics",
-      "created_at": "2026-06-16T17:12:02Z",
-      "updated_at": "2026-06-16T17:12:02Z",
-      "llm_title": "AI编码代理策略指令绕过风险",
-      "llm_summary": "AI编码代理（如Cursor/Claude Code）可能忽略开发者在配置文件（如CLAUDE.md）中明确写下的安全或操作指令。这种“指令不等于保证”的现象，可能导致代理绕过代码库访问、工具使用等方面的策略限制，执行未经批准或不安全的操作。",
-      "llm_reproduction": "1. 在项目配置文件（如CLAUDE.md或AGENTS.md）中写入明确指令，例如“不要使用grep搜索代码库，请使用代码图谱”或“禁止使用已弃用的API”。2. 向AI编码代理提问一个相关问题（如询问架构）或请求一个任务（如修改代码）。3. 观察代理是否仍使用grep等工具，或调用了被禁止的API，从而无视预设指令。"
-    },
-    {
       "title": "How do you secure AI coding agents?",
       "url": "https://news.ycombinator.com/item?id=46412347",
       "desc": "I’ve been using agentic coding tools  Windsurf &#x2F; Claude Code–style) and ran into a security problem I can’t really ignore anymore.<p>These tools don’t just suggest code they can read local files and run shell commands. That’s very powerful, but it also means a prompt injection (or poisoned context) can turn a “helpful assistant” into something that looks a lot like an attacker’s shell.<p>I noticed that  Cursor has publicly patched prompt-injection issues, including ones that opened paths to...",
@@ -3091,6 +2884,877 @@
       "updated_at": "2026-02-03T15:29:06Z",
       "llm_title": "MCP 服务器关键漏洞与隐性权限",
       "llm_summary": "扫描发现超过10%的MCP服务器存在严重安全漏洞，包括使用eval()、SQL注入和硬编码凭证等。由于MCP服务器在用户权限下运行且被AI代理隐式信任，攻击者可能通过漏洞实现沙箱逃逸、远程代码执行或信息泄露，从而危害整个开发环境。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "[Security]: loadProjectContextFiles walks ancestor directories to filesystem root — untrusted file injection outside workspace boundary",
+      "url": "https://github.com/openclaw/openclaw/issues/92561",
+      "desc": "## Bug type\nSecurity boundary issue\n\n## Summary\n\n`loadProjectContextFiles()` walks from `cwd` up through every ancestor directory to the filesystem root (`/`), looking for `AGENTS.md` / `CLAUDE.md` files in each. There is no boundary check to stop the walk at the workspace root. This means any `AGENTS.md` file placed anywhere in the ancestor path — including directories outside the agent's workspace — will be silently loaded into the agent's system prompt context.\n\nOn a multi-tenant host or shar...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "Claude Code",
+      "type": [
+        "权限绕过",
+        "提示注入",
+        "未修复",
+        "可复现"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "P1",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:needs-security-review",
+        "clawsweeper:source-repro",
+        "clawsweeper:linked-pr-open",
+        "impact:session-state",
+        "impact:security",
+        "issue-rating: 🦞 diamond lobster"
+      ],
+      "created_at": "2026-06-13T00:49:08Z",
+      "updated_at": "2026-06-15T18:58:03Z",
+      "state": "open",
+      "llm_title": "OpenClaw 项目上下文加载路径绕过",
+      "llm_summary": "该漏洞存在于`loadProjectContextFiles`函数中，它未设置文件系统遍历边界。攻击者可通过在工作区的上级目录放置恶意`AGENTS.md`或`CLAUDE.md`文件，将不受信任的内容注入到AI代理的系统提示中，实现提示注入。",
+      "llm_reproduction": "1. 在一个多租户或共享环境中，于AI编程代理工作区之外的某个上级目录（如`/etc`或`/var`）创建恶意`CLAUDE.md`文件，其中包含提示注入指令。\n2. 在该工作区的子目录中启动AI编程代理。\n3. 代理启动时会向上遍历目录直至根目录，加载该恶意文件，将其内容作为系统上下文的一部分，可能导致代理执行非预期行为。"
+    },
+    {
+      "title": "[Aikido] Fix 15 security issues in dompurify, @ungap/structured-clone, lodash-es and 1 more",
+      "url": "https://github.com/cline/cline/pull/11485",
+      "desc": "Upgrade DOMPurify, @ungap/structured-clone, lodash-es, and mermaid to fix multiple XSS vulnerabilities including prototype pollution bypass, template injection, and URI scheme validation gaps. This update includes <b>breaking changes</b> that require manual migration.\n\r<details>\n\r<summary>⚠️ Code affected by breaking changes.</summary>\n\r<br>\n\r\n\r⚠️ The mermaid upgrade contains breaking changes that affect this codebase:\n\r\n\r**Breaking Change 1: Flowchart edge curve defaults from `basis` to `rounde...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "提示注入",
+        "供应链攻击"
+      ],
+      "level": "中危",
+      "cve": [
+        "CVE-2026-41238",
+        "CVE-2026-41238",
+        "CVE-2026-41239",
+        "CVE-2026-41239",
+        "CVE-2026-41240",
+        "CVE-2026-41240",
+        "CVE-2026-2950",
+        "CVE-2026-2950",
+        "CVE-2026-41148",
+        "CVE-2026-41148",
+        "CVE-2026-41149",
+        "CVE-2026-41149",
+        "CVE-2026-41150",
+        "CVE-2026-41150",
+        "CVE-2026-41159",
+        "CVE-2026-41159"
+      ],
+      "labels": [],
+      "created_at": "2026-06-11T22:47:05Z",
+      "updated_at": "2026-06-11T22:50:39Z",
+      "state": "open",
+      "llm_title": "Cline 多依赖 XSS 供应链漏洞修复",
+      "llm_summary": "Cline 依赖的 DOMPurify、lodash-es 等多个前端库存在 XSS 漏洞，包括原型污染绕过、模板注入等。攻击者可能利用这些漏洞进行提示注入或控制前端行为。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "[Aikido] Fix 4 security issues in glib, http, serde_with",
+      "url": "https://github.com/cline/cline/pull/11322",
+      "desc": "Upgrade glib, http, and serde_with to fix memory safety vulnerabilities including use-after-free, double-free, and denial-of-service issues.\n\r<details>\n\r<summary>✅ 4 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[GHSA-wrw7-89jp-8q8g](https://app.aikido.dev/issues/28407729/detail?groupId=39595#GHSA-wrw7-89jp-8q8g)</pre> | <pre>MEDIU...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-05T22:52:35Z",
+      "updated_at": "2026-06-05T23:01:00Z",
+      "state": "open",
+      "llm_title": "Cline 多依赖内存安全漏洞修复",
+      "llm_summary": "Cline 依赖的 glib、http 等库存在 use-after-free、double-free 等内存安全漏洞，可能导致远程代码执行或拒绝服务，威胁代理运行环境安全。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "[Aikido] Fix 6 security issues in glib, http, serde_with and 2 more",
+      "url": "https://github.com/cline/cline/pull/11323",
+      "desc": "Upgrade glib, http, serde_with, once_cell, rand to fix memory safety issues including use-after-free, double-free, undefined behavior, and DoS vulnerabilities.\n\r<details>\n\r<summary>✅ 6 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[GHSA-wrw7-89jp-8q8g](https://app.aikido.dev/issues/28407729/detail?groupId=39595#GHSA-wrw7-89jp-8q8g)...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-05T22:52:38Z",
+      "updated_at": "2026-06-05T22:53:43Z",
+      "state": "open",
+      "llm_title": "Cline 依赖内存安全漏洞修复",
+      "llm_summary": "Cline 升级了 glib、http 等依赖以修复多个内存安全漏洞，包括 use-after-free 和未定义行为，这些漏洞可能被利用执行恶意代码或导致服务中断。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "fix(config): warn on unknown security.otp.gated_actions entries (#5810)",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw/pull/6626",
+      "desc": "## Summary\n\nFixes #5810. `security.otp.gated_actions` accepted any arbitrary string without feedback — the example from the issue,\n\n```toml\n[security.otp]\nenabled = true\ngated_actions = [\"kubectl_write\"]\n```\n\nloads cleanly even though `kubectl_write` corresponds to no registered tool, so the operator believes they've added a TOTP gate on a destructive action that cannot in fact be gated. This is a silent failure mode on a knob operators specifically reach for to harden destructive flows.\n\nThis P...",
+      "source": "GitHub Issues",
+      "repo": "zeroclaw-labs/zeroclaw",
+      "product": "Claude Code",
+      "type": [
+        "权限绕过"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "size: S",
+        "risk: high",
+        "config",
+        "security",
+        "security: otp_prompt",
+        "priority:p1",
+        "needs-author-action",
+        "stale-candidate"
+      ],
+      "created_at": "2026-05-13T13:24:52Z",
+      "updated_at": "2026-06-15T11:04:01Z",
+      "state": "open",
+      "llm_title": "OpenClaw安全配置未知条目警告修复",
+      "llm_summary": "security.otp.gated_actions配置项接受未知字符串而不报错，导致操作员认为已设置安全门控但实际未生效，可能绕过保护措施。此修复添加了对无效条目的警告。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "Show HN: A policy gate that runs before your AI coding agent's tool calls",
+      "url": "https://sigmashake.com",
+      "desc": "As a Security Engineer with over 10+ years in industry, I kept running into the same problem with coding agents: Instructions are not guarantees.<p>I put guidance in `CLAUDE.md`, `AGENTS.md`, memory files, MCP descriptions, and tool documentation. I explicitly told the agent things like:<p>* Use the code graph for architecture questions instead of grepping the repository.\n* Do not use deprecated APIs or Unsafe code.\n* Prefer specific tools for specific tasks.<p>The agent would still ignore those...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Claude Code",
+      "type": [
+        "权限绕过",
+        "可复现"
+      ],
+      "level": "中危",
+      "cve": [],
+      "hn_id": "48558502",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "hn_author": "cavalrytactics",
+      "created_at": "2026-06-16T17:12:02Z",
+      "updated_at": "2026-06-16T17:12:02Z",
+      "llm_title": "AI编码代理策略指令绕过风险",
+      "llm_summary": "AI编码代理（如Cursor/Claude Code）可能忽略开发者在配置文件（如CLAUDE.md）中明确写下的安全或操作指令。这种“指令不等于保证”的现象，可能导致代理绕过代码库访问、工具使用等方面的策略限制，执行未经批准或不安全的操作。",
+      "llm_reproduction": "1. 在项目配置文件（如CLAUDE.md或AGENTS.md）中写入明确指令，例如“不要使用grep搜索代码库，请使用代码图谱”或“禁止使用已弃用的API”。2. 向AI编码代理提问一个相关问题（如询问架构）或请求一个任务（如修改代码）。3. 观察代理是否仍使用grep等工具，或调用了被禁止的API，从而无视预设指令。"
+    },
+    {
+      "title": "[Bug] Anthropic API Error: False positive cyber content block on legitimate local security review",
+      "url": "https://github.com/anthropics/claude-code/issues/65596",
+      "desc": "**Bug Description**\nI am a paying Claude Code subscriber. I work on a LOCAL, private project and asked\nClaude Code to run a security and performance review of MY OWN code. This is a\ndefensive, fully legitimate task — Claude Code even ships a built-in\n/security-review command for exactly this purpose.\n\nInstead, the session was killed mid-task with:\n\n   \"API Error: Claude Code is unable to respond to this request, which appears to\n   violate our Usage Policy... This request triggered restrictions ...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复",
+        "可复现"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "duplicate",
+        "platform:linux",
+        "area:model",
+        "api:anthropic"
+      ],
+      "created_at": "2026-06-05T07:46:54Z",
+      "updated_at": "2026-06-12T16:01:47Z",
+      "state": "open",
+      "llm_title": "Claude Code安全审查误报阻止",
+      "llm_summary": "用户在自有代码上运行安全审查时，被Claude Code的内容安全过滤器错误阻止，系统误判其行为为违反使用政策的网络攻击内容。这反映了安全审查工具本身的策略缺陷，影响了其合法功能。",
+      "llm_reproduction": "用户请求Claude Code对本地私有项目进行安全和性能审查，触发了内置的`/security-review`命令，随后收到API错误，称请求违反使用政策并被阻止。"
+    },
+    {
+      "title": "fix(security): add ReDoS guard to exec approval argPattern matching",
+      "url": "https://github.com/openclaw/openclaw/pull/82950",
+      "desc": "Fixes #90014\n\n## Problem\n\n`matchArgPattern` in `src/infra/exec-command-resolution.ts` (line 323) compiles user-provided `argPattern` strings via `new RegExp(argPattern)` without any ReDoS validation. While patterns auto-generated by `buildArgPatternFromArgv` are safe (they use literal escaping), legacy hand-authored patterns from the exec-approvals allowlist could contain nested repetition (e.g., `(a+)+$`) that causes catastrophic backtracking.\n\n## Fix\n\nAdd a `hasNestedRepetition(argPattern)` gu...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "权限绕过",
+        "可复现"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "size: M",
+        "proof: supplied",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-05-17T05:53:24Z",
+      "updated_at": "2026-06-16T22:56:16Z",
+      "state": "open",
+      "llm_title": "OpenClaw ReDoS 参数匹配漏洞",
+      "llm_summary": "OpenClaw 的 exec 审批参数匹配功能存在正则表达式拒绝服务漏洞。攻击者可构造恶意参数模式，导致应用进程因正则回溯而卡死，拒绝服务。",
+      "llm_reproduction": "攻击者可在 exec 命令审批的 allowlist 中配置恶意的 `argPattern` 字符串（例如 `(a+)+$`），当匹配包含该模式的恶意输入时，触发 ReDoS，导致进程挂起。"
+    },
+    {
+      "title": "fix(security): cap state directory writes to 0700",
+      "url": "https://github.com/openclaw/openclaw/pull/89635",
+      "desc": "Fixes #89589\n\n## Summary\n\n`writeTextAtomic` computes `dirMode` as `0o777 & ~process.umask()`, which yields `0o775` under the common `umask 0o002`. When the atomic replace helper ensures the parent directory exists, it sets that mode, relaxing a previously hardened `~/.openclaw` from `0700` back to `0775`.\n\nThe same applies to `writeJson`, which re-exports from `@openclaw/fs-safe/json` without overriding `dirMode`.\n\nThis fix:\n- Defaults `dirMode` to `0o700` in `writeTextAtomic` (was `0o777 & ~pro...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "权限绕过",
+        "可复现"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "size: XS",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-06-02T23:54:46Z",
+      "updated_at": "2026-06-16T22:56:13Z",
+      "state": "open",
+      "llm_title": "OpenClaw 状态目录权限绕过",
+      "llm_summary": "OpenClaw 的文件写入工具在创建目录时，默认权限设置不当。受 umask 影响，可能将本应为 700（仅所有者可读写执行）的状态目录权限放宽至 775（组内用户和其他用户可读写执行），导致其他本地用户可能读取敏感的状态信息。",
+      "llm_reproduction": "在 `umask 0o002` 的系统环境下，任何触发 `writeTextAtomic` 或 `writeJson` 操作并首次创建父目录的行为，都可能将 `~/.openclaw` 等目录的权限从 700 错误地设置为 775。"
+    },
+    {
+      "title": "security-fast reports high-or-higher production dependency advisories",
+      "url": "https://github.com/openclaw/openclaw/issues/93421",
+      "desc": "`security-fast` is currently failing on unrelated PRs because the production dependency audit reports multiple high-or-higher advisories.\n\nObserved while triaging PR #90577; reproduced locally with the same audit failure category. This appears independent of the UI title changes in that PR.\n\nCurrent findings from the audit output:\n\n```text\nFound 5 high or higher advisories in production dependencies:\n- CRITICAL @vitest/browser · id=1120810 · title=Vitest Browser: Exposed Browser Mode API Can Pro...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "供应链攻击"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-15T21:16:39Z",
+      "updated_at": "2026-06-15T21:25:32Z",
+      "state": "open",
+      "llm_title": "OpenClaw 生产依赖存在高危漏洞",
+      "llm_summary": "安全审计工具检测到 OpenClaw 的生产依赖项存在多个高危或严重安全公告（如 Vitest 浏览器 API 暴露）。攻击者可能利用这些已知漏洞对使用该工具的开发环境或生成的代码造成影响，构成供应链攻击风险。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "[Aikido] Fix 13 security issues in lodash, socket.io-parser, yaml and 6 more",
+      "url": "https://github.com/cline/cline/pull/10092",
+      "desc": "Upgrade dependencies to patch critical RCE vulnerability in lodash template injection, high-severity DoS attacks in Socket.IO memory exhaustion and qs array limit bypass.\n\r<details>\n\r<summary>⚠️ Incomplete breaking changes analysis (8/9 analyzed)</summary>\n\r<br>\n\r\n\r⚠️ Breaking changes analysis not available for: minimatch\n\r\n\r✅ No breaking changes from the lodash upgrade (4.17.23 => 4.18.1) affect this codebase. The affected methods (`_.unset`, `_.omit`, and `_.template`) are not used anywhere in...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [
+        "CVE-2026-4800",
+        "CVE-2026-4800",
+        "CVE-2026-2950",
+        "CVE-2026-2950",
+        "CVE-2025-13465",
+        "CVE-2025-13465",
+        "CVE-2026-33151",
+        "CVE-2026-33151",
+        "CVE-2026-2391",
+        "CVE-2026-2391",
+        "CVE-2026-33532",
+        "CVE-2026-33532",
+        "CVE-2023-4316",
+        "CVE-2023-4316",
+        "CVE-2026-26996",
+        "CVE-2026-26996",
+        "CVE-2026-27903",
+        "CVE-2026-27903",
+        "CVE-2026-27904",
+        "CVE-2026-27904",
+        "CVE-2026-4867",
+        "CVE-2026-4867",
+        "CVE-2026-33750",
+        "CVE-2026-33750",
+        "CVE-2025-69873",
+        "CVE-2025-69873"
+      ],
+      "labels": [],
+      "created_at": "2026-04-01T22:45:41Z",
+      "updated_at": "2026-04-08T22:47:20Z",
+      "state": "open",
+      "llm_title": "Cline 修复多个高危依赖链漏洞",
+      "llm_summary": "该PR修复了Cline所依赖的多个库（如lodash, socket.io-parser, yaml等）中存在的严重安全问题，包括可能导致远程代码执行（RCE）的模板注入漏洞和拒绝服务（DoS）漏洞。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "[Aikido] Fix 16 security issues in zod, body-parser, axios and 6 more",
+      "url": "https://github.com/cline/cline/pull/8245",
+      "desc": "Upgrading zod, body-parser, axios, tar, express, serve-static, send, path-to-regexp, cookie to address vulnerabilities.\n\r<details>\n\r<summary>14 CVEs resolved by this upgrade</summary>\n\r<br>\n\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[CVE-2024-45590](https://app.aikido.dev/issues/19079432/detail?groupId=39595#CVE-2024-45590)</pre> | <pre>HIGH</pre> | body-parser is Node.js bo...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "已修复",
+        "远程代码执行"
+      ],
+      "level": "高危",
+      "cve": [
+        "CVE-2024-45590",
+        "CVE-2024-45590",
+        "CVE-2025-58754",
+        "CVE-2025-58754",
+        "CVE-2024-28863",
+        "CVE-2024-28863",
+        "CVE-2024-29041",
+        "CVE-2024-29041",
+        "CVE-2024-43796",
+        "CVE-2024-43796",
+        "CVE-2024-43800",
+        "CVE-2024-43800",
+        "CVE-2024-43799",
+        "CVE-2024-43799",
+        "CVE-2024-45296",
+        "CVE-2024-45296",
+        "CVE-2024-52798",
+        "CVE-2024-52798",
+        "CVE-2023-4316",
+        "CVE-2023-4316",
+        "CVE-2024-47764",
+        "CVE-2024-47764"
+      ],
+      "labels": [
+        "dependencies",
+        "documentation",
+        "Bot Reviewed"
+      ],
+      "created_at": "2025-12-21T23:33:51Z",
+      "updated_at": "2026-01-16T18:46:47Z",
+      "state": "open",
+      "llm_title": "Cline 依赖升级修复远程代码执行漏洞",
+      "llm_summary": "该 PR 通过升级 zod、body-parser、axios 等多个依赖，修复了 14 个已知漏洞，包括高危的 CVE-2024-45590，该漏洞涉及 body-parser 的远程代码执行风险，从而提升 Cline 的安全性。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "chore(deps-dev): bump postcss from 8.5.6 to 8.5.15 in /packages/terminal-security",
+      "url": "https://github.com/continuedev/continue/pull/12407",
+      "desc": "Bumps [postcss](https://github.com/postcss/postcss) from 8.5.6 to 8.5.15.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/postcss/postcss/releases\">postcss's releases</a>.</em></p>\n<blockquote>\n<h2>8.5.15</h2>\n<ul>\n<li>Fixed declaration parsing performance (by <a href=\"https://github.com/homanp\"><code>@​homanp</code></a>).</li>\n</ul>\n<h2>8.5.14</h2>\n<ul>\n<li>Fixed custom syntax regression (by <a href=\"https://github.com/43081j\"><code>@​43081j</code></a>...",
+      "source": "GitHub Issues",
+      "repo": "continuedev/continue",
+      "product": "Continue",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "dependencies",
+        "javascript",
+        "size:XS"
+      ],
+      "created_at": "2026-05-14T16:56:30Z",
+      "updated_at": "2026-06-08T04:25:18Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] TLS verification disabled in MCPConnection + auth bypass in MCPOauth",
+      "url": "https://github.com/continuedev/continue/issues/11468",
+      "desc": "Found via [SkillFence](https://npmjs.com/package/skillfence) automated scan.\n\n**Finding 1:** `MCPConnection.ts` — TLS verification disabled, allowing MITM attacks on MCP server connections.\n\n**Finding 2:** `MCPOauth.ts` — Authentication disabled pattern detected.\n\n**Impact:** MCP connections without TLS verification can be intercepted, potentially allowing tool poisoning attacks.\n\n**Recommendation:**\n- Enable TLS verification by default\n- Require auth for all MCP connections\n- Add certificate pi...",
+      "source": "GitHub Issues",
+      "repo": "continuedev/continue",
+      "product": "Continue",
+      "type": [
+        "权限绕过",
+        "远程代码执行",
+        "可复现"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "kind:bug",
+        "area:mcp"
+      ],
+      "created_at": "2026-03-16T00:46:20Z",
+      "updated_at": "2026-04-23T14:11:10Z",
+      "state": "open",
+      "llm_title": "Continue MCP连接安全绕过",
+      "llm_summary": "在Continue项目的MCP（模型上下文协议）实现中发现两个安全风险：TLS验证被禁用，可能导致中间人攻击窃取通信内容；OAuth认证流程存在绕过模式，可能导致未授权访问。这些漏洞可能被用于工具投毒攻击。",
+      "llm_reproduction": "暂无详细步骤，但漏洞由自动化扫描工具SkillFence发现，涉及MCPConnection.ts和MCPOauth.ts文件中的不安全编码模式。"
+    },
+    {
+      "title": "chore(deps-dev): bump vite from 7.3.1 to 7.3.2 in /packages/terminal-security",
+      "url": "https://github.com/continuedev/continue/pull/12054",
+      "desc": "Bumps [vite](https://github.com/vitejs/vite/tree/HEAD/packages/vite) from 7.3.1 to 7.3.2.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/vitejs/vite/releases\">vite's releases</a>.</em></p>\n<blockquote>\n<h2>v7.3.2</h2>\n<p>Please refer to <a href=\"https://github.com/vitejs/vite/blob/v7.3.2/packages/vite/CHANGELOG.md\">CHANGELOG.md</a> for details.</p>\n</blockquote>\n</details>\n<details>\n<summary>Changelog</summary>\n<p><em>Sourced from <a href=\"https://gith...",
+      "source": "GitHub Issues",
+      "repo": "continuedev/continue",
+      "product": "Continue",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "dependencies",
+        "javascript",
+        "size:XS"
+      ],
+      "created_at": "2026-04-06T22:50:20Z",
+      "updated_at": "2026-06-08T04:23:09Z",
+      "state": "open"
+    },
+    {
+      "title": "Bug: Python hook path '/hooks/security_reminder_hook.py' doesn't exist on macOS SIP-protected filesystem",
+      "url": "https://github.com/anomalyco/opencode/issues/30232",
+      "desc": "**Describe the bug**\n\nOpenCode repeatedly tries to execute a Python script at `/hooks/security_reminder_hook.py` on every operation, which doesn't exist. On macOS, this path is in the root of the filesystem protected by SIP (System Integrity Protection), so creating the file requires disabling system security.\n\n**To Reproduce**\n\n1. Install OpenCode 1.15.13 on macOS\n2. Observe stderr output on every message/operation:\n\n```\n/opt/homebrew/Cellar/python@3.11/3.11.14_1/Frameworks/Python.framework/Ver...",
+      "source": "GitHub Issues",
+      "repo": "anomalyco/opencode",
+      "product": "OpenCode",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-01T11:59:47Z",
+      "updated_at": "2026-06-01T12:00:44Z",
+      "state": "open"
+    },
+    {
+      "title": "There is a security issue with the share function.",
+      "url": "https://github.com/anomalyco/opencode/issues/7982",
+      "desc": "### Description\n\nExplain to me who the idiot was who came up with the idea of ​​sharing my session without warning? Why is my data being uploaded to open-source servers anyway? This is terrible from a security standpoint.\n\n### Plugins\n\n_No response_\n\n### OpenCode version\n\n_No response_\n\n### Steps to reproduce\n\n_No response_\n\n### Screenshot and/or share link\n\n_No response_\n\n### Operating System\n\n_No response_\n\n### Terminal\n\n_No response_",
+      "source": "GitHub Issues",
+      "repo": "anomalyco/opencode",
+      "product": "OpenCode",
+      "type": [
+        "信息泄露"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-01-12T11:26:29Z",
+      "updated_at": "2026-05-03T05:55:07Z",
+      "state": "open",
+      "llm_title": "通用AI工具 会话数据未经同意上传",
+      "llm_summary": "该工具的“分享”功能未经明确警告或用户同意，将用户会话数据自动上传至开源服务器，存在用户敏感信息泄露的严重安全风险。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "fix(security): resolve approval context-bleed and enforce session isolation in RPC workers",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/6641",
+      "desc": "Summary\r\nThis PR fixes a security bug in the execute_code tool where dangerous-command approvals could lose session isolation inside RPC worker threads.\r\n\r\nexecute_code dispatches tool calls from background RPC threads. The approval system is designed to be session-scoped, but these worker threads were not inheriting the parent approval session context. In concurrent gateway deployments, that meant a dangerous command triggered from inside execute_code could fall back to the process-wide HERMES_...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "权限绕过",
+        "沙箱逃逸"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "tool/code-exec",
+        "P1"
+      ],
+      "created_at": "2026-04-09T14:10:40Z",
+      "updated_at": "2026-06-16T21:05:38Z",
+      "state": "open",
+      "llm_title": "Cline execute_code 工具会话隔离绕过",
+      "llm_summary": "在`execute_code`工具的RPC工作线程中，危险命令的批准上下文未能正确继承父级会话隔离，导致在并发网关部署下，攻击者可能绕过会话限制执行危险命令。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "security: fail-closed gateway defaults and external-surface hardening",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/44073",
+      "desc": "Fixes unauthorised external-surface access when messaging adapters are enabled with default configuration.\r\n\r\nIt aligns runtime behaviour with `SECURITY.md` section 2.6.2 by making externally reachable messaging, gateway, API, and tool-socket surfaces fail closed unless access has been explicitly configured. The main goal is to prevent accidental open access when operators enable adapters or gateway features without also providing an explicit authorisation policy.\r\n\r\nThe fix tightens defaults, v...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "权限绕过",
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "P1"
+      ],
+      "created_at": "2026-06-11T06:59:05Z",
+      "updated_at": "2026-06-16T20:13:40Z",
+      "state": "open",
+      "llm_title": "通用AI工具 网关默认配置致外部访问绕过",
+      "llm_summary": "修复了当启用消息适配器时，默认配置会导致网关、API、工具套接字等外部可访问面未授权访问的漏洞，攻击者可能利用此漏洞访问本应受保护的内部服务。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "fix(security): gate sensitive browser CDP methods",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/46899",
+      "desc": "## Summary\n- adds a default-deny guard for raw `browser_cdp` methods that can expose cookies, alter browser permissions, clear storage, or inject/evaluate script\n- keeps an explicit `browser.allow_sensitive_cdp_methods` config escape hatch for trusted local debugging\n- covers both stateless CDP calls and supervisor `frame_id` routing\n\n## Validation\n- `pytest tests\\tools\\test_browser_cdp_tool.py tests\\tools\\test_browser_supervisor.py -q` -> 21 passed, 22 skipped\n- `ruff check hermes_cli\\config.py...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复",
+        "权限绕过"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/cli",
+        "tool/browser",
+        "P2"
+      ],
+      "created_at": "2026-06-15T22:26:53Z",
+      "updated_at": "2026-06-15T22:35:13Z",
+      "state": "open",
+      "llm_title": "通用AI工具浏览器CDP敏感方法限制",
+      "llm_summary": "为防止通过CDP协议暴露Cookie、修改浏览器权限或注入脚本等风险，增加了默认拒绝的访问控制，需显式配置才能使用敏感方法。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "fix(security): block execute_code secret egress",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/46900",
+      "desc": "## Summary\n- detects `execute_code` scripts that combine local secret/environment reads with direct network egress\n- blocks that pattern before child-process spawn in local non-approval contexts\n- routes gateway/ask contexts through a dedicated `execute_code_oob_exfil` approval key so the user can make an explicit decision\n\n## Validation\n- `pytest tests\\tools\\test_execute_code_approval_cluster.py -q` -> 23 passed\n- `ruff check tools\\approval.py tests\\tools\\test_execute_code_approval_cluster.py` ...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复",
+        "信息泄露"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/tools",
+        "tool/code-exec",
+        "P2"
+      ],
+      "created_at": "2026-06-15T22:27:10Z",
+      "updated_at": "2026-06-15T22:35:12Z",
+      "state": "open",
+      "llm_title": "通用AI工具代码执行数据外泄防护",
+      "llm_summary": "针对AI代理在执行代码时，可能读取本地敏感信息（如环境变量）并直接发送到外部网络的行为，增加了检测与拦截机制，需用户显式批准。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "security(deps): bump aiohttp 3.14.0 + anthropic 0.87.0, pin cryptography floor, + drift guard",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/42334",
+      "desc": "## What & why\n\nThree CVE-relevant Python pins in `pyproject.toml` are behind their patched versions, and two are **inconsistent** with the already-patched values in `tools/lazy_deps.py` — so the version a user ends up with depends on which install path (eager extra vs. lazy backend) they hit.\n\n| package | `pyproject.toml` (before) | `lazy_deps.py` | this PR |\n|---|---|---|---|\n| **aiohttp** | `3.13.4` | `3.13.4` | **`3.14.0`** |\n| **anthropic** | `0.86.0` ⚠️ | `0.87.0` | **`0.87.0`** |\n| **crypt...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "已修复",
+        "供应链攻击"
+      ],
+      "level": "高危",
+      "cve": [
+        "CVE-2026-34993",
+        "CVE-2026-47265",
+        "CVE-2026-34450",
+        "CVE-2026-34452",
+        "CVE-2026-39892",
+        "CVE-2026-34073"
+      ],
+      "labels": [
+        "type/security",
+        "P1",
+        "dependencies"
+      ],
+      "created_at": "2026-06-08T18:59:46Z",
+      "updated_at": "2026-06-15T22:29:15Z",
+      "state": "open",
+      "llm_title": "通用AI工具依赖库CVE修复",
+      "llm_summary": "修复了多个存在已知CVE的Python依赖库（如aiohttp、anthropic、cryptography）版本，消除了潜在的依赖库安全漏洞。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "fix(mount-security): tolerate allowlist entries missing path field",
+      "url": "https://github.com/nanocoai/nanoclaw/pull/2349",
+      "desc": "<!-- contributing-guide: v1 -->\n## Type of Change\n\n- [ ] **Feature skill** - adds a channel or integration (source code changes + SKILL.md)\n- [ ] **Utility skill** - adds a standalone tool (code files in `.claude/skills/<name>/`, no source changes)\n- [ ] **Operational/container skill** - adds a workflow or agent skill (SKILL.md only, no source changes)\n- [x] **Fix** - bug fix or security fix to source code\n- [ ] **Simplification** - reduces or simplifies source code\n- [ ] **Documentation** - doc...",
+      "source": "GitHub Issues",
+      "repo": "nanocoai/nanoclaw",
+      "product": "Claude Code",
+      "type": [
+        "权限绕过"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "PR: Fix",
+        "follows-guidelines"
+      ],
+      "created_at": "2026-05-08T07:21:05Z",
+      "updated_at": "2026-06-06T04:06:03Z",
+      "state": "open",
+      "llm_title": "OpenClaw 挂载安全配置缺陷修复",
+      "llm_summary": "该PR修复了一个安全配置问题：当允许列表条目缺少必要的路径字段时，系统原先可能无法正确处理，导致访问控制策略不一致或存在潜在的绕过风险。此修复提升了安全策略的健壮性。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "security: SSRF protection, media path check, spawn/cron limits",
+      "url": "https://github.com/HKUDS/nanobot/pull/2093",
+      "desc": "  ## Summary\r\n\r\n  This PR adds four independent security improvements to nanobot:\r\n\r\n  **1. SSRF protection for `WebFetchTool`**\r\n  - Block requests to private/internal network addresses (loopback, RFC 1918,\r\n  link-local/AWS metadata, IPv6 private ranges)\r\n  - Uses `socket.getaddrinfo` to resolve all address families (IPv4, IPv6, mapped\r\n  addresses)\r\n  - Fail-closed: DNS resolution failures are treated as blocked\r\n  - New config: `tools.web.allowPrivateIp` (default: `false`) to opt out when ne...",
+      "source": "GitHub Issues",
+      "repo": "HKUDS/nanobot",
+      "product": "NanoBot",
+      "type": [
+        "远程代码执行",
+        "信息泄露"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-03-16T11:12:50Z",
+      "updated_at": "2026-03-16T11:13:37Z",
+      "state": "open",
+      "llm_title": "通用AI编程工具 多项安全加固",
+      "llm_summary": "该PR为AI代理添加了多项关键安全防护：1) 为WebFetch工具增加SSRF保护，阻止访问内网地址；2) 增加媒体路径安全检查；3) 限制spawn/cron操作。这些措施旨在防止代理被利用探测内部网络或执行未经授权的命令。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "[Security] Authenticated Pico WebSocket clients can trigger unauthorized gateway configuration reload via `/reload`",
+      "url": "https://github.com/sipeed/picoclaw/issues/3071",
+      "desc": "### Advisory Details\n\n**Title**: Authenticated Pico WebSocket clients can trigger unauthorized gateway configuration reload via `/reload`\n\n**Description**:\n\n### Summary\n\nPicoClaw exposes a privileged configuration reload action through the public Pico WebSocket chat interface. Any authenticated Pico client that knows the Pico token can send a normal `message.send` payload containing `/reload` and trigger live gateway configuration reload, even though the dedicated HTTP management endpoint `/relo...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "权限绕过"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:32:17Z",
+      "updated_at": "2026-06-16T19:16:48Z",
+      "state": "open",
+      "llm_title": "PicoClaw WebSocket 配置重载权限绕过",
+      "llm_summary": "AI代理框架PicoClaw的WebSocket聊天接口暴露了敏感的配置重载命令。任何拥有Pico令牌的认证客户端均可通过发送 '/reload' 消息，绕过专用管理接口的权限控制，触发网关配置的热重载，可能导致服务中断或配置被恶意篡改。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "[Security] OneBot inbound media URL handling allows host-side arbitrary fetch in PicoClaw",
+      "url": "https://github.com/sipeed/picoclaw/issues/3070",
+      "desc": "### Advisory Details\n\n**Title**: OneBot inbound media URL handling allows host-side arbitrary fetch in PicoClaw\n\n**Description**:\n\n### Summary\n\nPicoClaw's OneBot channel trusts attacker-controlled inbound media `url` fields and fetches them from the host network without origin or private-address validation. A malicious or compromised OneBot upstream can force the PicoClaw host to issue HTTP requests to arbitrary destinations, including localhost and internal network services, and the response bo...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:32:11Z",
+      "updated_at": "2026-06-16T19:16:45Z",
+      "state": "open",
+      "llm_title": "PicoClaw OneBot 任意URL获取漏洞",
+      "llm_summary": "AI代理框架PicoClaw在处理OneBot传入的媒体URL时，直接从主机网络进行请求，且未验证URL的来源或目标是否为内网地址。攻击者可通过恶意的OneBot上游，强迫PicoClaw主机向任意内部服务（包括localhost）发起HTTP请求并获取响应，构成严重的SSRF漏洞。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "[Security] MQTT `allow_from` authorization can be bypassed by spoofing the topic `client_id`",
+      "url": "https://github.com/sipeed/picoclaw/issues/3068",
+      "desc": "### Advisory Details\n\n**Title**: MQTT `allow_from` authorization can be bypassed by spoofing the topic `client_id`\n\n**Description**:\n\n### Summary\n\nPicoClaw's MQTT channel authorizes inbound messages using the topic segment `{client_id}` from `/picoclaw/{agent_id}/{client_id}/request`. Because this value is client-controlled topic metadata rather than a broker-authenticated principal, any actor who can publish into the request topic namespace can impersonate an allowlisted sender and reach the in...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "权限绕过"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:31:26Z",
+      "updated_at": "2026-06-16T19:16:43Z",
+      "state": "open",
+      "llm_title": "PicoClaw MQTT 授权伪造绕过",
+      "llm_summary": "AI代理框架PicoClaw的MQTT通道使用客户端自行控制的主题段（client_id）进行授权校验。攻击者可通过在该主题段中伪造合法的授权ID，绕过MQTT broker层面的认证，冒充受信任的发送者向AI代理发送指令，从而非法访问系统。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "feat(security): add tirith pre-exec scanning on interactive shell approval paths",
+      "url": "https://github.com/nearai/ironclaw/pull/3254",
+      "desc": "### What is Tirith?\r\n\r\n[Tirith](https://github.com/sheeki03/tirith) is a terminal-security CLI written in Rust that analyzes shell commands for content-level threats that regex deny-lists do not reliably catch:\r\n\r\n- **Homograph / punycode attacks** — lookalike domains using Unicode confusables (Cyrillic / Greek / Fullwidth), mixed-script TLDs, and IDN spoofing\r\n- **Pipe-to-interpreter patterns** — `curl ... | bash`, `wget ... | sh`, PowerShell `iwr | iex`, and wrapper variants with `sudo` / `env...",
+      "source": "GitHub Issues",
+      "repo": "nearai/ironclaw",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "size: XL",
+        "risk: medium",
+        "scope: agent",
+        "scope: tool",
+        "scope: tool/builtin",
+        "scope: config",
+        "scope: docs",
+        "scope: dependencies",
+        "contributor: new"
+      ],
+      "created_at": "2026-05-05T15:41:10Z",
+      "updated_at": "2026-05-05T16:08:20Z",
+      "state": "open",
+      "llm_title": "通用AI编程工具 Shell预执行扫描防RCE",
+      "llm_summary": "该PR添加Tirith工具在交互式shell审批路径中预扫描命令，检测homograph攻击和管道解释器模式等威胁，以防止远程代码执行风险。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "feat(security): add outbound trust policy for wasm and mcp",
+      "url": "https://github.com/nearai/ironclaw/pull/1617",
+      "desc": "## Summary\n\nAdds an operator-managed outbound trust policy system for narrowly scoped HTTPS exceptions on extension-style outbound surfaces.\n\nThis change:\n- adds a shared `outbound_trust` policy model under `settings.security`\n- requires dual opt-in before any exception is granted:\n  - operator config must define a matching policy\n  - the consuming WASM tool, WASM channel, or MCP server must explicitly declare the allowed policy id\n- supports two explicit risk flags:\n  - `allow_invalid_tls`\n  - ...",
+      "source": "GitHub Issues",
+      "repo": "nearai/ironclaw",
+      "product": "IronClaw",
+      "type": [
+        "沙箱逃逸",
+        "权限绕过"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "size: XL",
+        "risk: medium",
+        "scope: channel/cli",
+        "scope: channel/wasm",
+        "scope: tool",
+        "scope: tool/wasm",
+        "scope: tool/mcp",
+        "scope: config",
+        "scope: extensions",
+        "scope: docs",
+        "scope: dependencies",
+        "contributor: new"
+      ],
+      "created_at": "2026-03-24T10:25:23Z",
+      "updated_at": "2026-05-01T06:18:19Z",
+      "state": "open",
+      "llm_title": "AI工具链出站信任策略安全增强",
+      "llm_summary": "此PR为AI代理使用的WASM工具和MCP服务器添加了出站信任策略。它通过要求操作员配置和消费方显式声明的双重授权，来控制代理对外部资源的访问，旨在防止代理通过扩展模块进行未经授权或高风险的外部通信。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "Security Improvements: SRI and Input Validation",
+      "url": "https://github.com/nearai/ironclaw/issues/107",
+      "desc": "### Summary\nDuring a security audit of the IronClaw codebase, I identified two minor security improvements that would strengthen the web gateway's defenses.\n\n---\n\n### 1. Missing Subresource Integrity (SRI) on CDN Script\n\n**Location:** `src/channels/web/static/index.html:8`\n\n**Current Code:**\n```html\n<script src=\"https://cdn.jsdelivr.net/npm/marked/marked.min.js\"></script>\n```\n\n**Issue:** The application loads `marked.js` from a CDN without an integrity hash. While IronClaw is primarily a local a...",
+      "source": "GitHub Issues",
+      "repo": "nearai/ironclaw",
+      "product": "IronClaw",
+      "type": [
+        "供应链攻击",
+        "提示注入"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "scope: channel/web"
+      ],
+      "created_at": "2026-02-16T11:25:16Z",
+      "updated_at": "2026-04-14T18:02:57Z",
+      "state": "open",
+      "llm_title": "AI平台Web前端安全加固建议",
+      "llm_summary": "这是一个安全审计发现的问题，指出IronClaw的Web网关存在两个安全隐患：一是加载外部CDN脚本未使用SRI校验，可能遭受供应链攻击；二是缺少输入验证，可能为注入攻击提供条件。这些问题可能影响通过Web界面与AI代理交互的安全性。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "Architecture Review: Security Model for Hosted Multi-Tenant Deployment",
+      "url": "https://github.com/nearai/ironclaw/issues/557",
+      "desc": "## Context\n\nIronClaw has two competing deployment goals: **local developer adoption** and **hosted deployment for general consumers**. This report examines the current architecture through the lens of the priority concern: **securing user credentials and data** against adversarial attacks through prompts, skills, and supply chain — and preventing users from accidentally causing irreversible damage through their agent.\n\nThis report was produced from a hands-on review of the codebase and a series ...",
+      "source": "GitHub Issues",
+      "repo": "nearai/ironclaw",
+      "product": "Claude Code",
+      "type": [
+        "提示注入",
+        "供应链攻击",
+        "信息泄露"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "scope: agent",
+        "scope: secrets"
+      ],
+      "created_at": "2026-03-05T00:26:37Z",
+      "updated_at": "2026-04-14T17:47:49Z",
+      "state": "open",
+      "llm_title": "多租户AI代理平台安全架构审查",
+      "llm_summary": "这份架构审查报告深入分析了IronClaw在托管部署模式下面临的安全挑战，重点关注如何保护用户凭证和数据免受通过提示、技能和供应链发起的对抗性攻击，并防止用户因代理执行造成不可逆损害。报告揭示了当前架构在隔离性、权限控制和数据保护方面的潜在风险。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "Show HN: AVP – an agent can't leak a secret it never had",
+      "url": "https://github.com/inflightsec/agent-vault-proxy",
+      "desc": "A process can&#x27;t leak a secret it never had.<p>Shai-hulud, prompt-injection - you name it. They cannot steal what your agent (or an process) don&#x27;t have.<p>I run coding agents (Claude Code, Codex) on my own machines most of the day. Every one of them wants real API keys in env and I was scratching my head for the last few months how to contain it.<p>The usual answer to this is a firewall. I don&#x27;t buy it. A firewall tries to contain a secret the process is still holding, and the rule...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Claude Code",
+      "type": [
+        "信息泄露"
+      ],
+      "level": "高危",
+      "cve": [],
+      "hn_id": "48495018",
+      "hn_points": 3,
+      "hn_comments": 1,
+      "hn_author": "radku",
+      "created_at": "2026-06-11T19:10:08Z",
+      "updated_at": "2026-06-11T19:10:08Z",
+      "llm_title": "通用工具秘密隔离方案防范提示注入",
+      "llm_summary": "该方案通过进程隔离确保AI编程代理（如Claude Code、Codex）无法直接访问API密钥等敏感环境变量。其核心思想是“进程无法泄露它从未拥有的秘密”，旨在从根本上防止因提示注入导致的密钥泄露风险。",
+      "llm_reproduction": "暂无"
+    },
+    {
+      "title": "AI agent has more production access than your senior engineers",
+      "url": "https://news.ycombinator.com/item?id=46966307",
+      "desc": "There’s a pattern I keep seeing across teams adopting AI agents for infrastructure, and it’s starting to scare me.<p>A team sets up an agent to help with Terraform, Kubernetes configs, or cloud deployments. To make it useful, they give it cloud credentials, state files, sometimes CI&#x2F;CD pipeline access. They test it in staging. It works. They move it to production. Nobody asks: what’s the blast radius if this thing gets prompt-injected?<p>Coding agents are not infrastructure agents.<p>The in...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Copilot",
+      "type": [
+        "提示注入",
+        "权限绕过"
+      ],
+      "level": "高危",
+      "cve": [],
+      "hn_id": "46966307",
+      "hn_points": 1,
+      "hn_comments": 1,
+      "hn_author": "sallamzz92",
+      "created_at": "2026-02-10T20:23:14Z",
+      "updated_at": "2026-02-10T20:23:14Z",
+      "llm_title": "通用代理过度权限与提示注入风险",
+      "llm_summary": "文章揭示了在将AI代理（特别是基础设施代理）部署到生产环境时，开发者常因其便利性而赋予其过高的云访问权限（如Terraform、K8s凭证）。这在遇到提示注入攻击时，可能导致巨大的破坏半径。",
       "llm_reproduction": "暂无"
     }
   ]
