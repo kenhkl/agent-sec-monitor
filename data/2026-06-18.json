@@ -1,45 +1,45 @@
 {
   "summary": {
-    "total": 254,
-    "generated_at": "2026-06-18T01:26:50.017473+08:00",
+    "total": 274,
+    "generated_at": "2026-06-18T06:54:40.819001+08:00",
     "date": "2026-06-18",
     "by_type": {
-      "已修复": 172,
-      "远程代码执行": 141,
-      "未修复": 47,
-      "提示注入": 28,
+      "已修复": 189,
+      "远程代码执行": 151,
+      "未修复": 49,
+      "提示注入": 31,
       "供应链攻击": 8,
       "权限绕过": 7,
-      "信息泄露": 2,
-      "沙箱逃逸": 2
+      "信息泄露": 3,
+      "沙箱逃逸": 3
     },
     "by_level": {
-      "严重": 151,
-      "高危": 45,
-      "低危": 42,
-      "中危": 16
+      "严重": 162,
+      "高危": 50,
+      "低危": 43,
+      "中危": 19
     },
     "by_product": {
-      "Claude Code": 66,
-      "Continue": 27,
-      "通用AI编程工具": 24,
-      "OpenClaw": 19,
+      "Claude Code": 68,
+      "Continue": 29,
+      "通用AI编程工具": 27,
+      "Hermes Agent": 24,
+      "OpenClaw": 21,
+      "Cline": 20,
       "NanoBot": 19,
-      "Cline": 18,
-      "Hermes Agent": 18,
       "Aider": 13,
       "PicoClaw": 13,
-      "NanoClaw": 10,
+      "NanoClaw": 12,
       "IronClaw": 10,
       "OpenCode": 7,
-      "ZeroClaw": 6,
+      "ZeroClaw": 7,
       "Copilot": 2,
       "Cursor": 2
     },
     "by_source": {
-      "GitHub Issues": 190,
-      "Hacker News": 51,
-      "GitHub Security Advisory": 10,
+      "GitHub Issues": 203,
+      "Hacker News": 55,
+      "GitHub Security Advisory": 13,
       "OSV.dev": 3
     },
     "target_repos": [
@@ -487,6 +487,115 @@
       "state": "open"
     },
     {
+      "title": "security: add Security Matrix runtime-fact audit model",
+      "url": "https://github.com/openclaw/openclaw/pull/92086",
+      "desc": "## Summary\n\n- Adds a Security Matrix runtime-fact evaluator.\n- Models actor, influence source, tool capability, approval state, and operator policy as separate inputs.\n- Adds default policy data, a deterministic evaluator, tool capability resolution, an audit-event object builder, tests, and documentation.\n- Adds a before-tool-call fact adapter and wires it into the trusted-tool-policy import path so the adapter is called with real tool-call facts during policy evaluation.\n- Removes the unsuppor...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "size: XL",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🦪 silver shellfish",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-06-11T04:06:34Z",
+      "updated_at": "2026-06-17T22:51:38Z",
+      "state": "open"
+    },
+    {
+      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
+      "url": "https://github.com/openclaw/openclaw/pull/77492",
+      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "app: web-ui",
+        "gateway",
+        "scripts",
+        "size: L",
+        "triage: dirty-candidate",
+        "proof: supplied",
+        "P1",
+        "rating: 🦪 silver shellfish",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-04T19:27:34Z",
+      "updated_at": "2026-06-17T21:24:29Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(exec): align node-host exec security/ask defaults with exec-approvals constants",
+      "url": "https://github.com/openclaw/openclaw/pull/93592",
+      "desc": "## Summary\n- resolveExecSecurity and resolveExecAsk in node-host/invoke.ts fell back to \"allowlist\" and \"on-miss\" when no explicit value was provided\n- These defaults conflicted with the canonical exec-approvals security=full and ask=off defaults, causing node-host exec commands to be downgraded when exec-approvals.json was configured for full/off\n- Changed the fallback from \"allowlist\"/\"on-miss\" to \"full\"/\"off\" to align with the canonical defaults\n- Updated test mirror functions and invoke test...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "size: XS",
+        "proof: supplied",
+        "P2",
+        "rating: 🦪 silver shellfish",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: 🔁 re-review loop"
+      ],
+      "created_at": "2026-06-16T10:42:29Z",
+      "updated_at": "2026-06-17T20:55:01Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] web-fetch-visibility: near-invisible CSS patterns not covered by sanitizer",
+      "url": "https://github.com/openclaw/openclaw/issues/48486",
+      "desc": "# [Security] web-fetch-visibility: near-invisible CSS patterns not covered by sanitizer\n\n## Description\n\nThe existing `sanitizeHtml()` in `web-fetch-visibility.ts` does an excellent job covering most invisible content injection vectors (HTML comments, `display:none`, `visibility:hidden`, `opacity:0`, `font-size:0`, `color:transparent`, zero-width Unicode, etc.).\n\nHowever, during a security audit, we identified a few **near-invisible CSS patterns** that pass through the current sanitizer but coul...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "提示注入",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "security",
+        "P2",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:fix-shape-clear",
+        "clawsweeper:needs-maintainer-review",
+        "clawsweeper:needs-product-decision",
+        "clawsweeper:needs-security-review",
+        "clawsweeper:source-repro"
+      ],
+      "created_at": "2026-03-16T20:58:52Z",
+      "updated_at": "2026-06-17T18:24:09Z",
+      "state": "open"
+    },
+    {
       "title": "security: scan markdown skill definitions for injection threats",
       "url": "https://github.com/openclaw/openclaw/pull/43469",
       "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
@@ -510,7 +619,7 @@
         "status: ⏳ waiting on author"
       ],
       "created_at": "2026-03-11T21:06:37Z",
-      "updated_at": "2026-06-17T17:22:42Z",
+      "updated_at": "2026-06-17T18:23:55Z",
       "state": "open"
     },
     {
@@ -569,31 +678,6 @@
       "state": "open"
     },
     {
-      "title": "security: add Security Matrix runtime-fact audit model",
-      "url": "https://github.com/openclaw/openclaw/pull/92086",
-      "desc": "## Summary\n\n- Adds a Security Matrix runtime-fact evaluator.\n- Models actor, influence source, tool capability, approval state, and operator policy as separate inputs.\n- Adds default policy data, a deterministic evaluator, tool capability resolution, an audit-event object builder, tests, and documentation.\n- Adds a before-tool-call fact adapter and wires it into the trusted-tool-policy import path so the adapter is called with real tool-call facts during policy evaluation.\n- Removes the unsuppor...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "docs",
-        "size: XL",
-        "triage: needs-real-behavior-proof",
-        "P2",
-        "rating: 🦪 silver shellfish",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-06-11T04:06:34Z",
-      "updated_at": "2026-06-17T12:37:20Z",
-      "state": "open"
-    },
-    {
       "title": "fix(security): block untrusted workspace providers in startup discovery",
       "url": "https://github.com/openclaw/openclaw/pull/74302",
       "desc": "### Motivation\n\n- Prevent untrusted workspace plugin discovery entries from being imported/executed during startup prewarm when `providerDiscoveryEntriesOnly` is enabled, closing a path that could run workspace code without explicit trust.\n\n### Description\n\n- When `providerDiscoveryEntriesOnly` is true, forward `includeUntrustedWorkspacePlugins: false` into `resolveRuntimePluginDiscoveryProviders` in `resolveImplicitProviders` (`src/agents/models-config.providers.implicit.ts`) to block workspace...",
@@ -642,31 +726,6 @@
       ],
       "created_at": "2026-03-17T14:57:08Z",
       "updated_at": "2026-06-17T11:36:57Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(exec): align node-host exec security/ask defaults with exec-approvals constants",
-      "url": "https://github.com/openclaw/openclaw/pull/93592",
-      "desc": "## Summary\n- resolveExecSecurity and resolveExecAsk in node-host/invoke.ts fell back to \"allowlist\" and \"on-miss\" when no explicit value was provided\n- These defaults conflicted with the canonical exec-approvals security=full and ask=off defaults, causing node-host exec commands to be downgraded when exec-approvals.json was configured for full/off\n- Changed the fallback from \"allowlist\"/\"on-miss\" to \"full\"/\"off\" to align with the canonical defaults\n- Updated test mirror functions and invoke test...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "size: XS",
-        "proof: supplied",
-        "P2",
-        "rating: 🦪 silver shellfish",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: 🔁 re-review loop"
-      ],
-      "created_at": "2026-06-16T10:42:29Z",
-      "updated_at": "2026-06-17T10:52:19Z",
       "state": "open"
     },
     {
@@ -980,79 +1039,15 @@
       "state": "open"
     },
     {
-      "title": "fix(nodes): align node-host exec policy defaults with global security…",
-      "url": "https://github.com/openclaw/openclaw/pull/93546",
-      "desc": "…/ask (#93518)\r\n\r\nresolveExecSecurity and resolveExecAsk on the node host defaulted to \"allowlist\" / \"on-miss\", which overrode exec-approvals.json settings via minSecurity/maxAsk intersection. Align with the global defaults of \"full\" / \"off\" so that exec-approvals.json acts as the authoritative policy source, matching Gateway-side non-sandbox exec behavior.\r\n\r\n## Summary\r\n\r\nWhat problem does this PR solve?\r\n\r\nWhy does this matter now?\r\n\r\nWhat is the intended outcome?\r\n\r\nWhat is intentionally out...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "size: XS",
-        "triage: needs-real-behavior-proof"
-      ],
-      "created_at": "2026-06-16T07:29:00Z",
-      "updated_at": "2026-06-16T07:29:19Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): add default pidsLimit for sandbox containers",
-      "url": "https://github.com/openclaw/openclaw/pull/44098",
-      "desc": "## Summary\n\nSandbox containers were created without a default pidsLimit, making them vulnerable to fork bomb attacks that could exhaust host resources.\n\n## Security Impact\n\n- **Prevents fork bomb attacks**: Malicious or compromised agents cannot execute `:(){ :|:& };:` style attacks\n- **Limits container processes**: Containers can create at most 1024 processes\n- **Protects host system**: Prevents PID/memory exhaustion\n\n## Changes\n\n1. Added `DEFAULT_SANDBOX_PIDS_LIMIT = 1024` constant in `src/age...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "agents",
-        "size: XS",
-        "triage: needs-real-behavior-proof",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 availability",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-03-12T14:04:02Z",
-      "updated_at": "2026-06-16T05:22:52Z",
-      "state": "open"
-    },
-    {
-      "title": "[Aikido] Fix 5 security issues in glib, http, smallvec and 1 more",
-      "url": "https://github.com/cline/cline/pull/11589",
-      "desc": "Upgrade glib, http, smallvec, and serde_with to fix memory safety vulnerabilities including use-after-free, double-free, undefined behavior, and DoS via unbounded allocations.\n\r<details>\n\r<summary>✅ 5 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[GHSA-wrw7-89jp-8q8g](https://app.aikido.dev/issues/28407729/detail?groupId=39595#GHSA...",
-      "source": "GitHub Issues",
-      "repo": "cline/cline",
-      "product": "Cline",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-06-16T22:54:25Z",
-      "updated_at": "2026-06-16T23:17:47Z",
-      "state": "open"
-    },
-    {
-      "title": "[Aikido] Fix 17 security issues in @grpc/grpc-js, form-data, protobufjs and 3 more",
-      "url": "https://github.com/cline/cline/pull/11588",
-      "desc": "Upgrade dependencies to fix critical DoS vulnerabilities in gRPC HTTP/2 stream handling and protobuf message conversion, CRLF injection in form-data, and CORS credential bypass in Hono.\n\r<details>\n\r<summary>⚠️ Incomplete breaking changes analysis (4/6 analyzed)</summary>\n\r<br>\n\r\n\r⚠️ Breaking changes analysis not available for: protobufjs, enhanced-resolve\n\r\n\r✅ The `@opentelemetry/core` upgrade from 2.5.0 to 2.8.0 includes breaking changes related to `OTEL_RESOURCE_ATTRIBUTES` parsing and double-...",
+      "title": "[Aikido] Fix 19 security issues in @grpc/grpc-js, form-data, protobufjs and 4 more",
+      "url": "https://github.com/cline/cline/pull/11626",
+      "desc": "Upgrade dependencies to fix critical DoS vulnerabilities in gRPC HTTP/2 stream handling and compressed messages, CRLF injection in form-data, stack overflow in protobufjs JSON conversion, and credential leakage in axios redirects.\n\r<details>\n\r<summary>⚠️ Incomplete breaking changes analysis (5/7 analyzed)</summary>\n\r<br>\n\r\n\r⚠️ Breaking changes analysis not available for: protobufjs, enhanced-resolve\n\r\n\r✅ After thorough analysis of the codebase, no breaking changes from the package upgrades affec...",
       "source": "GitHub Issues",
       "repo": "cline/cline",
       "product": "Cline",
       "type": [
         "远程代码执行",
+        "信息泄露",
         "已修复"
       ],
       "level": "严重",
@@ -1078,20 +1073,17 @@
         "CVE-2026-54289",
         "CVE-2026-54289",
         "CVE-2026-54285",
-        "CVE-2026-54285",
-        "CVE-2026-54285",
-        "CVE-2026-48712",
-        "CVE-2026-54269"
+        "CVE-2026-54285"
       ],
       "labels": [],
-      "created_at": "2026-06-16T22:53:51Z",
-      "updated_at": "2026-06-16T22:57:03Z",
+      "created_at": "2026-06-17T22:52:59Z",
+      "updated_at": "2026-06-17T22:53:56Z",
       "state": "open"
     },
     {
-      "title": "[Aikido] Fix 21 security issues in dompurify, @ungap/structured-clone, lodash-es and 1 more",
-      "url": "https://github.com/cline/cline/pull/11586",
-      "desc": "Upgrade DOMPurify, @ungap/structured-clone, lodash-es, and mermaid to fix multiple XSS vulnerabilities including prototype pollution bypass, template injection, and URI scheme validation gaps.\n\r<details>\n\r<summary>✅ Code not affected by breaking changes.</summary>\n\r<br>\n\r\n\r✅ No breaking changes from either package upgrade affect this codebase.\n\r\n\r**lodash-es (4.17.23 => 4.18.0):**\n\r- The codebase does not use `lodash-es` at all. It uses `lodash` (not `lodash-es`) in one test file (`apps/vscode/t...",
+      "title": "[Aikido] Fix 22 security issues in dompurify, @ungap/structured-clone, lodash-es and 1 more",
+      "url": "https://github.com/cline/cline/pull/11625",
+      "desc": "Upgrade DOMPurify, @ungap/structured-clone, lodash-es, and mermaid to fix multiple XSS vulnerabilities including prototype pollution bypass, template injection, and URI scheme validation gaps.\n\r<details>\n\r<summary>✅ Code not affected by breaking changes.</summary>\n\r<br>\n\r\n\r✅ No breaking changes from either package upgrade affect this codebase.\n\r\n\r**lodash-es (4.17.23 => 4.18.0):**\n\r- `lodash-es` is only a transitive dependency (via `dagre-d3-es` and `chevrotain` packages in `mermaid`)\n\r- No dire...",
       "source": "GitHub Issues",
       "repo": "cline/cline",
       "product": "Cline",
@@ -1125,8 +1117,25 @@
         "CVE-2026-41159"
       ],
       "labels": [],
-      "created_at": "2026-06-16T22:52:28Z",
-      "updated_at": "2026-06-16T22:56:18Z",
+      "created_at": "2026-06-17T22:51:43Z",
+      "updated_at": "2026-06-17T22:53:07Z",
+      "state": "open"
+    },
+    {
+      "title": "[Aikido] Fix 5 security issues in glib, http, smallvec and 1 more",
+      "url": "https://github.com/cline/cline/pull/11589",
+      "desc": "Upgrade glib, http, smallvec, and serde_with to fix memory safety vulnerabilities including use-after-free, double-free, undefined behavior, and DoS via unbounded allocations.\n\r<details>\n\r<summary>✅ 5 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[GHSA-wrw7-89jp-8q8g](https://app.aikido.dev/issues/28407729/detail?groupId=39595#GHSA...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-16T22:54:25Z",
+      "updated_at": "2026-06-16T23:17:47Z",
       "state": "open"
     },
     {
@@ -2091,6 +2100,136 @@
       "state": "open"
     },
     {
+      "title": "fix(egress): close three P0 security gaps in iron-proxy integration",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/48073",
+      "desc": "Closes the three **P0** security gaps @maxpetrusenko flagged in the #30179 review. Opening directly against `feat/iron-proxy` as offered in https://github.com/NousResearch/hermes-agent/pull/30179#issuecomment-4736002564 — single commit on top of current `feat/iron-proxy` HEAD (1 ahead, 0 behind).\n\n### P0-1 — version probe env leak\n`iron_proxy_version()` now builds a minimal env from `_PROXY_SUBPROCESS_ENV_ALLOWLIST` and passes it explicitly to the subprocess. PATH-resolved binaries no longer rec...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "backend/docker",
+        "area/auth",
+        "P1"
+      ],
+      "created_at": "2026-06-17T22:19:10Z",
+      "updated_at": "2026-06-17T22:22:30Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): align cron invisible-unicode set with the install-time scanner",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/35077",
+      "desc": "## What does this PR do?\n\nThe cron injection tripwire used a narrower invisible-unicode set than the install-time scanner, so an obfuscated directive could pass one gate while being caught by the other.\n\n```python\n# tools/cronjob_tools.py\n- _CRON_INVISIBLE_CHARS = { ...10 chars, missing U+2062-2064 / U+2066-2069... }\n+ from tools.threat_patterns import INVISIBLE_CHARS as _CRON_INVISIBLE_CHARS\n```\n\n`_CRON_INVISIBLE_CHARS` was a hand-copied 10-char subset of `threat_patterns.INVISIBLE_CHARS` (17 c...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/cron",
+        "P1"
+      ],
+      "created_at": "2026-05-30T01:57:12Z",
+      "updated_at": "2026-06-17T20:09:28Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): use system role for automated review prompts (#25839)",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/25934",
+      "desc": "## Summary\nCloses #25839\n\n**P1 Security Fix**: Background review prompts (skill/memory/curator) were injected as `role: \"user\"` messages, causing parallel agent instances to mistake them for real user commands and potentially execute unauthorized operations.\n\n## Changes\n\n### `run_agent.py`\n- Added `[Hermes automated prompt — NOT from the user]` prefix to `_MEMORY_REVIEW_PROMPT`, `_SKILL_REVIEW_PROMPT`, `_COMBINED_REVIEW_PROMPT`\n- Changed `_spawn_background_review()` to inject the review prompt a...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "P1"
+      ],
+      "created_at": "2026-05-14T20:17:00Z",
+      "updated_at": "2026-06-17T19:14:25Z",
+      "state": "open"
+    },
+    {
+      "title": "security(deps): clear June 2026 Dependabot CVE batch",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/47998",
+      "desc": "## Summary\n\n- Bump pinned Python deps to clear 32 open Dependabot alerts: \u0007iohttp 3.14.1, starlette 1.3.1, cryptography >=48, python-multipart >=0.0.32, \tornado 6.5.7, pygments >=2.20.0\n- Refresh website dompurify to 3.4.10 and photon sidecar @opentelemetry/core override to 2.8.0\n- Fix WeChat AES cipher construction for cryptography 48+ (#35432)\n\nCloses #47997. Complements #41374 (aiohttp/idna/PyNaCl batch).\n\n## Test plan\n\n- [x] uv lock --check\n- [x] pytest tests/test_packaging_metadata.py tests...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/tools",
+        "platform/wecom",
+        "P2"
+      ],
+      "created_at": "2026-06-17T19:07:29Z",
+      "updated_at": "2026-06-17T19:13:50Z",
+      "state": "open"
+    },
+    {
+      "title": "security(deps): clear June 2026 Dependabot batch (starlette, tornado, cryptography, dompurify, opentelemetry)",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/47997",
+      "desc": "## Summary\n\nDependabot/OSV reports **32 open alerts** on current `main` (2026-06-18) across Python lockfiles (`uv.lock`) and npm lockfiles (`website/package-lock.json`, `plugins/platforms/photon/sidecar/package-lock.json`). Several are **not covered** by the existing tracking issue #41374 (which focuses on aiohttp/idna/PyNaCl/PyJWT/pip).\n\nThis issue proposes a coordinated pin refresh plus one small gateway compatibility fix required for the cryptography bump.\n\n## Relationship to existing reports...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "P2"
+      ],
+      "created_at": "2026-06-17T19:06:57Z",
+      "updated_at": "2026-06-17T19:13:47Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): add auth.json, config.yaml, webhook_subscriptions.json to write deny list",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/47974",
+      "desc": "## Summary\n\nRe-adds write protection for three critical Hermes credential/config files that were lost when the `control_file_names` loop was removed from `is_write_denied()` (commit 81e42335a).\n\n## Problem\n\nAfter the `control_file_names` loop was removed from `agent/file_safety.py:is_write_denied()`:\n\n- `auth.json` has **NO write guard** on the `write_file`/`patch` tool path\n- `webhook_subscriptions.json` has **NO write guard** on the `write_file`/`patch` tool path  \n- `config.yaml` also lacks w...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "提示注入",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "P2"
+      ],
+      "created_at": "2026-06-17T18:16:31Z",
+      "updated_at": "2026-06-17T18:21:35Z",
+      "state": "open"
+    },
+    {
       "title": "fix(security): suppress user dashboard plugin APIs on public insecure dashboards (#43719)",
       "url": "https://github.com/NousResearch/hermes-agent/pull/43786",
       "desc": "## Summary\n\n- suppress user-installed dashboard plugin Python API imports when the dashboard is launched with `--insecure` on a non-loopback host\n- preserve bundled dashboard plugin APIs and preserve user-installed plugin APIs on loopback or OAuth-gated dashboards\n- snapshot the `dashboard.allow_insecure_user_plugin_api` opt-in before serving a public-insecure dashboard, so a later config edit plus rescan cannot re-enable user plugin Python imports in the same unauthenticated process\n- share das...",
@@ -2417,163 +2556,6 @@
       "state": "open"
     },
     {
-      "title": "fix(security): resolve approval context-bleed and enforce session isolation in RPC workers",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/6641",
-      "desc": "Summary\r\nThis PR fixes a security bug in the execute_code tool where dangerous-command approvals could lose session isolation inside RPC worker threads.\r\n\r\nexecute_code dispatches tool calls from background RPC threads. The approval system is designed to be session-scoped, but these worker threads were not inheriting the parent approval session context. In concurrent gateway deployments, that meant a dangerous command triggered from inside execute_code could fall back to the process-wide HERMES_...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/agent",
-        "tool/code-exec",
-        "P1"
-      ],
-      "created_at": "2026-04-09T14:10:40Z",
-      "updated_at": "2026-06-16T21:05:38Z",
-      "state": "open"
-    },
-    {
-      "title": "security: fail-closed gateway defaults and external-surface hardening",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/44073",
-      "desc": "Fixes unauthorised external-surface access when messaging adapters are enabled with default configuration.\r\n\r\nIt aligns runtime behaviour with `SECURITY.md` section 2.6.2 by making externally reachable messaging, gateway, API, and tool-socket surfaces fail closed unless access has been explicitly configured. The main goal is to prevent accidental open access when operators enable adapters or gateway features without also providing an explicit authorisation policy.\r\n\r\nThe fix tightens defaults, v...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/gateway",
-        "P1"
-      ],
-      "created_at": "2026-06-11T06:59:05Z",
-      "updated_at": "2026-06-16T20:13:40Z",
-      "state": "open"
-    },
-    {
-      "title": "feat: add configurable command_blocklist to terminal security",
-      "url": "https://github.com/NousResearch/hermes-agent/issues/47384",
-      "desc": "## Feature Request: Configurable `command_blocklist`\n\nThe current `command_allowlist` is a skip-approval list, not a blocklist. There is no way for users to permanently block specific commands from running via the agent -- the only options are the hardcoded hardline blocklist (non-configurable) and the smart approval system (LLM-dependent, not guaranteed).\n\n### Proposed solution\n\nAdd a `command_blocklist` section in `~/.hermes/config.yaml` that blocks commands unconditionally -- before YOLO, bef...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/feature",
-        "comp/cli",
-        "tool/terminal",
-        "P2"
-      ],
-      "created_at": "2026-06-16T17:35:47Z",
-      "updated_at": "2026-06-16T17:47:21Z",
-      "state": "open"
-    },
-    {
-      "title": "security: fix path traversal vulnerability in profile alias command",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/6205",
-      "desc": "## Summary\r\nPrevent path traversal and arbitrary file clobber in `hermes profile alias --name`.\r\n\r\n## What changed\r\n- validate custom alias names with the same safe identifier rules used for profiles\r\n- enforce wrapper path containment under `~/.local/bin`\r\n- centralize wrapper script generation in a single safe helper\r\n- update CLI alias flow to use the safe helper directly\r\n- add regression tests for traversal rejection and custom alias wrapper behavior\r\n\r\n## Impact\r\nPreviously, a crafted alia...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/cli",
-        "P1"
-      ],
-      "created_at": "2026-04-08T16:18:06Z",
-      "updated_at": "2026-06-16T17:04:30Z",
-      "state": "open"
-    },
-    {
-      "title": "Security: browser_type leaks credentials in tool output",
-      "url": "https://github.com/NousResearch/hermes-agent/issues/47197",
-      "desc": "## Description\n\nWhen using `browser_type` to type credentials (passwords, API keys, etc.) into input fields, the actual text being typed is included in the tool response and displayed in tool progress notifications on Telegram, Discord, and other messaging platforms.\n\n## Steps to Reproduce\n\n1. Use `browser_type` with a password or API key\n2. Observe tool progress notification in Telegram/Discord\n3. The credential value is visible in plain text\n\n## Example\n\n```\nbrowser_type: \"my_secret_password_1...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "tool/browser",
-        "P1"
-      ],
-      "created_at": "2026-06-16T11:22:15Z",
-      "updated_at": "2026-06-16T15:16:28Z",
-      "state": "open"
-    },
-    {
-      "title": "[Feature]: Surface security-audit-skipped skills (e.g. bundled shell scripts) in `zeroclaw skills list`",
-      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/7861",
-      "desc": "### Summary\n\nSurface skill directories that the security audit skips (most commonly: skills bundling shell scripts while `allow_scripts=false`) as a queryable \"Skipped\" section in `zeroclaw skills list`, instead of dropping them with only a transient stderr warning.\n\n### Problem statement\n\nWhen a skill directory fails ZeroClaw's security audit, the loader silently drops it from the set the agent can use. The most common trigger: the skill bundles shell-script files (`.sh`/`.bash`/`.zsh`/`.ps1`/…...",
-      "source": "GitHub Issues",
-      "repo": "zeroclaw-labs/zeroclaw",
-      "product": "ZeroClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "enhancement",
-        "skills"
-      ],
-      "created_at": "2026-06-17T15:15:48Z",
-      "updated_at": "2026-06-17T15:15:48Z",
-      "state": "open"
-    },
-    {
-      "title": "feat(security): add gated_commands TOTP gate for shell tool (phase 1)",
-      "url": "https://github.com/zeroclaw-labs/zeroclaw/pull/5779",
-      "desc": "## Summary\n\n- Base branch target: `master`\n- Problem: `security.otp.gated_actions` gates the entire `shell` tool, but there is no way to allow shell access in general while requiring TOTP only for specific destructive/admin commands (e.g. `sudo *`, `rm -rf *`, `systemctl restart *`).\n- Why it matters: Operators who trust their agent for everyday shell tasks (read, grep, cargo) still want a hard 2FA gate before elevated or irreversible operations — without disabling shell access entirely.\n- What ...",
-      "source": "GitHub Issues",
-      "repo": "zeroclaw-labs/zeroclaw",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "enhancement",
-        "size: M",
-        "risk: high",
-        "agent",
-        "config",
-        "runtime",
-        "needs-author-action",
-        "stale-candidate"
-      ],
-      "created_at": "2026-04-15T19:34:40Z",
-      "updated_at": "2026-06-15T19:22:24Z",
-      "state": "open"
-    },
-    {
       "title": "[Tracker]: v0.9.0 auth, security, gateway, and breaking-change queue and history",
       "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/7432",
       "desc": "## Summary\n\nTracker for the `v0.9.0` milestone: authentication, security hardening, gateway/RPC/WSS boundaries, per-principal authorization and isolation, breaking-change work deferred out of the `v0.8.x` series, issue backlog moved out of the `v0.8.1` release queue, and terminal/off-ramp history for items that have already merged or closed.\n\nThis issue is the milestone coordination home. It does not replace the issue-specific RFCs and trackers below, and it is not approval for every linked PR. ...",
@@ -2600,7 +2582,85 @@
         "status:accepted"
       ],
       "created_at": "2026-06-09T13:43:32Z",
-      "updated_at": "2026-06-15T16:44:21Z",
+      "updated_at": "2026-06-17T22:18:55Z",
+      "state": "open"
+    },
+    {
+      "title": "[Feature]: Apply security policy and channel config updates without full daemon reload",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/7897",
+      "desc": "### Summary\n\nAdd a scoped zero-downtime reload path for security policy and channel configuration changes that are currently written through the gateway config API but still require subsystem re-instantiation or daemon reload to fully take effect.\n\n### Problem statement\n\nThe current gateway config API can persist config edits and swap the in-memory `Config` snapshot. It also marks `pending_reload` because some subsystems still need to be re-instantiated before changes fully apply. `/admin/reload...",
+      "source": "GitHub Issues",
+      "repo": "zeroclaw-labs/zeroclaw",
+      "product": "ZeroClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "enhancement",
+        "risk: high",
+        "channel",
+        "config",
+        "daemon",
+        "gateway",
+        "security",
+        "needs-maintainer-review",
+        "priority:p3"
+      ],
+      "created_at": "2026-06-17T21:00:03Z",
+      "updated_at": "2026-06-17T21:06:38Z",
+      "state": "open"
+    },
+    {
+      "title": "[Feature]: Surface security-audit-skipped skills (e.g. bundled shell scripts) in `zeroclaw skills list`",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/7861",
+      "desc": "### Summary\n\nSurface skill directories that the security audit skips (most commonly: skills bundling shell scripts while `allow_scripts=false`) as a queryable \"Skipped\" section in `zeroclaw skills list`, instead of dropping them with only a transient stderr warning.\n\n### Problem statement\n\nWhen a skill directory fails ZeroClaw's security audit, the loader silently drops it from the set the agent can use. The most common trigger: the skill bundles shell-script files (`.sh`/`.bash`/`.zsh`/`.ps1`/…...",
+      "source": "GitHub Issues",
+      "repo": "zeroclaw-labs/zeroclaw",
+      "product": "ZeroClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "enhancement",
+        "risk: high",
+        "skills",
+        "priority:p2",
+        "status:accepted"
+      ],
+      "created_at": "2026-06-17T15:15:48Z",
+      "updated_at": "2026-06-17T21:03:33Z",
+      "state": "open"
+    },
+    {
+      "title": "feat(security): add gated_commands TOTP gate for shell tool (phase 1)",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw/pull/5779",
+      "desc": "## Summary\n\n- Base branch target: `master`\n- Problem: `security.otp.gated_actions` gates the entire `shell` tool, but there is no way to allow shell access in general while requiring TOTP only for specific destructive/admin commands (e.g. `sudo *`, `rm -rf *`, `systemctl restart *`).\n- Why it matters: Operators who trust their agent for everyday shell tasks (read, grep, cargo) still want a hard 2FA gate before elevated or irreversible operations — without disabling shell access entirely.\n- What ...",
+      "source": "GitHub Issues",
+      "repo": "zeroclaw-labs/zeroclaw",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "enhancement",
+        "size: M",
+        "risk: high",
+        "agent",
+        "config",
+        "runtime",
+        "needs-author-action",
+        "stale-candidate"
+      ],
+      "created_at": "2026-04-15T19:34:40Z",
+      "updated_at": "2026-06-15T19:22:24Z",
       "state": "open"
     },
     {
@@ -2761,6 +2821,47 @@
       ],
       "created_at": "2026-05-27T19:22:34Z",
       "updated_at": "2026-06-08T13:39:59Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): enforce folder validator in ncl groups create (CWE-22 path traversal)",
+      "url": "https://github.com/nanocoai/nanoclaw/pull/2800",
+      "desc": "## What\n`ncl groups create --folder ../../etc` persists a `folder` that escapes `GROUPS_DIR`. The group resource has no `customInsert`, so `genericCreate` does a raw INSERT with the supplied `folder`, bypassing `createAgentGroup` → `assertValidGroupFolder` (the SECURITY validator that rejects `..`). Downstream, `buildMounts`/`group-init` bind-mount that path **RW** into the container and `mkdir` it — a CWE-22 path traversal that becomes a container sandbox escape.\n\n## How it works\nAdd a `customI...",
+      "source": "GitHub Issues",
+      "repo": "nanocoai/nanoclaw",
+      "product": "NanoClaw",
+      "type": [
+        "沙箱逃逸",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-17T19:14:06Z",
+      "updated_at": "2026-06-17T19:15:56Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): confine send_file reads to /workspace (CVE-2026-29611)",
+      "url": "https://github.com/nanocoai/nanoclaw/pull/2799",
+      "desc": "## What\n`send_file` accepts an absolute `path` and copies the file into the outbox after only an existence check — no root restriction, no canonicalization. A prompt-injected or compromised agent can read **any container-visible file** (credential state, files under `/workspace/extra/*` mounts) and exfiltrate it through the normal attachment path.\n\nReported as **CVE-2026-29611 / #2760** (High, `<= 2.0.64`, unpatched).\n\n## How it works\n- Confine the resolved source path to `/workspace` — an absol...",
+      "source": "GitHub Issues",
+      "repo": "nanocoai/nanoclaw",
+      "product": "NanoClaw",
+      "type": [
+        "远程代码执行",
+        "未修复",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-29611",
+        "CVE-2026-29611"
+      ],
+      "labels": [],
+      "created_at": "2026-06-17T19:12:34Z",
+      "updated_at": "2026-06-17T19:12:34Z",
       "state": "open"
     },
     {
@@ -3097,43 +3198,6 @@
       "labels": [],
       "created_at": "2026-03-27T16:45:04Z",
       "updated_at": "2026-04-01T15:47:13Z",
-      "state": "open"
-    },
-    {
-      "title": "feat: add tirith-scan security skill",
-      "url": "https://github.com/nanocoai/nanoclaw/pull/1376",
-      "desc": "<!-- contributing-guide: v1 -->\n## Type of Change\n\n- [x] **Operational/container skill** - adds a workflow or agent skill (SKILL.md + supporting scripts, no source changes)\n\n## Description\n\nAdd a container skill that lets agents scan suspicious URLs and commands for security threats using [Tirith](https://github.com/sheeki03/tirith).\n\nTirith is a terminal security tool written in Rust that detects content-level threats: homograph/punycode attacks (lookalike domains), pipe-to-shell patterns (curl...",
-      "source": "GitHub Issues",
-      "repo": "nanocoai/nanoclaw",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "Type: Community Skill"
-      ],
-      "created_at": "2026-03-23T16:44:20Z",
-      "updated_at": "2026-03-30T07:38:07Z",
-      "state": "open"
-    },
-    {
-      "title": "Security: proxy Gmail/Calendar OAuth tokens through credential proxy",
-      "url": "https://github.com/nanocoai/nanoclaw/issues/1500",
-      "desc": "## Problem\n\nGmail and Calendar OAuth credentials (including long-lived refresh tokens) are mounted directly into containers at `/home/node/.gmail-mcp*/` and `/home/node/.calendar-mcp/`. A prompt injection attack via email, WhatsApp, or any other inbound message could instruct the agent to read and exfiltrate these tokens, granting full account access.\n\nThe Anthropic API key is already properly proxied — containers get `ANTHROPIC_API_KEY=placeholder` and the credential proxy injects the real key....",
-      "source": "GitHub Issues",
-      "repo": "nanocoai/nanoclaw",
-      "product": "NanoClaw",
-      "type": [
-        "提示注入",
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-03-28T02:18:10Z",
-      "updated_at": "2026-03-30T07:19:21Z",
       "state": "open"
     },
     {
@@ -3757,6 +3821,42 @@
       "state": "open"
     },
     {
+      "title": "Add DISABLE_TOOLS_LIST flag and security regression test",
+      "url": "https://github.com/nearai/ironclaw/pull/3548",
+      "desc": "## Summary\n- Add `DISABLE_TOOLS_LIST` config flag (CSV or bracketed/quoted list) to disable specific tools.\n- Enforced at **both** layers: registration (disabled tools never enter the registry, never sent to the LLM) and dispatch (any direct call is denied with an audited `ActionRecord` carrying `DISABLE_TOOLS_DENIAL_PREFIX`; audit failure is fail-closed).\n- Wired through agent dispatcher/scheduler/router and tool registry. Documented in `.env.example`.\n\n## Test plan\n- [x] `cargo test` — covered...",
+      "source": "GitHub Issues",
+      "repo": "nearai/ironclaw",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "size: XL",
+        "risk: medium",
+        "scope: agent",
+        "scope: channel/cli",
+        "scope: channel/web",
+        "scope: channel/wasm",
+        "scope: tool",
+        "scope: tool/builtin",
+        "scope: tool/wasm",
+        "scope: llm",
+        "scope: workspace",
+        "scope: secrets",
+        "scope: setup",
+        "scope: sandbox",
+        "scope: docs",
+        "scope: dependencies",
+        "contributor: core"
+      ],
+      "created_at": "2026-05-12T23:40:16Z",
+      "updated_at": "2026-06-17T19:59:59Z",
+      "state": "open"
+    },
+    {
       "title": "test(arch): assert production composition populates security audit/gate seams (maintainability guardrail)",
       "url": "https://github.com/nearai/ironclaw/pull/3940",
       "desc": "## Problem this kills\n\nThe same defect class recurred 3x in one development cycle (#3919, #3922, #3938/#3573):\n\n> A capability is wired as an `Option<Arc<dyn Trait>>` field with a `with_*` setter, but the canonical production composition path (`builtin_obligation_handler` / `build_default_planned_runtime` / `build_reborn_runtime`) forgets to call the setter — so the security feature silently no-ops in production while every direct-construction unit test keeps passing.\n\nOnly a reviewer reading th...",
@@ -3799,42 +3899,6 @@
       ],
       "created_at": "2026-02-14T06:15:01Z",
       "updated_at": "2026-06-09T15:32:45Z",
-      "state": "open"
-    },
-    {
-      "title": "Add DISABLE_TOOLS_LIST flag and security regression test",
-      "url": "https://github.com/nearai/ironclaw/pull/3548",
-      "desc": "## Summary\n- Add `DISABLE_TOOLS_LIST` config flag (CSV or bracketed/quoted list) to disable specific tools.\n- Enforced at **both** layers: registration (disabled tools never enter the registry, never sent to the LLM) and dispatch (any direct call is denied with an audited `ActionRecord` carrying `DISABLE_TOOLS_DENIAL_PREFIX`; audit failure is fail-closed).\n- Wired through agent dispatcher/scheduler/router and tool registry. Documented in `.env.example`.\n\n## Test plan\n- [x] `cargo test` — covered...",
-      "source": "GitHub Issues",
-      "repo": "nearai/ironclaw",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "size: XL",
-        "risk: medium",
-        "scope: agent",
-        "scope: channel/cli",
-        "scope: channel/web",
-        "scope: channel/wasm",
-        "scope: tool",
-        "scope: tool/builtin",
-        "scope: tool/wasm",
-        "scope: llm",
-        "scope: workspace",
-        "scope: secrets",
-        "scope: setup",
-        "scope: sandbox",
-        "scope: docs",
-        "scope: dependencies",
-        "contributor: core"
-      ],
-      "created_at": "2026-05-12T23:40:16Z",
-      "updated_at": "2026-06-02T17:44:04Z",
       "state": "open"
     },
     {
@@ -4206,6 +4270,63 @@
       "state": "open"
     },
     {
+      "title": "[GHSA] Claude Code: Out-of-Band Data Exfiltration via Pre-Approved HuggingFace Domain in WebFetch",
+      "url": "https://github.com/advisories/GHSA-fg94-h982-f3mm",
+      "desc": "Because the hostname huggingface.co was pre-approved as a bare hostname for the WebFetch tool, any path on that domain—including attacker-controlled model repositories—was auto-approved without a permission prompt or being subject to --allowedTools restrictions. An attacker able to inject untrusted content into a Claude Code context could direct it to issue WebFetch requests against attacker-controlled repository files (e.g. /resolve/main/config.json), which HuggingFace counts as downloads serve...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [
+        "CVE-2026-54316"
+      ],
+      "ghsa_id": "GHSA-fg94-h982-f3mm",
+      "severity": "medium",
+      "created_at": "2026-06-17T18:06:06Z",
+      "updated_at": "2026-06-17T18:06:44Z"
+    },
+    {
+      "title": "[GHSA] Open WebUI: Any authenticated user can read other users' private notes via Socket.IO",
+      "url": "https://github.com/advisories/GHSA-8788-j68r-3cgh",
+      "desc": "### Summary\n\nThe `ydoc:document:join` Socket.IO handler checks note ownership only when the `document_id` starts with `note:` (colon). However, the `YdocManager` storage layer normalizes all document IDs by replacing colons with underscores (`document_id.replace(\":\", \"_\")`). An attacker can join a document room using `note_<id>` (underscore) instead of `note:<id>` (colon), bypassing the authorization check entirely while accessing the same underlying Yjs document. The server then returns the ful...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [
+        "CVE-2026-54022"
+      ],
+      "ghsa_id": "GHSA-8788-j68r-3cgh",
+      "severity": "medium",
+      "created_at": "2026-06-17T18:05:21Z",
+      "updated_at": "2026-06-17T18:05:22Z"
+    },
+    {
+      "title": "[GHSA] Open WebUI: SSRF Protection Bypass in Playwright Web Loader via HTTP Redirects",
+      "url": "https://github.com/advisories/GHSA-jrfp-m64g-pcwv",
+      "desc": "### Summary\nThe SafePlaywrightURLLoader implements a validate_url function to prevent SSRF attacks by checking the IP address of the user-provided URL. However, this validation is performed only on the initial URL.\n\nSince Playwright automatically follows HTTP redirects (301/302) by default, an attacker can bypass the validation by providing a safe URL that redirects to a restricted internal network address (e.g., localhost, Docker container network, or Cloud Metadata).\n\nThis allows the applicati...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [
+        "CVE-2026-54018"
+      ],
+      "ghsa_id": "GHSA-jrfp-m64g-pcwv",
+      "severity": "high",
+      "created_at": "2026-06-17T17:55:44Z",
+      "updated_at": "2026-06-17T17:55:45Z"
+    },
+    {
       "title": "[GHSA] Open WebUI BOLA: `search_knowledge_files` Allows Unauthorized Knowledge Base File Enumeration",
       "url": "https://github.com/advisories/GHSA-cx9v-4qj2-jrw6",
       "desc": "## Summary\n\nOpen WebUI has a Broken Object Level Authorization (BOLA) vulnerability in the builtin `search_knowledge_files` tool.\n\nWhen native function calling is enabled and the selected model has no attached knowledge bases, an authenticated user can call `search_knowledge_files` with an arbitrary `knowledge_id`. The function then returns file metadata from that knowledge base without checking whether the user has read access.\n\nThis allows unauthorized enumeration of private or restricted know...",
@@ -4374,24 +4495,6 @@
       "updated_at": "2026-06-16T21:05:14Z"
     },
     {
-      "title": "[GHSA] phpseclib: X.509 certificate validation sends attacker-controlled outbound requests (server-side req",
-      "url": "https://github.com/advisories/GHSA-m557-wrgg-6rp4",
-      "desc": "### Summary\n\nWhen an application validates an untrusted X.509 certificate with phpseclib, **X509::validateSignature()** reads a URL out of that certificate's Authority Information Access (AIA) extension and connects to it. Attacker who supplies certificate fully controls host, port, and path of that connection. URL fetching is enabled by default, and no destination is blocked. An unauthenticated attacker can therefore make a validating server open connections to internal hosts and ports it shoul...",
-      "source": "GitHub Security Advisory",
-      "repo": "unknown",
-      "product": "Continue",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "ghsa_id": "GHSA-m557-wrgg-6rp4",
-      "severity": "medium",
-      "created_at": "2026-06-16T15:03:58Z",
-      "updated_at": "2026-06-16T15:03:59Z"
-    },
-    {
       "title": "[GHSA-5c57-rqjx-35g2] Cline Kanban Server has a Cross-Origin WebSocket Hijacking Vulnerability",
       "url": "https://osv.dev/vulnerability/GHSA-5c57-rqjx-35g2",
       "desc": "Cline Kanban Server has a Cross-Origin WebSocket Hijacking Vulnerability",
@@ -4475,25 +4578,6 @@
       "updated_at": "2026-04-14T15:14:26Z"
     },
     {
-      "title": "Cogent Security: AI Agents for Vulnerability Management Launched",
-      "url": "https://www.cogent.security/",
-      "desc": "",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "通用AI编程工具",
-      "type": [
-        "未修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "hn_id": "44562142",
-      "hn_points": 10,
-      "hn_comments": 0,
-      "hn_author": "chairmanwow1",
-      "created_at": "2025-07-14T16:37:48Z",
-      "updated_at": "2025-07-14T16:37:48Z"
-    },
-    {
       "title": "Show HN: Enter your domain and my open-source agent will hack it",
       "url": "https://github.com/usestrix/strix",
       "desc": "I built an open-source AI agent for security testing to find and fix vulnerabilities in your code.<p>I’ve noticed how bad security vulnerabilities have gotten with everyone shipping AI code slop, so I wanted to build something that allows for vibe-coding at full speed without compromising security.<p>Traditional security tools aren’t effective, and manual pen-testing can’t keep up with the rapidly growing AI code<p>This tool runs your code dynamically, finds vulnerabilities, and validates them t...",
@@ -4553,25 +4637,6 @@
       "updated_at": "2025-11-21T12:17:31Z"
     },
     {
-      "title": "Microsoft Copilot zero-click attack raises alarms about AI agent security",
-      "url": "https://fortune.com/2025/06/11/microsoft-copilot-vulnerability-ai-agents-echoleak-hacking/",
-      "desc": "",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "Copilot",
-      "type": [
-        "未修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "hn_id": "44270104",
-      "hn_points": 2,
-      "hn_comments": 1,
-      "hn_author": "transpute",
-      "created_at": "2025-06-13T16:45:19Z",
-      "updated_at": "2025-06-13T16:45:19Z"
-    },
-    {
       "title": "Show HN: Klavis AI – Open-source MCP integration for AI applications",
       "url": "https://github.com/Klavis-AI/klavis",
       "desc": "Hi HN, we are excited to show you Klavis AI. It is an open source project and we provide hosted versions with API access as well. (Website: <a href=\"https:&#x2F;&#x2F;www.klavis.ai&#x2F;\">https:&#x2F;&#x2F;www.klavis.ai&#x2F;</a>, Github repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Klavis-AI&#x2F;klavis\">https:&#x2F;&#x2F;github.com&#x2F;Klavis-AI&#x2F;klavis</a>)<p>We&#x27;re addressing a couple of key problems with using MCPs. First, many available MCP servers lack native or used-based aut...",
@@ -4589,27 +4654,6 @@
       "hn_author": "wirehack",
       "created_at": "2025-05-05T15:52:37Z",
       "updated_at": "2025-05-05T15:52:37Z"
-    },
-    {
-      "title": "More than 1,500 AI projects are now vulnerable to a silent exploit",
-      "url": "https://news.ycombinator.com/item?id=44065948",
-      "desc": "According to the latest research by ARIMLABS[.]AI, a critical security vulnerability (CVE-2025-47241) has been discovered in the widely used Browser Use framework — a dependency leveraged by more than 1,500 AI projects.<p>The issue enables zero-click agent hijacking, meaning an attacker can take control of an LLM-powered browsing agent simply by getting it to visit a malicious page — no user interaction required.<p>This raises serious concerns about the current state of security in autonomous AI...",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "通用AI编程工具",
-      "type": [
-        "未修复"
-      ],
-      "level": "严重",
-      "cve": [
-        "CVE-2025-47241"
-      ],
-      "hn_id": "44065948",
-      "hn_points": 6,
-      "hn_comments": 1,
-      "hn_author": "mykytamudryi",
-      "created_at": "2025-05-22T19:39:06Z",
-      "updated_at": "2025-05-22T19:39:06Z"
     },
     {
       "title": "Show HN: I built a fast,free CVE Search API(300k+records)because NVD was tooslow",
@@ -4651,25 +4695,6 @@
       "hn_author": "hsin003",
       "created_at": "2026-03-15T13:09:36Z",
       "updated_at": "2026-03-15T13:09:36Z"
-    },
-    {
-      "title": "Show HN: Code Scalpel – AST analyzer and security scanner (MCP server)",
-      "url": "https://codescalpel.dev/",
-      "desc": "I built Code Scalpel as an MCP server for code analysis. It parses \nPython, JavaScript, TypeScript, and Java - builds control flow graphs \nand catches security bugs using taint analysis and symbolic execution.<p>Security detection:\n- 16+ vulnerability types (SQL&#x2F;NoSQL&#x2F;LDAP injection, XSS, command \n  injection, SSRF, CSRF, SSTI, prototype pollution, weak crypto, etc.)\n- Taint tracking across files\n- &lt;10% false positive rate\n- Z3 symbolic execution for path analysis<p>The MCP part exp...",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "通用AI编程工具",
-      "type": [
-        "未修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "hn_id": "47065233",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "hn_author": "digitalbyooki",
-      "created_at": "2026-02-18T19:32:32Z",
-      "updated_at": "2026-02-18T19:32:32Z"
     },
     {
       "title": "How TRM Labs Scaled Security with Self-Improving AI Vulnerability Agents",
@@ -4805,25 +4830,6 @@
       "updated_at": "2026-03-15T22:29:46Z"
     },
     {
-      "title": "Oscar Six Radar – vulnerability scanner with native A2A (agent-to-agent) support",
-      "url": "https://news.ycombinator.com/item?id=47242324",
-      "desc": "Hey HN,<p>I&#x27;m Randy, founder of Oscar Six Security. We build vulnerability scanning tools for small businesses and MSPs.<p>Today I&#x27;m sharing something I&#x27;m genuinely excited about: we shipped native support for Google&#x27;s A2A (Agent-to-Agent) protocol in our Radar scanner. Here&#x27;s what that actually means in practice:<p>An AI agent — anything built on Google ADK, LangChain, CrewAI, or any A2A-compatible framework — can now:<p>1. Discover Radar&#x27;s capabilities via our age...",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "通用AI编程工具",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "hn_id": "47242324",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "hn_author": "oscarsixsecllc",
-      "created_at": "2026-03-04T02:40:41Z",
-      "updated_at": "2026-03-04T02:40:41Z"
-    },
-    {
       "title": "Show HN: ClawShield – Open-source security proxy for AI agents (Go, eBPF)",
       "url": "https://github.com/SleuthCo/clawshield-public",
       "desc": "Author here. ClawShield is a security proxy that sits in front of OpenClaw (open-source AI gateway) and scans all inbound&#x2F;outbound messages.<p>The core is an HTTP&#x2F;WebSocket reverse proxy in Go (~6k lines) with four scanners:<p>1. Prompt injection detection - three tiers: regex heuristics (role overrides, instruction injection, delimiter attacks, encoding attacks), structural analysis (base64-decoded instruction blocks, imperative verb density scoring), and canary token leak detection.<...",
@@ -4845,6 +4851,25 @@
       "updated_at": "2026-03-02T01:11:57Z"
     },
     {
+      "title": "Show HN: Ziran, security testing for AI agents",
+      "url": "https://github.com/taoq-ai/ziran",
+      "desc": "Link: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;taoq-ai&#x2F;ziran\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;taoq-ai&#x2F;ziran</a><p>Hey HN, I want to introduce you to ZIRAN, an open-source security testing framework for AI agents.<p>As an AI engineer working with LangChain and CrewAI agents in production, I was frustrated that existing security tools (PyRIT, Garak) only test LLMs, \nnot agents. They miss the unique attack surface agents create: dangerous tool combinations, multi-step e...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "通用AI编程工具",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "47001873",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "hn_author": "leoneperdigao",
+      "created_at": "2026-02-13T12:18:09Z",
+      "updated_at": "2026-02-13T12:18:09Z"
+    },
+    {
       "title": "Show HN: Vett – Scan, sign, and verify AI agent skills before installing",
       "url": "https://vett.sh",
       "desc": "Hey HN. I built a security registry for AI agent skills.<p>There are 64k skills on Vercel&#x27;s skills.sh. Cursor, Claude Code, Windsurf, and dozens more agents pull them from GitHub at HEAD — no versioning, signing, or scanning. The OpenClaw agents themselves flagged this: &quot;The supply chain attack nobody is talking about: skill.md is an unsigned binary.&quot;[0]<p>I took an official skill that packages other skills, added a few lines of Python to exfiltrate env vars, shell history, and gi...",
@@ -4863,6 +4888,64 @@
       "hn_author": "nikon",
       "created_at": "2026-02-18T17:21:59Z",
       "updated_at": "2026-02-18T17:21:59Z"
+    },
+    {
+      "title": "Show HN: Hydra – A safer OpenClaw alternative using containerized agents",
+      "url": "https://github.com/RickConsole/hydra",
+      "desc": "Hey HN!<p>I&#x27;m a pentester, and the recent wave of security issues with AI agent frameworks (exposed API keys, RCE vulnerabilities, malicious marketplace plugins) made me uncomfortable enough to build something different.<p>Hydra runs every AI agent inside its own container. Agents start with nothing, and only sees what you explicitly declare (mounts, secrets, etc). Mounts and secrets require agreement between two independent config files (the agent config and a separate host-level allowlist...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "47072965",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "hn_author": "RickConsole",
+      "created_at": "2026-02-19T12:13:14Z",
+      "updated_at": "2026-02-19T12:13:14Z"
+    },
+    {
+      "title": "Show HN: Driftcop – Open-source CLI SAST for \"MCP rug pull attacks in AI Agents\"",
+      "url": "https://github.com/sudoviz/driftcop",
+      "desc": "Hi HN! We just open-sourced Driftcop, a security tool for people building AI agents with external tools via MCP. Driftcop continuously checks that the tools your AI agent relies on haven’t changed or drifted in unsafe ways. The motivation came from recent findings that AI agents can be quietly compromised via their tools – e.g. a tool that was useful and benign yesterday could auto-update into something malicious today (this is known as a rug pull attack in the MCP context)<p>Anthropic’s MCP (Mo...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "通用AI编程工具",
+      "type": [
+        "提示注入",
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "44843841",
+      "hn_points": 4,
+      "hn_comments": 1,
+      "hn_author": "vinaypanghal",
+      "created_at": "2025-08-09T03:37:01Z",
+      "updated_at": "2025-08-09T03:37:01Z"
+    },
+    {
+      "title": "AI Vulnerability Intelligence Agent Converts CVEs to Actionable Security Reports",
+      "url": "https://github.com/gtamir02-png/cve-ai-agent/blob/main/README.md",
+      "desc": "",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "通用AI编程工具",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "hn_id": "48373280",
+      "hn_points": 8,
+      "hn_comments": 2,
+      "hn_author": "gtamir02",
+      "created_at": "2026-06-02T17:27:11Z",
+      "updated_at": "2026-06-02T17:27:11Z"
     },
     {
       "title": "Bill Gates AI on AI (one month later)",
@@ -4902,45 +4985,6 @@
       "hn_author": "cavalrytactics",
       "created_at": "2026-06-16T17:12:02Z",
       "updated_at": "2026-06-16T17:12:02Z"
-    },
-    {
-      "title": "Show HN: KeelTest – AI-driven VS Code unit test generator with bug discovery",
-      "url": "https://keelcode.dev/keeltest",
-      "desc": "I built this because Cursor, Claude Code and other agentic AI tools kept giving me tests that looked fine but failed when I ran them. Or worse - I&#x27;d ask the agent to run them and it would start looping: fix tests, those fail, then it starts &quot;fixing&quot; my code so tests pass, or just deletes assertions so they &quot;pass&quot;.<p>Out of that frustration I built KeelTest - a VS Code extension that generates pytest tests and executes them, got hooked and decided to push this project for...",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "hn_id": "46526088",
-      "hn_points": 30,
-      "hn_comments": 15,
-      "hn_author": "bulba4aur",
-      "created_at": "2026-01-07T13:22:35Z",
-      "updated_at": "2026-01-07T13:22:35Z"
-    },
-    {
-      "title": "Show HN: OmoiOS–190K lines of Python to stop babysitting AI agents (Apache 2.0)",
-      "url": "https://github.com/kivo360/OmoiOS",
-      "desc": "AI coding agents generate decent code. The problem is everything around the code - checking progress, catching drift, deciding if it&#x27;s actually done. I spent months trying to make autonomous agents work. The bottleneck was always me.<p>Attempt 1 - Claude&#x2F;GPT directly: works for small stuff, but you re-explain context endlessly.<p>Attempt 2 - Copilot&#x2F;Cursor: great autocomplete, still doing 95% of the thinking.<p>Attempt 3 - continuous agents: keeps working without prompting, but &q...",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "hn_id": "47263360",
-      "hn_points": 2,
-      "hn_comments": 2,
-      "hn_author": "kanddle",
-      "created_at": "2026-03-05T16:07:21Z",
-      "updated_at": "2026-03-05T16:07:21Z"
     },
     {
       "title": "Show HN: Oc-mnemoria – Persistent memory for AI coding agents",
@@ -5454,6 +5498,440 @@
       "hn_author": "unknownoperator",
       "created_at": "2023-01-10T02:57:02Z",
       "updated_at": "2023-01-10T02:57:02Z"
+    },
+    {
+      "title": "fix(nodes): align node-host exec policy defaults with global security…",
+      "url": "https://github.com/openclaw/openclaw/pull/93546",
+      "desc": "…/ask (#93518)\r\n\r\nresolveExecSecurity and resolveExecAsk on the node host defaulted to \"allowlist\" / \"on-miss\", which overrode exec-approvals.json settings via minSecurity/maxAsk intersection. Align with the global defaults of \"full\" / \"off\" so that exec-approvals.json acts as the authoritative policy source, matching Gateway-side non-sandbox exec behavior.\r\n\r\n## Summary\r\n\r\nWhat problem does this PR solve?\r\n\r\nWhy does this matter now?\r\n\r\nWhat is the intended outcome?\r\n\r\nWhat is intentionally out...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "size: XS",
+        "triage: needs-real-behavior-proof"
+      ],
+      "created_at": "2026-06-16T07:29:00Z",
+      "updated_at": "2026-06-16T07:29:19Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): add default pidsLimit for sandbox containers",
+      "url": "https://github.com/openclaw/openclaw/pull/44098",
+      "desc": "## Summary\n\nSandbox containers were created without a default pidsLimit, making them vulnerable to fork bomb attacks that could exhaust host resources.\n\n## Security Impact\n\n- **Prevents fork bomb attacks**: Malicious or compromised agents cannot execute `:(){ :|:& };:` style attacks\n- **Limits container processes**: Containers can create at most 1024 processes\n- **Protects host system**: Prevents PID/memory exhaustion\n\n## Changes\n\n1. Added `DEFAULT_SANDBOX_PIDS_LIMIT = 1024` constant in `src/age...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "agents",
+        "size: XS",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-03-12T14:04:02Z",
+      "updated_at": "2026-06-16T05:22:52Z",
+      "state": "open"
+    },
+    {
+      "title": "[Aikido] Fix 17 security issues in @grpc/grpc-js, form-data, protobufjs and 3 more",
+      "url": "https://github.com/cline/cline/pull/11588",
+      "desc": "Upgrade dependencies to fix critical DoS vulnerabilities in gRPC HTTP/2 stream handling and protobuf message conversion, CRLF injection in form-data, and CORS credential bypass in Hono.\n\r<details>\n\r<summary>⚠️ Incomplete breaking changes analysis (4/6 analyzed)</summary>\n\r<br>\n\r\n\r⚠️ Breaking changes analysis not available for: protobufjs, enhanced-resolve\n\r\n\r✅ The `@opentelemetry/core` upgrade from 2.5.0 to 2.8.0 includes breaking changes related to `OTEL_RESOURCE_ATTRIBUTES` parsing and double-...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-48068",
+        "CVE-2026-48068",
+        "CVE-2026-48069",
+        "CVE-2026-48069",
+        "CVE-2026-12143",
+        "CVE-2026-12143",
+        "CVE-2026-48712",
+        "CVE-2026-48712",
+        "CVE-2026-54269",
+        "CVE-2026-54269",
+        "CVE-2026-54290",
+        "CVE-2026-54290",
+        "CVE-2026-54288",
+        "CVE-2026-54288",
+        "CVE-2026-54286",
+        "CVE-2026-54286",
+        "CVE-2026-54287",
+        "CVE-2026-54287",
+        "CVE-2026-54289",
+        "CVE-2026-54289",
+        "CVE-2026-54285",
+        "CVE-2026-54285",
+        "CVE-2026-54285",
+        "CVE-2026-48712",
+        "CVE-2026-54269"
+      ],
+      "labels": [],
+      "created_at": "2026-06-16T22:53:51Z",
+      "updated_at": "2026-06-16T22:57:03Z",
+      "state": "open"
+    },
+    {
+      "title": "[Aikido] Fix 21 security issues in dompurify, @ungap/structured-clone, lodash-es and 1 more",
+      "url": "https://github.com/cline/cline/pull/11586",
+      "desc": "Upgrade DOMPurify, @ungap/structured-clone, lodash-es, and mermaid to fix multiple XSS vulnerabilities including prototype pollution bypass, template injection, and URI scheme validation gaps.\n\r<details>\n\r<summary>✅ Code not affected by breaking changes.</summary>\n\r<br>\n\r\n\r✅ No breaking changes from either package upgrade affect this codebase.\n\r\n\r**lodash-es (4.17.23 => 4.18.0):**\n\r- The codebase does not use `lodash-es` at all. It uses `lodash` (not `lodash-es`) in one test file (`apps/vscode/t...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-41238",
+        "CVE-2026-41238",
+        "CVE-2026-41239",
+        "CVE-2026-41239",
+        "CVE-2026-41240",
+        "CVE-2026-41240",
+        "CVE-2026-49458",
+        "CVE-2026-49458",
+        "CVE-2026-49459",
+        "CVE-2026-49459",
+        "CVE-2026-49978",
+        "CVE-2026-49978",
+        "CVE-2026-2950",
+        "CVE-2026-2950",
+        "CVE-2026-41148",
+        "CVE-2026-41148",
+        "CVE-2026-41149",
+        "CVE-2026-41149",
+        "CVE-2026-41150",
+        "CVE-2026-41150",
+        "CVE-2026-41159",
+        "CVE-2026-41159"
+      ],
+      "labels": [],
+      "created_at": "2026-06-16T22:52:28Z",
+      "updated_at": "2026-06-16T22:56:18Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): resolve approval context-bleed and enforce session isolation in RPC workers",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/6641",
+      "desc": "Summary\r\nThis PR fixes a security bug in the execute_code tool where dangerous-command approvals could lose session isolation inside RPC worker threads.\r\n\r\nexecute_code dispatches tool calls from background RPC threads. The approval system is designed to be session-scoped, but these worker threads were not inheriting the parent approval session context. In concurrent gateway deployments, that meant a dangerous command triggered from inside execute_code could fall back to the process-wide HERMES_...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "tool/code-exec",
+        "P1"
+      ],
+      "created_at": "2026-04-09T14:10:40Z",
+      "updated_at": "2026-06-16T21:05:38Z",
+      "state": "open"
+    },
+    {
+      "title": "security: fail-closed gateway defaults and external-surface hardening",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/44073",
+      "desc": "Fixes unauthorised external-surface access when messaging adapters are enabled with default configuration.\r\n\r\nIt aligns runtime behaviour with `SECURITY.md` section 2.6.2 by making externally reachable messaging, gateway, API, and tool-socket surfaces fail closed unless access has been explicitly configured. The main goal is to prevent accidental open access when operators enable adapters or gateway features without also providing an explicit authorisation policy.\r\n\r\nThe fix tightens defaults, v...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "P1"
+      ],
+      "created_at": "2026-06-11T06:59:05Z",
+      "updated_at": "2026-06-16T20:13:40Z",
+      "state": "open"
+    },
+    {
+      "title": "feat: add configurable command_blocklist to terminal security",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/47384",
+      "desc": "## Feature Request: Configurable `command_blocklist`\n\nThe current `command_allowlist` is a skip-approval list, not a blocklist. There is no way for users to permanently block specific commands from running via the agent -- the only options are the hardcoded hardline blocklist (non-configurable) and the smart approval system (LLM-dependent, not guaranteed).\n\n### Proposed solution\n\nAdd a `command_blocklist` section in `~/.hermes/config.yaml` that blocks commands unconditionally -- before YOLO, bef...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/feature",
+        "comp/cli",
+        "tool/terminal",
+        "P2"
+      ],
+      "created_at": "2026-06-16T17:35:47Z",
+      "updated_at": "2026-06-16T17:47:21Z",
+      "state": "open"
+    },
+    {
+      "title": "security: fix path traversal vulnerability in profile alias command",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/6205",
+      "desc": "## Summary\r\nPrevent path traversal and arbitrary file clobber in `hermes profile alias --name`.\r\n\r\n## What changed\r\n- validate custom alias names with the same safe identifier rules used for profiles\r\n- enforce wrapper path containment under `~/.local/bin`\r\n- centralize wrapper script generation in a single safe helper\r\n- update CLI alias flow to use the safe helper directly\r\n- add regression tests for traversal rejection and custom alias wrapper behavior\r\n\r\n## Impact\r\nPreviously, a crafted alia...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/cli",
+        "P1"
+      ],
+      "created_at": "2026-04-08T16:18:06Z",
+      "updated_at": "2026-06-16T17:04:30Z",
+      "state": "open"
+    },
+    {
+      "title": "Security: browser_type leaks credentials in tool output",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/47197",
+      "desc": "## Description\n\nWhen using `browser_type` to type credentials (passwords, API keys, etc.) into input fields, the actual text being typed is included in the tool response and displayed in tool progress notifications on Telegram, Discord, and other messaging platforms.\n\n## Steps to Reproduce\n\n1. Use `browser_type` with a password or API key\n2. Observe tool progress notification in Telegram/Discord\n3. The credential value is visible in plain text\n\n## Example\n\n```\nbrowser_type: \"my_secret_password_1...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "tool/browser",
+        "P1"
+      ],
+      "created_at": "2026-06-16T11:22:15Z",
+      "updated_at": "2026-06-16T15:16:28Z",
+      "state": "open"
+    },
+    {
+      "title": "feat: add tirith-scan security skill",
+      "url": "https://github.com/nanocoai/nanoclaw/pull/1376",
+      "desc": "<!-- contributing-guide: v1 -->\n## Type of Change\n\n- [x] **Operational/container skill** - adds a workflow or agent skill (SKILL.md + supporting scripts, no source changes)\n\n## Description\n\nAdd a container skill that lets agents scan suspicious URLs and commands for security threats using [Tirith](https://github.com/sheeki03/tirith).\n\nTirith is a terminal security tool written in Rust that detects content-level threats: homograph/punycode attacks (lookalike domains), pipe-to-shell patterns (curl...",
+      "source": "GitHub Issues",
+      "repo": "nanocoai/nanoclaw",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "Type: Community Skill"
+      ],
+      "created_at": "2026-03-23T16:44:20Z",
+      "updated_at": "2026-03-30T07:38:07Z",
+      "state": "open"
+    },
+    {
+      "title": "Security: proxy Gmail/Calendar OAuth tokens through credential proxy",
+      "url": "https://github.com/nanocoai/nanoclaw/issues/1500",
+      "desc": "## Problem\n\nGmail and Calendar OAuth credentials (including long-lived refresh tokens) are mounted directly into containers at `/home/node/.gmail-mcp*/` and `/home/node/.calendar-mcp/`. A prompt injection attack via email, WhatsApp, or any other inbound message could instruct the agent to read and exfiltrate these tokens, granting full account access.\n\nThe Anthropic API key is already properly proxied — containers get `ANTHROPIC_API_KEY=placeholder` and the credential proxy injects the real key....",
+      "source": "GitHub Issues",
+      "repo": "nanocoai/nanoclaw",
+      "product": "NanoClaw",
+      "type": [
+        "提示注入",
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-03-28T02:18:10Z",
+      "updated_at": "2026-03-30T07:19:21Z",
+      "state": "open"
+    },
+    {
+      "title": "[GHSA] phpseclib: X.509 certificate validation sends attacker-controlled outbound requests (server-side req",
+      "url": "https://github.com/advisories/GHSA-m557-wrgg-6rp4",
+      "desc": "### Summary\n\nWhen an application validates an untrusted X.509 certificate with phpseclib, **X509::validateSignature()** reads a URL out of that certificate's Authority Information Access (AIA) extension and connects to it. Attacker who supplies certificate fully controls host, port, and path of that connection. URL fetching is enabled by default, and no destination is blocked. An unauthenticated attacker can therefore make a validating server open connections to internal hosts and ports it shoul...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "ghsa_id": "GHSA-m557-wrgg-6rp4",
+      "severity": "medium",
+      "created_at": "2026-06-16T15:03:58Z",
+      "updated_at": "2026-06-16T15:03:59Z"
+    },
+    {
+      "title": "Cogent Security: AI Agents for Vulnerability Management Launched",
+      "url": "https://www.cogent.security/",
+      "desc": "",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "通用AI编程工具",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "hn_id": "44562142",
+      "hn_points": 10,
+      "hn_comments": 0,
+      "hn_author": "chairmanwow1",
+      "created_at": "2025-07-14T16:37:48Z",
+      "updated_at": "2025-07-14T16:37:48Z"
+    },
+    {
+      "title": "Microsoft Copilot zero-click attack raises alarms about AI agent security",
+      "url": "https://fortune.com/2025/06/11/microsoft-copilot-vulnerability-ai-agents-echoleak-hacking/",
+      "desc": "",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Copilot",
+      "type": [
+        "未修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "44270104",
+      "hn_points": 2,
+      "hn_comments": 1,
+      "hn_author": "transpute",
+      "created_at": "2025-06-13T16:45:19Z",
+      "updated_at": "2025-06-13T16:45:19Z"
+    },
+    {
+      "title": "More than 1,500 AI projects are now vulnerable to a silent exploit",
+      "url": "https://news.ycombinator.com/item?id=44065948",
+      "desc": "According to the latest research by ARIMLABS[.]AI, a critical security vulnerability (CVE-2025-47241) has been discovered in the widely used Browser Use framework — a dependency leveraged by more than 1,500 AI projects.<p>The issue enables zero-click agent hijacking, meaning an attacker can take control of an LLM-powered browsing agent simply by getting it to visit a malicious page — no user interaction required.<p>This raises serious concerns about the current state of security in autonomous AI...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "通用AI编程工具",
+      "type": [
+        "未修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2025-47241"
+      ],
+      "hn_id": "44065948",
+      "hn_points": 6,
+      "hn_comments": 1,
+      "hn_author": "mykytamudryi",
+      "created_at": "2025-05-22T19:39:06Z",
+      "updated_at": "2025-05-22T19:39:06Z"
+    },
+    {
+      "title": "Show HN: Code Scalpel – AST analyzer and security scanner (MCP server)",
+      "url": "https://codescalpel.dev/",
+      "desc": "I built Code Scalpel as an MCP server for code analysis. It parses \nPython, JavaScript, TypeScript, and Java - builds control flow graphs \nand catches security bugs using taint analysis and symbolic execution.<p>Security detection:\n- 16+ vulnerability types (SQL&#x2F;NoSQL&#x2F;LDAP injection, XSS, command \n  injection, SSRF, CSRF, SSTI, prototype pollution, weak crypto, etc.)\n- Taint tracking across files\n- &lt;10% false positive rate\n- Z3 symbolic execution for path analysis<p>The MCP part exp...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "通用AI编程工具",
+      "type": [
+        "未修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "hn_id": "47065233",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "hn_author": "digitalbyooki",
+      "created_at": "2026-02-18T19:32:32Z",
+      "updated_at": "2026-02-18T19:32:32Z"
+    },
+    {
+      "title": "Oscar Six Radar – vulnerability scanner with native A2A (agent-to-agent) support",
+      "url": "https://news.ycombinator.com/item?id=47242324",
+      "desc": "Hey HN,<p>I&#x27;m Randy, founder of Oscar Six Security. We build vulnerability scanning tools for small businesses and MSPs.<p>Today I&#x27;m sharing something I&#x27;m genuinely excited about: we shipped native support for Google&#x27;s A2A (Agent-to-Agent) protocol in our Radar scanner. Here&#x27;s what that actually means in practice:<p>An AI agent — anything built on Google ADK, LangChain, CrewAI, or any A2A-compatible framework — can now:<p>1. Discover Radar&#x27;s capabilities via our age...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "通用AI编程工具",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "47242324",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "hn_author": "oscarsixsecllc",
+      "created_at": "2026-03-04T02:40:41Z",
+      "updated_at": "2026-03-04T02:40:41Z"
+    },
+    {
+      "title": "Show HN: KeelTest – AI-driven VS Code unit test generator with bug discovery",
+      "url": "https://keelcode.dev/keeltest",
+      "desc": "I built this because Cursor, Claude Code and other agentic AI tools kept giving me tests that looked fine but failed when I ran them. Or worse - I&#x27;d ask the agent to run them and it would start looping: fix tests, those fail, then it starts &quot;fixing&quot; my code so tests pass, or just deletes assertions so they &quot;pass&quot;.<p>Out of that frustration I built KeelTest - a VS Code extension that generates pytest tests and executes them, got hooked and decided to push this project for...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "46526088",
+      "hn_points": 30,
+      "hn_comments": 15,
+      "hn_author": "bulba4aur",
+      "created_at": "2026-01-07T13:22:35Z",
+      "updated_at": "2026-01-07T13:22:35Z"
+    },
+    {
+      "title": "Show HN: OmoiOS–190K lines of Python to stop babysitting AI agents (Apache 2.0)",
+      "url": "https://github.com/kivo360/OmoiOS",
+      "desc": "AI coding agents generate decent code. The problem is everything around the code - checking progress, catching drift, deciding if it&#x27;s actually done. I spent months trying to make autonomous agents work. The bottleneck was always me.<p>Attempt 1 - Claude&#x2F;GPT directly: works for small stuff, but you re-explain context endlessly.<p>Attempt 2 - Copilot&#x2F;Cursor: great autocomplete, still doing 95% of the thinking.<p>Attempt 3 - continuous agents: keeps working without prompting, but &q...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "hn_id": "47263360",
+      "hn_points": 2,
+      "hn_comments": 2,
+      "hn_author": "kanddle",
+      "created_at": "2026-03-05T16:07:21Z",
+      "updated_at": "2026-03-05T16:07:21Z"
     }
   ]
 }
