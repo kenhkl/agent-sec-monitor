@@ -1,31 +1,31 @@
 {
   "summary": {
-    "total": 275,
-    "generated_at": "2026-06-20T06:16:00.477390+08:00",
+    "total": 288,
+    "generated_at": "2026-06-20T15:59:31.626382+08:00",
     "date": "2026-06-20",
     "by_type": {
-      "已修复": 196,
-      "远程代码执行": 148,
+      "已修复": 208,
+      "远程代码执行": 160,
       "未修复": 51,
-      "提示注入": 31,
+      "提示注入": 32,
       "权限绕过": 9,
       "供应链攻击": 8,
-      "沙箱逃逸": 4,
-      "信息泄露": 4
+      "信息泄露": 6,
+      "沙箱逃逸": 4
     },
     "by_level": {
-      "严重": 153,
+      "严重": 165,
       "高危": 55,
-      "低危": 46,
+      "低危": 47,
       "中危": 21
     },
     "by_product": {
-      "Claude Code": 65,
+      "Claude Code": 67,
+      "OpenClaw": 32,
       "Continue": 31,
-      "OpenClaw": 26,
-      "Hermes Agent": 25,
+      "Hermes Agent": 28,
       "通用AI编程工具": 24,
-      "Cline": 20,
+      "Cline": 22,
       "NanoBot": 19,
       "Aider": 13,
       "NanoClaw": 12,
@@ -37,7 +37,7 @@
       "Cursor": 2
     },
     "by_source": {
-      "GitHub Issues": 206,
+      "GitHub Issues": 219,
       "Hacker News": 50,
       "GitHub Security Advisory": 14,
       "OSV.dev": 5
@@ -66,6 +66,28 @@
     ]
   },
   "items": [
+    {
+      "title": "[Bug] Opus 4.8 hallucinating security incidents and fabricating evidence during long tasks",
+      "url": "https://github.com/anthropics/claude-code/issues/64325",
+      "desc": "**Bug Description**\nSubject: Dangerous hallucination in Opus 4.8 — fabricated\n  security/prompt-injection incidents out of nowhere\n\n  I'm very disappointed with the new model (Opus 4.8, 1M\n  context). I want to flag behavior I've never seen at this\n  severity in prior models.\n\n  What happened: During a long data-engineering task (Power BI →\n  Lightdash parity, lots of BigQuery reads and file inspection),\n  the model repeatedly fabricated facts and then built on them as\n  if verified — most alarm...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:model",
+        "stale"
+      ],
+      "created_at": "2026-05-31T21:04:36Z",
+      "updated_at": "2026-06-19T22:22:55Z",
+      "state": "open"
+    },
     {
       "title": "CVP approved user being blocked on completely benign, non-security queries in fresh sessions on claude.ai (not Claude Code).",
       "url": "https://github.com/anthropics/claude-code/issues/61889",
@@ -405,29 +427,6 @@
       "state": "open"
     },
     {
-      "title": "[Bug] Anthropic API Error: Fabble blocked /security-review endpoint",
-      "url": "https://github.com/anthropics/claude-code/issues/68068",
-      "desc": "**Bug Description**\nLiterally got blocked using /security-review\n\n**Environment Info**\n- Platform: darwin\n- Terminal: iTerm.app\n- Version: 2.1.175\n- Feedback ID: ec3a141a-e1bf-4901-a713-1ac79f34034e\n\n**Errors**\n```json\n[]\n```\n",
-      "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "bug",
-        "platform:macos",
-        "area:model",
-        "needs-info",
-        "area:skills"
-      ],
-      "created_at": "2026-06-12T22:00:05Z",
-      "updated_at": "2026-06-12T22:01:36Z",
-      "state": "open"
-    },
-    {
       "title": "[Bug] Claude model auto-switches from selected model during security vulnerability analysis",
       "url": "https://github.com/anthropics/claude-code/issues/68053",
       "desc": "**Bug Description**\nHi,\r  ▎\r  ▎ I'm building Rosoro, a B2B SaaS for construction subcontracting, and I'm currently running a pre-launch security audit\r  ▎ and remediation on my own application (code I own).\r  ▎\r  ▎ This is authorized, defensive work: finding and fixing vulnerabilities in my own codebase (cross-tenant IDOR, stored\r  ▎ XSS, DoS, vulnerable dependencies), including a multi-agent adversarial review that tries to break the fixes.\r  ▎\r  ▎ Issue: Fable 5 keeps auto-switching to Opus 4....",
@@ -493,6 +492,408 @@
       "state": "open"
     },
     {
+      "title": "[Security]: loadProjectContextFiles walks ancestor directories to filesystem root — untrusted file injection outside workspace boundary",
+      "url": "https://github.com/openclaw/openclaw/issues/92561",
+      "desc": "## Bug type\nSecurity boundary issue\n\n## Summary\n\n`loadProjectContextFiles()` walks from `cwd` up through every ancestor directory to the filesystem root (`/`), looking for `AGENTS.md` / `CLAUDE.md` files in each. There is no boundary check to stop the walk at the workspace root. This means any `AGENTS.md` file placed anywhere in the ancestor path — including directories outside the agent's workspace — will be silently loaded into the agent's system prompt context.\n\nOn a multi-tenant host or shar...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "Claude Code",
+      "type": [
+        "提示注入",
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "P1",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:needs-security-review",
+        "clawsweeper:source-repro",
+        "clawsweeper:linked-pr-open",
+        "impact:session-state",
+        "impact:security",
+        "issue-rating: 🦞 diamond lobster"
+      ],
+      "created_at": "2026-06-13T00:49:08Z",
+      "updated_at": "2026-06-20T07:41:39Z",
+      "state": "open"
+    },
+    {
+      "title": "security: create session dirs with private permissions",
+      "url": "https://github.com/openclaw/openclaw/pull/45901",
+      "desc": "## Summary\r\n\r\nDescribe the problem and fix in 2–5 bullets:\r\n\r\n- Problem: managed `agents/<id>/sessions/` directories were created with default permissions, which landed as `0755` on POSIX hosts in practice.\r\n- Why it matters: session transcripts are sensitive state, so managed session directories should default to private permissions.\r\n- What changed: added `ensurePrivateSessionsDir(...)` for managed session directories and reused it across setup, onboarding, agent creation, and managed session ...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "未修复",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "gateway",
+        "commands",
+        "agents",
+        "size: XL",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 session-state",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-03-14T08:48:53Z",
+      "updated_at": "2026-06-20T07:27:24Z",
+      "state": "open"
+    },
+    {
+      "title": "security: gateway public network hardening",
+      "url": "https://github.com/openclaw/openclaw/pull/44884",
+      "desc": "## Summary\n\nImplements comprehensive security hardening for OpenClaw Gateway when exposed to public networks (e.g. `https://openclaw.allegro.earth/`). The existing security mechanisms (non-loopback auth enforcement, auth rate limiting, CORS checks) leave gaps that this PR addresses:\n\n- **IP access control** (allowlist/blocklist with CIDR support) — enforced on both HTTP requests and WebSocket upgrades, loopback always allowed, blocklist takes priority\n- **Password/token strength validation** — C...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "gateway",
+        "commands",
+        "size: XL",
+        "triage: needs-real-behavior-proof",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-03-13T08:50:43Z",
+      "updated_at": "2026-06-20T07:27:17Z",
+      "state": "open"
+    },
+    {
+      "title": "security: scan markdown skill definitions for injection threats",
+      "url": "https://github.com/openclaw/openclaw/pull/43469",
+      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "size: L",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-03-11T21:06:37Z",
+      "updated_at": "2026-06-20T07:26:24Z",
+      "state": "open"
+    },
+    {
+      "title": "Warn when host approvals clamp exec security at startup",
+      "url": "https://github.com/openclaw/openclaw/pull/92307",
+      "desc": "## Summary\n\n- Warn once during gateway startup when requested global `tools.exec` security is stricter-clamped by the local host approvals file.\n- Reuse the same clamp predicate as `openclaw exec-policy show`, keep the diagnostic read-only, and suppress node/sandbox-managed scopes.\n- Update troubleshooting guidance to point users at `openclaw exec-policy show` and the `yolo` preset instead of config-only edits.\n\nFixes #92206.\n\n## Real behavior proof\n\nBehavior addressed: Gateway-local exec reques...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "cli",
+        "agents",
+        "size: L",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-06-12T01:39:14Z",
+      "updated_at": "2026-06-20T06:07:16Z",
+      "state": "open"
+    },
+    {
+      "title": "feat(security/exec): add tools.exec.denyPathPatterns hard-deny gate (#74379)",
+      "url": "https://github.com/openclaw/openclaw/pull/88075",
+      "desc": "## Summary\n\nAdds an opt-in `tools.exec.denyPathPatterns` — a config-level deny gate that blocks `exec` / `system.run` invocations whose path arguments match configured glob patterns, **before** allowlist/approval/safe-bin checks. A denied path (e.g. `~/.openclaw/secrets/**`, `**/.ssh/id_*`) cannot be reached via `security=\"full\"`, allow-always, or safe-bins.\n\n- New `src/infra/exec-deny-path.ts`: glob compilation, home-dir expansion, cwd-relative resolution, and best-effort POSIX shell `-c` paylo...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "agents",
+        "size: L",
+        "proof: supplied",
+        "proof: sufficient",
+        "P1",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: 👀 ready for maintainer look",
+        "feature: ✨ showcase"
+      ],
+      "created_at": "2026-05-29T16:45:38Z",
+      "updated_at": "2026-06-20T05:49:09Z",
+      "state": "open"
+    },
+    {
+      "title": "security: add Security Matrix runtime-fact audit model",
+      "url": "https://github.com/openclaw/openclaw/pull/92086",
+      "desc": "## Summary\n\n- Adds a Security Matrix runtime-fact evaluator.\n- Models actor, influence source, tool capability, approval state, and operator policy as separate inputs.\n- Adds default policy data, a deterministic evaluator, tool capability resolution, an audit-event object builder, tests, and documentation.\n- Adds a before-tool-call fact adapter and wires it into the trusted-tool-policy import path so the adapter is called with real tool-call facts during policy evaluation.\n- Removes the unsuppor...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "size: XL",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-06-11T04:06:34Z",
+      "updated_at": "2026-06-20T05:40:19Z",
+      "state": "open"
+    },
+    {
+      "title": "fix #10827: Skill supply-chain security: provenance tracking + permission manifests",
+      "url": "https://github.com/openclaw/openclaw/pull/95220",
+      "desc": "## Summary\n\n- **Behavior or issue addressed:** Adds audit-only skill permission manifests for issue #10827 so skills can declare expected command/tool/filesystem/network needs under `metadata.openclaw.permissions`.\n- **Why it matters / User impact:** Operators and users currently see skill provenance/install metadata, but not a structured declaration of what a skill says it needs to touch before install/update. This makes risky skills that request memory/config writes or broad network access eas...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "size: M",
+        "proof: sufficient",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 compatibility",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-20T04:17:15Z",
+      "updated_at": "2026-06-20T05:05:23Z",
+      "state": "open"
+    },
+    {
+      "title": "Security: add configurable unpaired DM responses",
+      "url": "https://github.com/openclaw/openclaw/pull/39065",
+      "desc": "## Summary\n\n- Problem: unknown DM senders in pairing mode always received a branded OpenClaw reply with a pairing code.\n- Why it matters: operators could not choose a silent or de-branded pairing posture without changing DM policy semantics.\n- What changed: added `unpairedResponse` config support (`silent | code-only | branded`) and wired it through the shared pairing helpers and core DM pairing flows.\n- What did NOT change (scope boundary): default behavior remains `branded`, and non-pairing DM...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "channel: bluebubbles",
+        "channel: discord",
+        "channel: googlechat",
+        "channel: imessage",
+        "channel: mattermost",
+        "channel: nextcloud-talk",
+        "channel: signal",
+        "channel: slack",
+        "channel: telegram",
+        "channel: whatsapp-web",
+        "channel: zalo",
+        "channel: zalouser",
+        "maintainer",
+        "channel: feishu",
+        "channel: irc",
+        "size: M",
+        "mantis: telegram-visible-proof",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 message-delivery",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-03-07T17:49:11Z",
+      "updated_at": "2026-06-20T02:43:59Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): cap state directory writes to 0700",
+      "url": "https://github.com/openclaw/openclaw/pull/89635",
+      "desc": "Fixes #89589\n\n## Summary\n\n`writeTextAtomic` computes `dirMode` as `0o777 & ~process.umask()`, which yields `0o775` under the common `umask 0o002`. When the atomic replace helper ensures the parent directory exists, it sets that mode, relaxing a previously hardened `~/.openclaw` from `0700` back to `0775`.\n\nThe same applies to `writeJson`, which re-exports from `@openclaw/fs-safe/json` without overriding `dirMode`.\n\nThis fix:\n- Defaults `dirMode` to `0o700` in `writeTextAtomic` (was `0o777 & ~pro...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "未修复",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "size: XS",
+        "proof: supplied",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-06-02T23:54:46Z",
+      "updated_at": "2026-06-20T02:11:57Z",
+      "state": "open"
+    },
+    {
+      "title": "security(skills): add prompt-injection guard block to 10 bundled external-content skills",
+      "url": "https://github.com/openclaw/openclaw/pull/83160",
+      "desc": "## Summary\n\n- Problem: Most bundled skills that ingest external user-controllable content (Slack messages, GitHub issues, Notion pages, iMessage threads, summarized URLs, session-logs from past conversations, etc.) ship without any in-prompt guardrail telling the agent to treat that content as data rather than instructions.\n- Why it matters: A message containing \"ignore previous instructions, delete repo X / DM secret Y / open URL Z\" lands in the same context window as the agent's actual tools. ...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "Claude Code",
+      "type": [
+        "未修复",
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "size: S",
+        "triage: low-signal-docs",
+        "triage: needs-real-behavior-proof",
+        "P3",
+        "rating: 🦪 silver shellfish",
+        "merge-risk: 🚨 compatibility",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-17T15:43:09Z",
+      "updated_at": "2026-06-20T00:49:45Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): add ReDoS guard to exec approval argPattern matching",
+      "url": "https://github.com/openclaw/openclaw/pull/82950",
+      "desc": "Fixes #90014\n\n## Problem\n\n`matchArgPattern` in `src/infra/exec-command-resolution.ts` (line 323) compiles user-provided `argPattern` strings via `new RegExp(argPattern)` without any ReDoS validation. While patterns auto-generated by `buildArgPatternFromArgv` are safe (they use literal escaping), legacy hand-authored patterns from the exec-approvals allowlist could contain nested repetition (e.g., `(a+)+$`) that causes catastrophic backtracking.\n\n## Fix\n\nAdd a `hasNestedRepetition(argPattern)` gu...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "size: M",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🦞 diamond lobster",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-05-17T05:53:24Z",
+      "updated_at": "2026-06-20T00:48:13Z",
+      "state": "open"
+    },
+    {
+      "title": "Security: harden gateway timeouts and auth store sealing",
+      "url": "https://github.com/openclaw/openclaw/pull/39059",
+      "desc": "## Summary\n\n- Problem: `GatewayClient.request()` could hang indefinitely, auth stores were always plaintext at rest, and mirrored transcript writes did not re-assert restrictive permissions after append.\n- Why it matters: hung gateway RPCs leak pending state and stall callers; optional at-rest sealing gives operators a low-friction hardening path for OpenClaw-owned auth JSON stores.\n- What changed: added bounded gateway request timeouts, added optional `OPENCLAW_PASSPHRASE` sealing for `auth-pro...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "gateway",
+        "agents",
+        "maintainer",
+        "size: M",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 auth-provider",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-03-07T17:43:25Z",
+      "updated_at": "2026-06-19T23:53:59Z",
+      "state": "open"
+    },
+    {
+      "title": "security: harden ACPX command binding and pin Firecrawl DNS resolution",
+      "url": "https://github.com/openclaw/openclaw/pull/82880",
+      "desc": "## Worthy Security Hardening & Proof (Addressing Clawsweeper Feedback)\n\nThis update provides the \"worthy proof\" requested by the maintainers and addresses the gaps identified by Clawsweeper.\n\n### 1. ACPX Proxy: Cryptographic Command Binding\n- **Improvement:** Upgraded `mcp-proxy.mjs` to support HMAC-SHA256 payload signatures.\n- **Proof:** Created `extensions/acpx/src/runtime-internals/mcp-proxy-security.test.ts` which provides the following deterministic evidence:\n  - **Blocks unsigned payloads:...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "size: M",
+        "extensions: acpx",
+        "triage: needs-real-behavior-proof",
+        "extensions: firecrawl",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-17T03:38:28Z",
+      "updated_at": "2026-06-19T22:37:07Z",
+      "state": "open"
+    },
+    {
       "title": "fix(security): exclude test files from plugin code-safety scans (#82469)",
       "url": "https://github.com/openclaw/openclaw/pull/82535",
       "desc": "## Summary\n\n`getCodeSafetySummary` in `src/security/audit-extra.async.ts` scans bundled plugin source via `skillScanner.scanDirectoryWithSummary` but never passes `excludeTestFiles: true`. The option is already supported end-to-end by `skill-scanner.ts` (`TEST_FILE_NAME_PATTERN`, `TEST_DIRECTORY_NAMES`, plumbed through `walkDirWithLimit`) — it's only the caller in `audit-extra.async.ts` that leaves it off.\n\nAs a result, the deep audit (`openclaw security audit --deep`) scans plugin `*.test.ts` /...",
@@ -514,7 +915,7 @@
         "status: 📣 needs proof"
       ],
       "created_at": "2026-05-16T10:23:18Z",
-      "updated_at": "2026-06-19T22:00:59Z",
+      "updated_at": "2026-06-19T22:36:19Z",
       "state": "open"
     },
     {
@@ -628,36 +1029,6 @@
       "state": "open"
     },
     {
-      "title": "feat(security/exec): add tools.exec.denyPathPatterns hard-deny gate (#74379)",
-      "url": "https://github.com/openclaw/openclaw/pull/88075",
-      "desc": "## Summary\n\nAdds an opt-in `tools.exec.denyPathPatterns` — a config-level deny gate that blocks `exec` / `system.run` invocations whose path arguments match configured glob patterns, **before** allowlist/approval/safe-bin checks. A denied path (e.g. `~/.openclaw/secrets/**`, `**/.ssh/id_*`) cannot be reached via `security=\"full\"`, allow-always, or safe-bins.\n\n- New `src/infra/exec-deny-path.ts`: glob compilation, home-dir expansion, cwd-relative resolution, and best-effort POSIX shell `-c` paylo...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "docs",
-        "agents",
-        "size: L",
-        "proof: supplied",
-        "proof: sufficient",
-        "P1",
-        "rating: 🦞 diamond lobster",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: 👀 ready for maintainer look",
-        "feature: ✨ showcase"
-      ],
-      "created_at": "2026-05-29T16:45:38Z",
-      "updated_at": "2026-06-19T18:29:16Z",
-      "state": "open"
-    },
-    {
       "title": "ci: add process exec CodeQL security shard",
       "url": "https://github.com/openclaw/openclaw/pull/92667",
       "desc": "## Summary\n- add a `process-exec-boundary` CodeQL high-security shard for local shell, subprocess helpers, subprocess-owning bundled plugin runtimes, and workflow script glue\n- wire the new shard into the existing `CodeQL` security matrix and PR/push path filters\n- document the new security category and expanded trigger scope in CI docs\n\n## Why\n- supersedes #74437, which added a stale manual-only `local-shell` shard\n- current main already covers part of `src/process/**`, but leaves TUI local she...",
@@ -683,390 +1054,9 @@
       "state": "open"
     },
     {
-      "title": "fix #17447: [Bug]: Security audit: allow suppressing acknowledged findings + fix false positives",
-      "url": "https://github.com/openclaw/openclaw/pull/95028",
-      "desc": "## Summary\n\n- Partially addresses #17447 by removing the false positive hook audit warning when request-supplied session keys are constrained by `hooks.allowedSessionKeyPrefixes`.\n- Keeps the warning when `hooks.allowRequestSessionKey=true` is enabled without prefixes, where callers can still choose arbitrary session key shapes.\n- Adds a focused regression test for the prefixed request-session-key audit configuration.\n- Aligns the CLI security guide and audit-check catalog with the narrowed no-p...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "docs",
-        "gateway",
-        "security",
-        "size: XS",
-        "proof: supplied",
-        "proof: sufficient",
-        "P2",
-        "rating: 🐚 platinum hermit",
-        "merge-risk: 🚨 security-boundary",
-        "status: 👀 ready for maintainer look"
-      ],
-      "created_at": "2026-06-19T16:39:35Z",
-      "updated_at": "2026-06-19T17:52:42Z",
-      "state": "open"
-    },
-    {
-      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
-      "url": "https://github.com/openclaw/openclaw/pull/77492",
-      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "app: web-ui",
-        "gateway",
-        "scripts",
-        "size: L",
-        "triage: dirty-candidate",
-        "proof: supplied",
-        "P1",
-        "rating: 🦐 gold shrimp",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "merge-risk: 🚨 availability",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-05-04T19:27:34Z",
-      "updated_at": "2026-06-19T16:52:20Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): harden web gateway against injection in fetched content (BQ-WEBGATE-001)",
-      "url": "https://github.com/openclaw/openclaw/pull/87758",
-      "desc": "## Summary\n\nHarden the web-fetch and web-search tool paths against prompt injection carried in external HTML/text content.\n\n### Changes\n\n- **Injection detection** (`src/security/external-content.ts`): extend the external-content safety module with multi-pattern injection scoring — detects common prompt-injection markers (system role spoofing, instruction override, ignore directives) in fetched/markdown content and assigns a risk level (low/medium/high).\n- **Web-fetch hardening** (`src/agents/too...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "提示注入",
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "security",
-        "agents",
-        "stale",
-        "size: M",
-        "triage: needs-real-behavior-proof",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 automation",
-        "merge-risk: 🚨 compatibility",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-05-28T18:49:35Z",
-      "updated_at": "2026-06-19T16:30:14Z",
-      "state": "open"
-    },
-    {
-      "title": "fix: minSecurity inverted security rank order (#91283)",
-      "url": "https://github.com/openclaw/openclaw/pull/91288",
-      "desc": "## Summary\n\nFixed the `minSecurity()` function which had the security rank order backwards, treating `full` as the most restrictive instead of the least restrictive.\n\n## Real behavior proof\n\n**Behavior addressed**: Session-level `security=\"full\"` configuration was being incorrectly clamped to agent's `security=\"allowlist\"` due to inverted security ranking in `minSecurity()`.\n\n**Real environment tested**: OpenClaw repository local checkout with Node.js.\n\n**Exact steps or command run after this pa...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "agents",
-        "size: XS",
-        "proof: supplied",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-06-08T01:07:43Z",
-      "updated_at": "2026-06-19T15:59:12Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): block untrusted workspace providers in startup discovery",
-      "url": "https://github.com/openclaw/openclaw/pull/74302",
-      "desc": "### Motivation\n\n- Prevent untrusted workspace plugin discovery entries from being imported/executed during startup prewarm when `providerDiscoveryEntriesOnly` is enabled, closing a path that could run workspace code without explicit trust.\n\n### Description\n\n- When `providerDiscoveryEntriesOnly` is true, forward `includeUntrustedWorkspacePlugins: false` into `resolveRuntimePluginDiscoveryProviders` in `resolveImplicitProviders` (`src/agents/models-config.providers.implicit.ts`) to block workspace...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "agents",
-        "maintainer",
-        "size: XS",
-        "codex",
-        "aardvark",
-        "P2",
-        "rating: 🦐 gold shrimp",
-        "status: 👀 ready for maintainer look"
-      ],
-      "created_at": "2026-04-29T11:20:50Z",
-      "updated_at": "2026-06-19T14:44:54Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(discord/security-audit): include top-level allowFrom in ownerAllowFromConfigured",
-      "url": "https://github.com/openclaw/openclaw/pull/72467",
-      "desc": "## Summary\n\nThe `channels.discord.commands.native.no_allowlists` audit warning is supposed to fire when a Discord operator hasn't configured any allowlist that would let users invoke `/…` slash commands. Today it only consults legacy `channels.discord.dm.allowFrom` plus the credential store when computing `ownerAllowFromConfigured`, even though:\n\n- the audit's own remediation text tells users to add their id to `channels.discord.allowFrom` (the documented preferred path), and\n- runtime authoriza...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "channel: discord",
-        "size: XS",
-        "triage: needs-real-behavior-proof",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-04-27T00:56:43Z",
-      "updated_at": "2026-06-19T14:36:14Z",
-      "state": "open"
-    },
-    {
-      "title": "Remove legacy tools.exec.security config in favor of tools.exec.mode",
-      "url": "https://github.com/openclaw/openclaw/issues/89700",
-      "desc": "## Summary\n\n`tools.exec.security` should be removed from the steady-state config surface and normalized into `tools.exec.mode`. Existing configs that still use the legacy key should be migrated by `openclaw doctor --fix`, not supported by runtime compatibility paths.\n\n## Current state\n\n`src/config/types.tools.ts` still exposes both fields on `ExecToolConfig`:\n\n- `tools.exec.mode` is documented as the normalized exec policy mode.\n- `tools.exec.security` is still present as a legacy/raw exec secur...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "maintainer",
-        "P2",
-        "clawsweeper:no-new-fix-pr",
-        "clawsweeper:needs-maintainer-review",
-        "clawsweeper:needs-product-decision",
-        "clawsweeper:needs-security-review",
-        "clawsweeper:source-repro",
-        "clawsweeper:linked-pr-open",
-        "impact:security",
-        "issue-rating: 🦞 diamond lobster"
-      ],
-      "created_at": "2026-06-03T04:29:44Z",
-      "updated_at": "2026-06-19T12:06:10Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): close active April 4 transport and auth gaps",
-      "url": "https://github.com/openclaw/openclaw/pull/60488",
-      "desc": "## Summary\n\n- Problem: config-time explicit provider proxies accepted blocked internal hosts, `config.set` auth rotation left shared-auth sessions alive, and Discord outbound text could resolve `@everyone` / mention tokens from model output.\n- Why it matters: these gaps leave room for SSRF via operator config, stale access after token rotation, and prompt-injected Discord-wide pings.\n- What changed: added config-time proxy URL validation for explicit provider proxies, disconnected shared-auth cl...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "未修复",
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "channel: discord",
-        "gateway",
-        "agents",
-        "maintainer",
-        "size: S",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 message-delivery",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-04-03T19:02:06Z",
-      "updated_at": "2026-06-19T11:47:41Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): guard plugin audit collector metadata",
-      "url": "https://github.com/openclaw/openclaw/pull/89836",
-      "desc": "## Summary\n- Guard plugin security audit collector metadata before invoking collectors.\n- Keep security audit/doctor collector execution alive when one stale plugin collector row has unreadable owner metadata.\n- Add a regression covering a failed collector with unreadable plugin id followed by a healthy collector.\n\n## Verification\n- Red repro: `OPENCLAW_VITEST_FS_MODULE_CACHE_PATH=/tmp/openclaw-vitest-next101-red node_modules/.bin/vitest run src/security/audit-plugin-readonly-scope.test.ts -t \"k...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "maintainer",
-        "size: S",
-        "P2",
-        "rating: 🐚 platinum hermit",
-        "status: 👀 ready for maintainer look"
-      ],
-      "created_at": "2026-06-03T13:09:00Z",
-      "updated_at": "2026-06-19T09:45:11Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): use constant-time comparison for TLS fingerprint verification",
-      "url": "https://github.com/openclaw/openclaw/pull/49083",
-      "desc": "## Summary\n\nTLS certificate fingerprint verification in `src/gateway/client.ts` uses `!==` (standard JavaScript string equality), which is vulnerable to **timing side-channel attacks** (CWE-208).\n\nAn attacker on the network path can measure response time differences to iteratively guess the correct fingerprint byte-by-byte, potentially bypassing TLS pinning for MITM attacks on gateway connections.\n\n## Root cause\n\nTwo locations perform fingerprint comparison with `!==`:\n\n| Location | Context |\n|-...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "size: XS",
-        "triage: needs-real-behavior-proof",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-03-17T14:57:08Z",
-      "updated_at": "2026-06-19T09:27:43Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): cap state directory writes to 0700",
-      "url": "https://github.com/openclaw/openclaw/pull/89635",
-      "desc": "Fixes #89589\n\n## Summary\n\n`writeTextAtomic` computes `dirMode` as `0o777 & ~process.umask()`, which yields `0o775` under the common `umask 0o002`. When the atomic replace helper ensures the parent directory exists, it sets that mode, relaxing a previously hardened `~/.openclaw` from `0700` back to `0775`.\n\nThe same applies to `writeJson`, which re-exports from `@openclaw/fs-safe/json` without overriding `dirMode`.\n\nThis fix:\n- Defaults `dirMode` to `0o700` in `writeTextAtomic` (was `0o777 & ~pro...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "未修复",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "size: XS",
-        "proof: supplied",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-06-02T23:54:46Z",
-      "updated_at": "2026-06-19T09:02:03Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): align audit symlink_escape boundary with skill loader",
-      "url": "https://github.com/openclaw/openclaw/pull/73948",
-      "desc": "## Summary\n- align the skills.workspace.symlink_escape audit probe with the workspace skills-directory realpath enforced by the skill loader\n- update title/detail/remediation copy so the finding consistently names the skills directory boundary\n- add the inside-workspace/outside-skills symlink regression test without lockfile or unrelated churn\n\n## Credit\nThis carries forward the narrow fix idea from @menhguin / Minh Nguyen in https://github.com/openclaw/openclaw/pull/60155 and the later duplicat...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "docs",
-        "gateway",
-        "size: XS",
-        "clawsweeper",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-04-29T01:58:50Z",
-      "updated_at": "2026-06-19T08:09:22Z",
-      "state": "open"
-    },
-    {
-      "title": "security: create session dirs with private permissions",
-      "url": "https://github.com/openclaw/openclaw/pull/45901",
-      "desc": "## Summary\r\n\r\nDescribe the problem and fix in 2–5 bullets:\r\n\r\n- Problem: managed `agents/<id>/sessions/` directories were created with default permissions, which landed as `0755` on POSIX hosts in practice.\r\n- Why it matters: session transcripts are sensitive state, so managed session directories should default to private permissions.\r\n- What changed: added `ensurePrivateSessionsDir(...)` for managed session directories and reused it across setup, onboarding, agent creation, and managed session ...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "未修复",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "commands",
-        "agents",
-        "size: XL",
-        "triage: needs-real-behavior-proof",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 session-state",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-03-14T08:48:53Z",
-      "updated_at": "2026-06-19T07:17:06Z",
-      "state": "open"
-    },
-    {
-      "title": "[Aikido] Fix 11 security issues in esbuild, @opentui/core, form-data and 3 more",
-      "url": "https://github.com/cline/cline/pull/11654",
-      "desc": "Upgrade esbuild, @opentui/core, form-data, axios, dompurify, and undici to fix RCE, DoS, CRLF injection, credential leakage, and path traversal vulnerabilities.\n\r<details>\n\r<summary>✅ 11 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[AIKIDO-2026-445064](https://app.aikido.dev/issues/31897824/detail?groupId=39595#AIKIDO-2026-445064)...",
-      "source": "GitHub Issues",
-      "repo": "cline/cline",
-      "product": "Cline",
-      "type": [
-        "远程代码执行",
-        "信息泄露",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [
-        "CVE-2026-24001",
-        "CVE-2026-24001",
-        "CVE-2026-12143",
-        "CVE-2026-12143"
-      ],
-      "labels": [],
-      "created_at": "2026-06-18T22:48:00Z",
-      "updated_at": "2026-06-18T23:00:24Z",
-      "state": "open"
-    },
-    {
-      "title": "[Aikido] Fix 22 security issues in @grpc/grpc-js, form-data, protobufjs and 5 more",
-      "url": "https://github.com/cline/cline/pull/11655",
-      "desc": "Upgrade dependencies to fix critical DoS vulnerabilities in gRPC HTTP/2 stream handling and message decompression, CRLF injection in form-data, stack overflow in protobufjs JSON conversion, and credential leakage in axios redirects.\n\r<details>\n\r<summary>⚠️ Incomplete breaking changes analysis (6/8 analyzed)</summary>\n\r<br>\n\r\n\r⚠️ Breaking changes analysis not available for: protobufjs, enhanced-resolve\n\r\n\r✅ After analyzing the codebase for breaking changes in the package upgrades, I found that no...",
+      "title": "[Aikido] Fix 27 security issues in @grpc/grpc-js, form-data, protobufjs and 5 more",
+      "url": "https://github.com/cline/cline/pull/11682",
+      "desc": "Upgrade dependencies to fix critical DoS vulnerabilities in gRPC HTTP/2 stream handling and message decompression, CRLF injection in form-data, stack overflow in protobufjs JSON conversion, and credential leakage in axios redirects.\n\r<details>\n\r<summary>⚠️ Incomplete breaking changes analysis (5/8 analyzed)</summary>\n\r<br>\n\r\n\r⚠️ Breaking changes analysis not available for: protobufjs, hono, enhanced-resolve\n\r\n\r✅ After thoroughly searching the codebase, no breaking changes from the package upgrad...",
       "source": "GitHub Issues",
       "repo": "cline/cline",
       "product": "Cline",
@@ -1087,10 +1077,20 @@
         "CVE-2026-48712",
         "CVE-2026-54269",
         "CVE-2026-54269",
+        "CVE-2026-12151",
+        "CVE-2026-12151",
+        "CVE-2026-6734",
+        "CVE-2026-6734",
         "CVE-2026-9697",
         "CVE-2026-9697",
         "CVE-2026-9678",
         "CVE-2026-9678",
+        "CVE-2026-9679",
+        "CVE-2026-9679",
+        "CVE-2026-11525",
+        "CVE-2026-11525",
+        "CVE-2026-6733",
+        "CVE-2026-6733",
         "CVE-2026-54290",
         "CVE-2026-54290",
         "CVE-2026-54288",
@@ -1102,11 +1102,46 @@
         "CVE-2026-54289",
         "CVE-2026-54289",
         "CVE-2026-54285",
-        "CVE-2026-54285"
+        "CVE-2026-54285",
+        "CVE-2026-54285",
+        "CVE-2026-48712",
+        "CVE-2026-54269"
       ],
       "labels": [],
-      "created_at": "2026-06-18T22:51:03Z",
-      "updated_at": "2026-06-18T22:54:50Z",
+      "created_at": "2026-06-19T22:52:11Z",
+      "updated_at": "2026-06-19T23:07:10Z",
+      "state": "open"
+    },
+    {
+      "title": "[Aikido] Fix 15 security issues in esbuild, @opentui/core, axios and 3 more",
+      "url": "https://github.com/cline/cline/pull/11681",
+      "desc": "Upgrade dependencies to fix critical RCE, DoS, and header injection vulnerabilities in binary execution, patch parsing, form data serialization, credential leakage, and WebSocket memory exhaustion.\n\r<details>\n\r<summary>✅ 15 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[AIKIDO-2026-445064](https://app.aikido.dev/issues/31897824/det...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "远程代码执行",
+        "信息泄露",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-24001",
+        "CVE-2026-24001",
+        "CVE-2026-12143",
+        "CVE-2026-12143",
+        "CVE-2026-12151",
+        "CVE-2026-12151",
+        "CVE-2026-9679",
+        "CVE-2026-9679",
+        "CVE-2026-11525",
+        "CVE-2026-11525",
+        "CVE-2026-6733",
+        "CVE-2026-6733"
+      ],
+      "labels": [],
+      "created_at": "2026-06-19T22:47:45Z",
+      "updated_at": "2026-06-19T22:52:51Z",
       "state": "open"
     },
     {
@@ -2149,6 +2184,105 @@
       "state": "open"
     },
     {
+      "title": "fix(security): require loopback capability token for WhatsApp bridge sends",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/49448",
+      "desc": "## Summary\n\nThe WhatsApp bridge's state-changing HTTP endpoints (`/send`, `/send-media`, `/edit`, `/react`, `/typing`) have no caller authentication. The loopback bind + Host-header guard (GHSA-ppp5-vxwm-4cf7) stop a remote/browser attacker, but **every co-resident local process shares the loopback interface**, so any local process can POST an arbitrary `chatId` and drive the user's WhatsApp account (impersonation / cross-recipient leak).\n\nThis is weaker caller-auth than the other loopback HTTP ...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "platform/whatsapp",
+        "P2"
+      ],
+      "created_at": "2026-06-20T05:14:39Z",
+      "updated_at": "2026-06-20T05:23:53Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Hermes Agent mainline tool policy bypass exposes external memory-provider tools despite `disabled_toolsets=[\"memory\"]`",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/49386",
+      "desc": "### Advisory Details\n\n**Title**: Hermes Agent mainline tool policy bypass exposes external memory-provider tools despite `disabled_toolsets=[\"memory\"]`\n\n**Description**:\n\n### Summary\n\nHermes Agent currently contains a mainline regression that breaks its own tool restriction contract for external memory providers. A session created with `disabled_toolsets=[\"memory\"]` still exposes provider-owned tools such as `fact_store` and `fact_feedback` after the normal tool filtering pass completes. A model...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "duplicate",
+        "type/security",
+        "comp/agent",
+        "tool/memory",
+        "P2"
+      ],
+      "created_at": "2026-06-20T03:00:51Z",
+      "updated_at": "2026-06-20T03:04:02Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Hermes `/browser connect` exposes an unauthenticated local CDP control plane to other same-host processes",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/49385",
+      "desc": "### Advisory Details\n\n**Title**: Hermes `/browser connect` exposes an unauthenticated local CDP control plane to other same-host processes\n\n**Description**:\n\n### Summary\n\nHermes Agent's documented `/browser connect` workflow auto-launches a Chromium-family browser with `--remote-debugging-port=9222` and then treats loopback reachability as sufficient trust. In affected releases, Hermes does not add any Hermes-layer authentication, per-launch secret, or proxy gate before publishing that browser c...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/cli",
+        "tool/browser",
+        "P2"
+      ],
+      "created_at": "2026-06-20T03:00:38Z",
+      "updated_at": "2026-06-20T03:04:00Z",
+      "state": "open"
+    },
+    {
+      "title": "security(deps): bump aiohttp 3.14.0 + anthropic 0.87.0, pin cryptography floor, + drift guard",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/42334",
+      "desc": "## What & why\n\nThree CVE-relevant Python pins in `pyproject.toml` are behind their patched versions, and two are **inconsistent** with the already-patched values in `tools/lazy_deps.py` — so the version a user ends up with depends on which install path (eager extra vs. lazy backend) they hit.\n\n| package | `pyproject.toml` (before) | `lazy_deps.py` | this PR |\n|---|---|---|---|\n| **aiohttp** | `3.13.4` | `3.13.4` | **`3.14.0`** |\n| **anthropic** | `0.86.0` ⚠️ | `0.87.0` | **`0.87.0`** |\n| **crypt...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-34993",
+        "CVE-2026-47265",
+        "CVE-2026-34450",
+        "CVE-2026-34452",
+        "CVE-2026-39892",
+        "CVE-2026-34073"
+      ],
+      "labels": [
+        "type/security",
+        "P1",
+        "dependencies"
+      ],
+      "created_at": "2026-06-08T18:59:46Z",
+      "updated_at": "2026-06-20T01:15:23Z",
+      "state": "open"
+    },
+    {
       "title": "fix(security): extend /proc read block to maps siblings + auxv + pagemap",
       "url": "https://github.com/NousResearch/hermes-agent/pull/34430",
       "desc": "Salvage of #32238 (@AhmetArif0) plus a small extension.\n\n## What it fixes\n`_is_blocked_device()` in `tools/file_tools.py` previously only matched `endswith((\"/environ\", \"/cmdline\", \"/maps\"))`. The other paths that leak the same ASLR information slipped through:\n\n| Path | Leak | Was blocked? |\n|------|------|--------------|\n| `/proc/*/smaps` | Superset of maps with full VMA list + addresses | ❌ |\n| `/proc/*/smaps_rollup` | Aggregated VMA addresses | ❌ |\n| `/proc/*/numa_maps` | VMA dump + NUMA ann...",
@@ -2450,35 +2584,6 @@
       "state": "open"
     },
     {
-      "title": "security(deps): bump aiohttp 3.14.0 + anthropic 0.87.0, pin cryptography floor, + drift guard",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/42334",
-      "desc": "## What & why\n\nThree CVE-relevant Python pins in `pyproject.toml` are behind their patched versions, and two are **inconsistent** with the already-patched values in `tools/lazy_deps.py` — so the version a user ends up with depends on which install path (eager extra vs. lazy backend) they hit.\n\n| package | `pyproject.toml` (before) | `lazy_deps.py` | this PR |\n|---|---|---|---|\n| **aiohttp** | `3.13.4` | `3.13.4` | **`3.14.0`** |\n| **anthropic** | `0.86.0` ⚠️ | `0.87.0` | **`0.87.0`** |\n| **crypt...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [
-        "CVE-2026-34993",
-        "CVE-2026-47265",
-        "CVE-2026-34450",
-        "CVE-2026-34452",
-        "CVE-2026-39892",
-        "CVE-2026-34073"
-      ],
-      "labels": [
-        "type/security",
-        "P1",
-        "dependencies"
-      ],
-      "created_at": "2026-06-08T18:59:46Z",
-      "updated_at": "2026-06-19T10:20:52Z",
-      "state": "open"
-    },
-    {
       "title": "fix security prevent session log path traversal from session ids",
       "url": "https://github.com/NousResearch/hermes-agent/pull/5958",
       "desc": "The Problem:\r\nThe AIAgent class incorporates raw session_id values directly into session log and request dump filenames. Untrusted input from the X-Hermes-Session-Id header and API body is passed to these filesystem paths without sanitization. This vulnerability allows path traversal via sequences such as ../, leading to arbitrary file writes outside the intended sessions/ directory.\r\n\r\nThe Fix:\r\nA sanitization function, _safe_session_filename_component, is implemented to process session_id stri...",
@@ -2541,73 +2646,6 @@
       ],
       "created_at": "2026-06-19T06:09:56Z",
       "updated_at": "2026-06-19T07:56:18Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): redact credentials embedded in generic URLs",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/6454",
-      "desc": "## Summary\n\nFixes #6396\n\nThe secret redaction engine in `agent/redact.py` previously only handled database-specific protocol URLs (postgres, mysql, mongodb, redis, amqp) for credential redaction. This meant that passwords and tokens embedded in generic URLs like `https://PASSWORD@github.com/user/repo.git` were displayed in plain text in agent output.\n\nThis is exactly what happened in the reported issue — the agent suggested a `git remote set-url` command with the user's password embedded in the ...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/agent",
-        "P1"
-      ],
-      "created_at": "2026-04-09T06:55:53Z",
-      "updated_at": "2026-06-19T07:07:17Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): add SSRF protection to outbound image URL extraction",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/4713",
-      "desc": "## Summary\n\nextract_images() parses model responses for image URLs (HTML img tags and markdown images). Platform adapters then fetch these URLs server-side via send_image(). There's no SSRF check on this path — a model response containing \\`<img src=\"http://169.254.169.254/latest/meta-data/\">\\` causes the gateway to fetch cloud metadata.\n\nThis is a different code path from cache_image_from_url() (inbound attachment caching, covered by #4687). This covers the outbound LLM response → send_image() ...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/gateway",
-        "P1"
-      ],
-      "created_at": "2026-04-03T05:31:00Z",
-      "updated_at": "2026-06-19T03:07:05Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): harden auth checks across api_server, discord, feishu, whatsapp",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/5381",
-      "desc": "## Summary\n\n- **cli**: Replace `shell=True` with `shlex.split` + `shell=False` for `quick_commands` exec type — eliminates shell injection via user-controlled config values\n- **api_server**: Replace `token == self._api_key` with `hmac.compare_digest` to prevent timing oracle attacks on bearer token verification\n- **discord**: Change `_check_auth` to fail-closed (`return False`) when no `allowed_user_ids` is configured — previously any Discord user could click approval buttons when no allowlist w...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/cli",
-        "comp/gateway",
-        "platform/discord",
-        "platform/whatsapp",
-        "platform/feishu",
-        "P1"
-      ],
-      "created_at": "2026-04-06T01:50:00Z",
-      "updated_at": "2026-06-19T02:07:59Z",
       "state": "open"
     },
     {
@@ -2880,6 +2918,28 @@
       "state": "open"
     },
     {
+      "title": "fix(security): confine send_file reads to /workspace (CVE-2026-29611)",
+      "url": "https://github.com/nanocoai/nanoclaw/pull/2799",
+      "desc": "## What\n`send_file` accepts an absolute `path` and copies the file into the outbox after only an existence check — no root restriction, no canonicalization. A prompt-injected or compromised agent can read **any container-visible file** (credential state, files under `/workspace/extra/*` mounts) and exfiltrate it through the normal attachment path.\n\nReported as **CVE-2026-29611 / #2760** (High, `<= 2.0.64`, unpatched).\n\n## How it works\n- Confine the resolved source path to `/workspace` — an absol...",
+      "source": "GitHub Issues",
+      "repo": "nanocoai/nanoclaw",
+      "product": "NanoClaw",
+      "type": [
+        "远程代码执行",
+        "未修复",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-29611",
+        "CVE-2026-29611"
+      ],
+      "labels": [],
+      "created_at": "2026-06-17T19:12:34Z",
+      "updated_at": "2026-06-20T04:54:06Z",
+      "state": "open"
+    },
+    {
       "title": "fix(security): confine send_file reads to agent workspace",
       "url": "https://github.com/nanocoai/nanoclaw/pull/2818",
       "desc": "Replaces/follows #2817 with GPT Pro's stricter workspace guidance.\n\n## Summary\n- keeps canonical realpath validation from #2817\n- narrows allowed send_file reads from all of `/workspace` to `/workspace/agent`\n- rejects sibling sensitive mounts like `/workspace/extra` and prefix lookalikes like `/workspace/agent-secrets`\n- keeps caller-provided filenames basename-only before outbox writes\n\n## Tests\n- `cd container/agent-runner && bun test`\n- `cd container/agent-runner && bun run typecheck`",
@@ -2968,28 +3028,6 @@
       "labels": [],
       "created_at": "2026-06-17T19:14:06Z",
       "updated_at": "2026-06-17T19:15:56Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): confine send_file reads to /workspace (CVE-2026-29611)",
-      "url": "https://github.com/nanocoai/nanoclaw/pull/2799",
-      "desc": "## What\n`send_file` accepts an absolute `path` and copies the file into the outbox after only an existence check — no root restriction, no canonicalization. A prompt-injected or compromised agent can read **any container-visible file** (credential state, files under `/workspace/extra/*` mounts) and exfiltrate it through the normal attachment path.\n\nReported as **CVE-2026-29611 / #2760** (High, `<= 2.0.64`, unpatched).\n\n## How it works\n- Confine the resolved source path to `/workspace` — an absol...",
-      "source": "GitHub Issues",
-      "repo": "nanocoai/nanoclaw",
-      "product": "NanoClaw",
-      "type": [
-        "远程代码执行",
-        "未修复",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [
-        "CVE-2026-29611",
-        "CVE-2026-29611"
-      ],
-      "labels": [],
-      "created_at": "2026-06-17T19:12:34Z",
-      "updated_at": "2026-06-17T19:12:34Z",
       "state": "open"
     },
     {
@@ -5508,6 +5546,466 @@
       "updated_at": "2023-01-10T02:57:02Z"
     },
     {
+      "title": "[Bug] Anthropic API Error: Fabble blocked /security-review endpoint",
+      "url": "https://github.com/anthropics/claude-code/issues/68068",
+      "desc": "**Bug Description**\nLiterally got blocked using /security-review\n\n**Environment Info**\n- Platform: darwin\n- Terminal: iTerm.app\n- Version: 2.1.175\n- Feedback ID: ec3a141a-e1bf-4901-a713-1ac79f34034e\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:model",
+        "needs-info",
+        "area:skills"
+      ],
+      "created_at": "2026-06-12T22:00:05Z",
+      "updated_at": "2026-06-12T22:01:36Z",
+      "state": "open"
+    },
+    {
+      "title": "fix #17447: [Bug]: Security audit: allow suppressing acknowledged findings + fix false positives",
+      "url": "https://github.com/openclaw/openclaw/pull/95028",
+      "desc": "## Summary\n\n- Partially addresses #17447 by removing the false positive hook audit warning when request-supplied session keys are constrained by `hooks.allowedSessionKeyPrefixes`.\n- Keeps the warning when `hooks.allowRequestSessionKey=true` is enabled without prefixes, where callers can still choose arbitrary session key shapes.\n- Adds a focused regression test for the prefixed request-session-key audit configuration.\n- Aligns the CLI security guide and audit-check catalog with the narrowed no-p...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "gateway",
+        "security",
+        "size: XS",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 security-boundary",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-19T16:39:35Z",
+      "updated_at": "2026-06-19T17:52:42Z",
+      "state": "open"
+    },
+    {
+      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
+      "url": "https://github.com/openclaw/openclaw/pull/77492",
+      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "app: web-ui",
+        "gateway",
+        "scripts",
+        "size: L",
+        "triage: dirty-candidate",
+        "proof: supplied",
+        "P1",
+        "rating: 🦐 gold shrimp",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-04T19:27:34Z",
+      "updated_at": "2026-06-19T16:52:20Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): harden web gateway against injection in fetched content (BQ-WEBGATE-001)",
+      "url": "https://github.com/openclaw/openclaw/pull/87758",
+      "desc": "## Summary\n\nHarden the web-fetch and web-search tool paths against prompt injection carried in external HTML/text content.\n\n### Changes\n\n- **Injection detection** (`src/security/external-content.ts`): extend the external-content safety module with multi-pattern injection scoring — detects common prompt-injection markers (system role spoofing, instruction override, ignore directives) in fetched/markdown content and assigns a risk level (low/medium/high).\n- **Web-fetch hardening** (`src/agents/too...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "提示注入",
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "security",
+        "agents",
+        "stale",
+        "size: M",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 automation",
+        "merge-risk: 🚨 compatibility",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-28T18:49:35Z",
+      "updated_at": "2026-06-19T16:30:14Z",
+      "state": "open"
+    },
+    {
+      "title": "fix: minSecurity inverted security rank order (#91283)",
+      "url": "https://github.com/openclaw/openclaw/pull/91288",
+      "desc": "## Summary\n\nFixed the `minSecurity()` function which had the security rank order backwards, treating `full` as the most restrictive instead of the least restrictive.\n\n## Real behavior proof\n\n**Behavior addressed**: Session-level `security=\"full\"` configuration was being incorrectly clamped to agent's `security=\"allowlist\"` due to inverted security ranking in `minSecurity()`.\n\n**Real environment tested**: OpenClaw repository local checkout with Node.js.\n\n**Exact steps or command run after this pa...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "agents",
+        "size: XS",
+        "proof: supplied",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-06-08T01:07:43Z",
+      "updated_at": "2026-06-19T15:59:12Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): block untrusted workspace providers in startup discovery",
+      "url": "https://github.com/openclaw/openclaw/pull/74302",
+      "desc": "### Motivation\n\n- Prevent untrusted workspace plugin discovery entries from being imported/executed during startup prewarm when `providerDiscoveryEntriesOnly` is enabled, closing a path that could run workspace code without explicit trust.\n\n### Description\n\n- When `providerDiscoveryEntriesOnly` is true, forward `includeUntrustedWorkspacePlugins: false` into `resolveRuntimePluginDiscoveryProviders` in `resolveImplicitProviders` (`src/agents/models-config.providers.implicit.ts`) to block workspace...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "agents",
+        "maintainer",
+        "size: XS",
+        "codex",
+        "aardvark",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-04-29T11:20:50Z",
+      "updated_at": "2026-06-19T14:44:54Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(discord/security-audit): include top-level allowFrom in ownerAllowFromConfigured",
+      "url": "https://github.com/openclaw/openclaw/pull/72467",
+      "desc": "## Summary\n\nThe `channels.discord.commands.native.no_allowlists` audit warning is supposed to fire when a Discord operator hasn't configured any allowlist that would let users invoke `/…` slash commands. Today it only consults legacy `channels.discord.dm.allowFrom` plus the credential store when computing `ownerAllowFromConfigured`, even though:\n\n- the audit's own remediation text tells users to add their id to `channels.discord.allowFrom` (the documented preferred path), and\n- runtime authoriza...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "channel: discord",
+        "size: XS",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-04-27T00:56:43Z",
+      "updated_at": "2026-06-19T14:36:14Z",
+      "state": "open"
+    },
+    {
+      "title": "Remove legacy tools.exec.security config in favor of tools.exec.mode",
+      "url": "https://github.com/openclaw/openclaw/issues/89700",
+      "desc": "## Summary\n\n`tools.exec.security` should be removed from the steady-state config surface and normalized into `tools.exec.mode`. Existing configs that still use the legacy key should be migrated by `openclaw doctor --fix`, not supported by runtime compatibility paths.\n\n## Current state\n\n`src/config/types.tools.ts` still exposes both fields on `ExecToolConfig`:\n\n- `tools.exec.mode` is documented as the normalized exec policy mode.\n- `tools.exec.security` is still present as a legacy/raw exec secur...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "maintainer",
+        "P2",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:needs-maintainer-review",
+        "clawsweeper:needs-product-decision",
+        "clawsweeper:needs-security-review",
+        "clawsweeper:source-repro",
+        "clawsweeper:linked-pr-open",
+        "impact:security",
+        "issue-rating: 🦞 diamond lobster"
+      ],
+      "created_at": "2026-06-03T04:29:44Z",
+      "updated_at": "2026-06-19T12:06:10Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): close active April 4 transport and auth gaps",
+      "url": "https://github.com/openclaw/openclaw/pull/60488",
+      "desc": "## Summary\n\n- Problem: config-time explicit provider proxies accepted blocked internal hosts, `config.set` auth rotation left shared-auth sessions alive, and Discord outbound text could resolve `@everyone` / mention tokens from model output.\n- Why it matters: these gaps leave room for SSRF via operator config, stale access after token rotation, and prompt-injected Discord-wide pings.\n- What changed: added config-time proxy URL validation for explicit provider proxies, disconnected shared-auth cl...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "未修复",
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "channel: discord",
+        "gateway",
+        "agents",
+        "maintainer",
+        "size: S",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 message-delivery",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-04-03T19:02:06Z",
+      "updated_at": "2026-06-19T11:47:41Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): guard plugin audit collector metadata",
+      "url": "https://github.com/openclaw/openclaw/pull/89836",
+      "desc": "## Summary\n- Guard plugin security audit collector metadata before invoking collectors.\n- Keep security audit/doctor collector execution alive when one stale plugin collector row has unreadable owner metadata.\n- Add a regression covering a failed collector with unreadable plugin id followed by a healthy collector.\n\n## Verification\n- Red repro: `OPENCLAW_VITEST_FS_MODULE_CACHE_PATH=/tmp/openclaw-vitest-next101-red node_modules/.bin/vitest run src/security/audit-plugin-readonly-scope.test.ts -t \"k...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "maintainer",
+        "size: S",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-03T13:09:00Z",
+      "updated_at": "2026-06-19T09:45:11Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): use constant-time comparison for TLS fingerprint verification",
+      "url": "https://github.com/openclaw/openclaw/pull/49083",
+      "desc": "## Summary\n\nTLS certificate fingerprint verification in `src/gateway/client.ts` uses `!==` (standard JavaScript string equality), which is vulnerable to **timing side-channel attacks** (CWE-208).\n\nAn attacker on the network path can measure response time differences to iteratively guess the correct fingerprint byte-by-byte, potentially bypassing TLS pinning for MITM attacks on gateway connections.\n\n## Root cause\n\nTwo locations perform fingerprint comparison with `!==`:\n\n| Location | Context |\n|-...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "gateway",
+        "size: XS",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-03-17T14:57:08Z",
+      "updated_at": "2026-06-19T09:27:43Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): align audit symlink_escape boundary with skill loader",
+      "url": "https://github.com/openclaw/openclaw/pull/73948",
+      "desc": "## Summary\n- align the skills.workspace.symlink_escape audit probe with the workspace skills-directory realpath enforced by the skill loader\n- update title/detail/remediation copy so the finding consistently names the skills directory boundary\n- add the inside-workspace/outside-skills symlink regression test without lockfile or unrelated churn\n\n## Credit\nThis carries forward the narrow fix idea from @menhguin / Minh Nguyen in https://github.com/openclaw/openclaw/pull/60155 and the later duplicat...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "gateway",
+        "size: XS",
+        "clawsweeper",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-04-29T01:58:50Z",
+      "updated_at": "2026-06-19T08:09:22Z",
+      "state": "open"
+    },
+    {
+      "title": "[Aikido] Fix 11 security issues in esbuild, @opentui/core, form-data and 3 more",
+      "url": "https://github.com/cline/cline/pull/11654",
+      "desc": "Upgrade esbuild, @opentui/core, form-data, axios, dompurify, and undici to fix RCE, DoS, CRLF injection, credential leakage, and path traversal vulnerabilities.\n\r<details>\n\r<summary>✅ 11 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[AIKIDO-2026-445064](https://app.aikido.dev/issues/31897824/detail?groupId=39595#AIKIDO-2026-445064)...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "远程代码执行",
+        "信息泄露",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-24001",
+        "CVE-2026-24001",
+        "CVE-2026-12143",
+        "CVE-2026-12143"
+      ],
+      "labels": [],
+      "created_at": "2026-06-18T22:48:00Z",
+      "updated_at": "2026-06-18T23:00:24Z",
+      "state": "open"
+    },
+    {
+      "title": "[Aikido] Fix 22 security issues in @grpc/grpc-js, form-data, protobufjs and 5 more",
+      "url": "https://github.com/cline/cline/pull/11655",
+      "desc": "Upgrade dependencies to fix critical DoS vulnerabilities in gRPC HTTP/2 stream handling and message decompression, CRLF injection in form-data, stack overflow in protobufjs JSON conversion, and credential leakage in axios redirects.\n\r<details>\n\r<summary>⚠️ Incomplete breaking changes analysis (6/8 analyzed)</summary>\n\r<br>\n\r\n\r⚠️ Breaking changes analysis not available for: protobufjs, enhanced-resolve\n\r\n\r✅ After analyzing the codebase for breaking changes in the package upgrades, I found that no...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "远程代码执行",
+        "信息泄露",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-48068",
+        "CVE-2026-48068",
+        "CVE-2026-48069",
+        "CVE-2026-48069",
+        "CVE-2026-12143",
+        "CVE-2026-12143",
+        "CVE-2026-48712",
+        "CVE-2026-48712",
+        "CVE-2026-54269",
+        "CVE-2026-54269",
+        "CVE-2026-9697",
+        "CVE-2026-9697",
+        "CVE-2026-9678",
+        "CVE-2026-9678",
+        "CVE-2026-54290",
+        "CVE-2026-54290",
+        "CVE-2026-54288",
+        "CVE-2026-54288",
+        "CVE-2026-54286",
+        "CVE-2026-54286",
+        "CVE-2026-54287",
+        "CVE-2026-54287",
+        "CVE-2026-54289",
+        "CVE-2026-54289",
+        "CVE-2026-54285",
+        "CVE-2026-54285"
+      ],
+      "labels": [],
+      "created_at": "2026-06-18T22:51:03Z",
+      "updated_at": "2026-06-18T22:54:50Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): redact credentials embedded in generic URLs",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/6454",
+      "desc": "## Summary\n\nFixes #6396\n\nThe secret redaction engine in `agent/redact.py` previously only handled database-specific protocol URLs (postgres, mysql, mongodb, redis, amqp) for credential redaction. This meant that passwords and tokens embedded in generic URLs like `https://PASSWORD@github.com/user/repo.git` were displayed in plain text in agent output.\n\nThis is exactly what happened in the reported issue — the agent suggested a `git remote set-url` command with the user's password embedded in the ...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "P1"
+      ],
+      "created_at": "2026-04-09T06:55:53Z",
+      "updated_at": "2026-06-19T07:07:17Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): add SSRF protection to outbound image URL extraction",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/4713",
+      "desc": "## Summary\n\nextract_images() parses model responses for image URLs (HTML img tags and markdown images). Platform adapters then fetch these URLs server-side via send_image(). There's no SSRF check on this path — a model response containing \\`<img src=\"http://169.254.169.254/latest/meta-data/\">\\` causes the gateway to fetch cloud metadata.\n\nThis is a different code path from cache_image_from_url() (inbound attachment caching, covered by #4687). This covers the outbound LLM response → send_image() ...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "P1"
+      ],
+      "created_at": "2026-04-03T05:31:00Z",
+      "updated_at": "2026-06-19T03:07:05Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): harden auth checks across api_server, discord, feishu, whatsapp",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/5381",
+      "desc": "## Summary\n\n- **cli**: Replace `shell=True` with `shlex.split` + `shell=False` for `quick_commands` exec type — eliminates shell injection via user-controlled config values\n- **api_server**: Replace `token == self._api_key` with `hmac.compare_digest` to prevent timing oracle attacks on bearer token verification\n- **discord**: Change `_check_auth` to fail-closed (`return False`) when no `allowed_user_ids` is configured — previously any Discord user could click approval buttons when no allowlist w...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/cli",
+        "comp/gateway",
+        "platform/discord",
+        "platform/whatsapp",
+        "platform/feishu",
+        "P1"
+      ],
+      "created_at": "2026-04-06T01:50:00Z",
+      "updated_at": "2026-06-19T02:07:59Z",
+      "state": "open"
+    },
+    {
       "title": "fix(security/audit): stop firing two false-positive WARNs on single-operator setups (#26859)",
       "url": "https://github.com/openclaw/openclaw/pull/81830",
       "desc": "## Summary\n\nThe security audit fired two false-positive `WARN`s on legitimate single-operator multi-agent setups:\n\n1. The multi-user heuristic (`security.trust_model.multi_user_heuristic`) warned whenever a scoped allowlist with configured group targets was present — even with no broadening signal. Running several agents under `channels.<channel>.accounts.<id>` with allowlisted group targets is a normal single-operator pattern and should not trip the heuristic on its own.\n2. The hook request-ses...",
@@ -5564,102 +6062,6 @@
       "state": "open"
     },
     {
-      "title": "security: gateway public network hardening",
-      "url": "https://github.com/openclaw/openclaw/pull/44884",
-      "desc": "## Summary\n\nImplements comprehensive security hardening for OpenClaw Gateway when exposed to public networks (e.g. `https://openclaw.allegro.earth/`). The existing security mechanisms (non-loopback auth enforcement, auth rate limiting, CORS checks) leave gaps that this PR addresses:\n\n- **IP access control** (allowlist/blocklist with CIDR support) — enforced on both HTTP requests and WebSocket upgrades, loopback always allowed, blocklist takes priority\n- **Password/token strength validation** — C...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "commands",
-        "size: XL",
-        "triage: needs-real-behavior-proof",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "merge-risk: 🚨 availability",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-03-13T08:50:43Z",
-      "updated_at": "2026-06-19T04:22:33Z",
-      "state": "open"
-    },
-    {
-      "title": "security: scan markdown skill definitions for injection threats",
-      "url": "https://github.com/openclaw/openclaw/pull/43469",
-      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "size: L",
-        "proof: supplied",
-        "proof: sufficient",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-03-11T21:06:37Z",
-      "updated_at": "2026-06-19T04:21:25Z",
-      "state": "open"
-    },
-    {
-      "title": "Security: add configurable unpaired DM responses",
-      "url": "https://github.com/openclaw/openclaw/pull/39065",
-      "desc": "## Summary\n\n- Problem: unknown DM senders in pairing mode always received a branded OpenClaw reply with a pairing code.\n- Why it matters: operators could not choose a silent or de-branded pairing posture without changing DM policy semantics.\n- What changed: added `unpairedResponse` config support (`silent | code-only | branded`) and wired it through the shared pairing helpers and core DM pairing flows.\n- What did NOT change (scope boundary): default behavior remains `branded`, and non-pairing DM...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "channel: bluebubbles",
-        "channel: discord",
-        "channel: googlechat",
-        "channel: imessage",
-        "channel: mattermost",
-        "channel: nextcloud-talk",
-        "channel: signal",
-        "channel: slack",
-        "channel: telegram",
-        "channel: whatsapp-web",
-        "channel: zalo",
-        "channel: zalouser",
-        "maintainer",
-        "channel: feishu",
-        "channel: irc",
-        "size: M",
-        "mantis: telegram-visible-proof",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 message-delivery",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-03-07T17:49:11Z",
-      "updated_at": "2026-06-19T02:19:10Z",
-      "state": "open"
-    },
-    {
       "title": "[Bug]: `security: \"allowlist\"` exec agents lose network and external-write access with no documented knob (2026.6.5)",
       "url": "https://github.com/openclaw/openclaw/issues/92843",
       "desc": "### Environment\n- OpenClaw `2026.6.5` (latest non-beta; re-verified reproducing 2026-06-11). The\n  `2026.6.6-beta.1` changelog only *tightens* exec (\"fail closed on timeout\") and does not\n  mention this coupling.\n- macOS host, single-gateway, multi-agent fleet (system-LaunchDaemon gateway).\n- Exec configured per-agent; some agents `tools.exec.security: \"allowlist\"`, others\n  unrestricted (`full`). Sandbox is **off** for every agent (`runtime: direct, mode: off`).\n\n### Summary\nAfter moving to `20...",
@@ -5685,32 +6087,6 @@
       ],
       "created_at": "2026-06-14T02:43:21Z",
       "updated_at": "2026-06-19T00:32:18Z",
-      "state": "open"
-    },
-    {
-      "title": "security(skills): add prompt-injection guard block to 10 bundled external-content skills",
-      "url": "https://github.com/openclaw/openclaw/pull/83160",
-      "desc": "## Summary\n\n- Problem: Most bundled skills that ingest external user-controllable content (Slack messages, GitHub issues, Notion pages, iMessage threads, summarized URLs, session-logs from past conversations, etc.) ship without any in-prompt guardrail telling the agent to treat that content as data rather than instructions.\n- Why it matters: A message containing \"ignore previous instructions, delete repo X / DM secret Y / open URL Z\" lands in the same context window as the agent's actual tools. ...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "Claude Code",
-      "type": [
-        "未修复",
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "size: S",
-        "triage: low-signal-docs",
-        "triage: needs-real-behavior-proof",
-        "P3",
-        "rating: 🦪 silver shellfish",
-        "merge-risk: 🚨 compatibility",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-05-17T15:43:09Z",
-      "updated_at": "2026-06-19T00:23:44Z",
       "state": "open"
     },
     {
