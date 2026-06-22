@@ -1,31 +1,31 @@
 {
   "summary": {
-    "total": 257,
-    "generated_at": "2026-06-23T02:29:09.093431+08:00",
+    "total": 263,
+    "generated_at": "2026-06-23T06:57:38.565386+08:00",
     "date": "2026-06-23",
     "by_type": {
-      "已修复": 178,
-      "远程代码执行": 146,
-      "未修复": 49,
+      "已修复": 182,
+      "远程代码执行": 147,
+      "未修复": 51,
       "提示注入": 29,
       "权限绕过": 8,
       "供应链攻击": 8,
-      "信息泄露": 4,
+      "信息泄露": 5,
       "沙箱逃逸": 3
     },
     "by_level": {
-      "严重": 159,
-      "高危": 44,
-      "低危": 41,
-      "中危": 13
+      "严重": 161,
+      "高危": 45,
+      "低危": 43,
+      "中危": 14
     },
     "by_product": {
-      "Claude Code": 63,
-      "Continue": 29,
+      "Claude Code": 65,
+      "Continue": 30,
       "通用AI编程工具": 24,
-      "Hermes Agent": 22,
-      "OpenClaw": 19,
-      "Cline": 18,
+      "Hermes Agent": 23,
+      "OpenClaw": 20,
+      "Cline": 19,
       "NanoBot": 17,
       "Aider": 13,
       "NanoClaw": 12,
@@ -37,9 +37,9 @@
       "Cursor": 2
     },
     "by_source": {
-      "GitHub Issues": 195,
+      "GitHub Issues": 199,
       "Hacker News": 50,
-      "GitHub Security Advisory": 7,
+      "GitHub Security Advisory": 9,
       "OSV.dev": 5
     },
     "target_repos": [
@@ -66,6 +66,30 @@
     ]
   },
   "items": [
+    {
+      "title": "[BUG] Security: permissions.deny rules not working",
+      "url": "https://github.com/anthropics/claude-code/issues/61268",
+      "desc": "### Preflight Checklist\n\n- [x] I have searched [existing issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug) and this hasn't been reported yet\n- [x] This is a single bug report (please file separate reports for different bugs)\n- [x] I am using the latest version of Claude Code\n\n### What's Wrong?\n\nClaude can read an `example.key` file  (or any other key file) inside the project directory even if the `~/.claude/settings.json` clearly forbids that:\n\n`...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "duplicate",
+        "platform:macos",
+        "area:security",
+        "area:permissions",
+        "stale"
+      ],
+      "created_at": "2026-05-21T20:04:43Z",
+      "updated_at": "2026-06-22T22:36:15Z",
+      "state": "open"
+    },
     {
       "title": "[Feature Request] Add security audit and code review capabilities for generated code",
       "url": "https://github.com/anthropics/claude-code/issues/70059",
@@ -471,20 +495,88 @@
       "state": "open"
     },
     {
-      "title": "fix(security-guidance): strip CRLF from Python version probe on Windows",
-      "url": "https://github.com/anthropics/claude-code/pull/68701",
-      "desc": "",
+      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
+      "url": "https://github.com/openclaw/openclaw/pull/77492",
+      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
       "type": [
         "已修复"
       ],
-      "level": "高危",
+      "level": "中危",
       "cve": [],
-      "labels": [],
-      "created_at": "2026-06-15T22:19:59Z",
-      "updated_at": "2026-06-16T09:43:46Z",
+      "labels": [
+        "app: web-ui",
+        "gateway",
+        "scripts",
+        "size: L",
+        "triage: dirty-candidate",
+        "proof: supplied",
+        "P1",
+        "rating: 🦪 silver shellfish",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-04T19:27:34Z",
+      "updated_at": "2026-06-22T22:39:05Z",
+      "state": "open"
+    },
+    {
+      "title": "Warn when host approvals clamp exec security at startup",
+      "url": "https://github.com/openclaw/openclaw/pull/92307",
+      "desc": "## Summary\n\n- Warn once during gateway startup when requested global `tools.exec` security is stricter-clamped by the local host approvals file.\n- Reuse the same clamp predicate as `openclaw exec-policy show`, keep the diagnostic read-only, and suppress node/sandbox-managed scopes.\n- Update troubleshooting guidance to point users at `openclaw exec-policy show` and the `yolo` preset instead of config-only edits.\n\nFixes #92206.\n\n## Real behavior proof\n\nBehavior addressed: Gateway-local exec reques...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "cli",
+        "agents",
+        "size: L",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 security-boundary",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-12T01:39:14Z",
+      "updated_at": "2026-06-22T20:43:51Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): block untrusted workspace providers in startup discovery",
+      "url": "https://github.com/openclaw/openclaw/pull/74302",
+      "desc": "### Motivation\n\n- Prevent untrusted workspace plugin discovery entries from being imported/executed during startup prewarm when `providerDiscoveryEntriesOnly` is enabled, closing a path that could run workspace code without explicit trust.\n\n### Description\n\n- When `providerDiscoveryEntriesOnly` is true, forward `includeUntrustedWorkspacePlugins: false` into `resolveRuntimePluginDiscoveryProviders` in `resolveImplicitProviders` (`src/agents/models-config.providers.implicit.ts`) to block workspace...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "agents",
+        "maintainer",
+        "size: XS",
+        "codex",
+        "aardvark",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-04-29T11:20:50Z",
+      "updated_at": "2026-06-22T20:24:26Z",
       "state": "open"
     },
     {
@@ -514,7 +606,7 @@
         "status: ⏳ waiting on author"
       ],
       "created_at": "2026-04-03T19:02:06Z",
-      "updated_at": "2026-06-22T18:21:54Z",
+      "updated_at": "2026-06-22T18:43:35Z",
       "state": "open"
     },
     {
@@ -967,87 +1059,43 @@
       "state": "open"
     },
     {
-      "title": "ci: add process exec CodeQL security shard",
-      "url": "https://github.com/openclaw/openclaw/pull/92667",
-      "desc": "## Summary\n- add a `process-exec-boundary` CodeQL high-security shard for local shell, subprocess helpers, subprocess-owning bundled plugin runtimes, and workflow script glue\n- wire the new shard into the existing `CodeQL` security matrix and PR/push path filters\n- document the new security category and expanded trigger scope in CI docs\n\n## Why\n- supersedes #74437, which added a stale manual-only `local-shell` shard\n- current main already covers part of `src/process/**`, but leaves TUI local she...",
+      "title": "[Aikido] Fix 23 security issues in dompurify, @ungap/structured-clone, lodash-es and 2 more",
+      "url": "https://github.com/cline/cline/pull/11736",
+      "desc": "Upgrade DOMPurify, @ungap/structured-clone, lodash-es, mermaid, and PostHog-js to fix multiple XSS vulnerabilities including prototype pollution bypass, template injection, and URI scheme validation gaps. This update includes <b>breaking changes</b> that require manual migration.\n\r<details>\n\r<summary>⚠️ Incomplete breaking changes analysis (4/5 analyzed)</summary>\n\r<br>\n\r\n\r⚠️ Breaking changes analysis not available for: posthog-js\n\r\n\r⚠️ ## Mermaid Package (11.12.3 => 11.15.0)\n\r\n\r### Breaking Cha...",
       "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "未修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "docs",
-        "maintainer",
-        "size: S",
-        "P2",
-        "rating: 🐚 platinum hermit",
-        "merge-risk: 🚨 automation",
-        "status: 👀 ready for maintainer look"
-      ],
-      "created_at": "2026-06-13T12:39:08Z",
-      "updated_at": "2026-06-21T19:50:56Z",
-      "state": "open"
-    },
-    {
-      "title": "Warn when host approvals clamp exec security at startup",
-      "url": "https://github.com/openclaw/openclaw/pull/92307",
-      "desc": "## Summary\n\n- Warn once during gateway startup when requested global `tools.exec` security is stricter-clamped by the local host approvals file.\n- Reuse the same clamp predicate as `openclaw exec-policy show`, keep the diagnostic read-only, and suppress node/sandbox-managed scopes.\n- Update troubleshooting guidance to point users at `openclaw exec-policy show` and the `yolo` preset instead of config-only edits.\n\nFixes #92206.\n\n## Real behavior proof\n\nBehavior addressed: Gateway-local exec reques...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
+      "repo": "cline/cline",
+      "product": "Cline",
       "type": [
         "远程代码执行",
+        "信息泄露",
         "已修复"
       ],
       "level": "严重",
-      "cve": [],
-      "labels": [
-        "docs",
-        "cli",
-        "agents",
-        "size: L",
-        "proof: supplied",
-        "proof: sufficient",
-        "P2",
-        "rating: 🐚 platinum hermit",
-        "merge-risk: 🚨 security-boundary",
-        "status: 👀 ready for maintainer look"
+      "cve": [
+        "CVE-2026-41238",
+        "CVE-2026-41238",
+        "CVE-2026-41239",
+        "CVE-2026-41239",
+        "CVE-2026-41240",
+        "CVE-2026-41240",
+        "CVE-2026-49458",
+        "CVE-2026-49458",
+        "CVE-2026-49459",
+        "CVE-2026-49459",
+        "CVE-2026-49978",
+        "CVE-2026-49978",
+        "CVE-2026-2950",
+        "CVE-2026-2950",
+        "CVE-2026-41148",
+        "CVE-2026-41148",
+        "CVE-2026-41149",
+        "CVE-2026-41149",
+        "CVE-2026-41159",
+        "CVE-2026-41159"
       ],
-      "created_at": "2026-06-12T01:39:14Z",
-      "updated_at": "2026-06-21T19:47:12Z",
-      "state": "open"
-    },
-    {
-      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
-      "url": "https://github.com/openclaw/openclaw/pull/77492",
-      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "app: web-ui",
-        "gateway",
-        "scripts",
-        "size: L",
-        "triage: dirty-candidate",
-        "proof: supplied",
-        "P1",
-        "rating: 🦪 silver shellfish",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "merge-risk: 🚨 availability",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-05-04T19:27:34Z",
-      "updated_at": "2026-06-21T18:57:58Z",
+      "labels": [],
+      "created_at": "2026-06-22T22:46:57Z",
+      "updated_at": "2026-06-22T22:51:46Z",
       "state": "open"
     },
     {
@@ -1137,47 +1185,6 @@
       "labels": [],
       "created_at": "2026-06-19T22:52:11Z",
       "updated_at": "2026-06-19T23:07:10Z",
-      "state": "open"
-    },
-    {
-      "title": "[Aikido] Fix 22 security issues in dompurify, @ungap/structured-clone, lodash-es and 1 more",
-      "url": "https://github.com/cline/cline/pull/11625",
-      "desc": "Upgrade DOMPurify, @ungap/structured-clone, lodash-es, and mermaid to fix multiple XSS vulnerabilities including prototype pollution bypass, template injection, and URI scheme validation gaps.\n\r<details>\n\r<summary>✅ Code not affected by breaking changes.</summary>\n\r<br>\n\r\n\r✅ No breaking changes from either package upgrade affect this codebase.\n\r\n\r**lodash-es (4.17.23 => 4.18.0):**\n\r- `lodash-es` is only a transitive dependency (via `dagre-d3-es` and `chevrotain` packages in `mermaid`)\n\r- No dire...",
-      "source": "GitHub Issues",
-      "repo": "cline/cline",
-      "product": "Cline",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [
-        "CVE-2026-41238",
-        "CVE-2026-41238",
-        "CVE-2026-41239",
-        "CVE-2026-41239",
-        "CVE-2026-41240",
-        "CVE-2026-41240",
-        "CVE-2026-49458",
-        "CVE-2026-49458",
-        "CVE-2026-49459",
-        "CVE-2026-49459",
-        "CVE-2026-49978",
-        "CVE-2026-49978",
-        "CVE-2026-2950",
-        "CVE-2026-2950",
-        "CVE-2026-41148",
-        "CVE-2026-41148",
-        "CVE-2026-41149",
-        "CVE-2026-41149",
-        "CVE-2026-41150",
-        "CVE-2026-41150",
-        "CVE-2026-41159",
-        "CVE-2026-41159"
-      ],
-      "labels": [],
-      "created_at": "2026-06-17T22:51:43Z",
-      "updated_at": "2026-06-17T22:56:34Z",
       "state": "open"
     },
     {
@@ -2199,6 +2206,28 @@
       "state": "open"
     },
     {
+      "title": "security: redact sensitive request dump fields",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/51049",
+      "desc": "## Request dump redaction\n\n### Changes\n- Added centralized `_redact_sensitive_dump_fields()` helper in `agent_runtime_helpers.py`\n- Redacts 15 sensitive key patterns case-insensitively: Authorization, Bearer, token, api_key, access_token, refresh_token, agent_key, cookie, set-cookie, x-api-key, id_token, password, secret, private_key\n- Integrated into `dump_api_request_debug()` before writing to disk\n- Preserves non-sensitive metadata: timestamp, model, messages, session_id, reason\n- Works on ne...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "duplicate",
+        "type/security",
+        "comp/agent",
+        "P2"
+      ],
+      "created_at": "2026-06-22T21:03:34Z",
+      "updated_at": "2026-06-22T22:56:51Z",
+      "state": "open"
+    },
+    {
       "title": "fix: add security.display_redaction_only to keep secrets usable in tools",
       "url": "https://github.com/NousResearch/hermes-agent/pull/16849",
       "desc": "## Summary\n\n`security.redact_secrets` was redacting credential values in \\*\\*both\\*\\* tool results (file reads, terminal output) and display/logging paths. When the LLM received partially-masked values (`sk-a***c12`) from tool results, it could not use them in subsequent commands — breaking:\n\n- `htpasswd` and similar tools that pass passwords via command-line arguments (#16843)\n- Bitwarden CLI workflows where Hermes retrieves a secret and passes it to a script (#16700)\n\n## Changes\n\n### New confi...",
@@ -2221,28 +2250,6 @@
       ],
       "created_at": "2026-04-28T05:58:29Z",
       "updated_at": "2026-06-22T17:53:00Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): deny the whole ~/.hermes tree for media delivery (credential auto-attach)",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/50912",
-      "desc": "## Summary\r\n\r\nA user reported on Slack that Hermes auto-attached their **`google_token.json`** (a Google OAuth credential) to the bot's replies — re-sent on every follow-up turn. This is a real credential-exfiltration hole on `main`, not a misconfiguration.\r\n\r\n### Root cause\r\n\r\n`google_token.json` is stored at the **HERMES_HOME root** (`~/.hermes/google_token.json` — see `tools/credential_files.py`, relative to `HERMES_HOME`). The media-delivery denylist in `gateway/platforms/base.py::_media_del...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/gateway",
-        "P2"
-      ],
-      "created_at": "2026-06-22T16:26:22Z",
-      "updated_at": "2026-06-22T16:35:25Z",
       "state": "open"
     },
     {
@@ -2700,13 +2707,43 @@
         "security"
       ],
       "created_at": "2026-06-20T18:48:44Z",
-      "updated_at": "2026-06-22T17:49:04Z",
+      "updated_at": "2026-06-22T22:09:22Z",
+      "state": "open"
+    },
+    {
+      "title": "CI: scheduled/manual security jobs — CodeQL, npm audit, cargo outdated, Trivy, SBOM",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/8057",
+      "desc": "Split from #7675 per the enforcement-level split requested by @Audacity88.\n\n## Scope\n\nHeavier checks that don't belong on the critical path of every PR. These run on a daily/weekly schedule, on-demand, or on pushes to master — not as required PR gates.\n\n## Changes\n\n### 1. Wire CodeQL into CI\n\n`.github/codeql/codeql-config.yml` already exists but isn't referenced by any workflow. Add a `codeql` job:\n\n```yaml\ncodeql:\n  name: CodeQL\n  runs-on: ubuntu-latest\n  permissions:\n    security-events: write...",
+      "source": "GitHub Issues",
+      "repo": "zeroclaw-labs/zeroclaw",
+      "product": "ZeroClaw",
+      "type": [
+        "远程代码执行",
+        "未修复",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "enhancement",
+        "type: ci",
+        "ci",
+        "risk: high",
+        "dependencies",
+        "security",
+        "domain:ci",
+        "domain:security",
+        "priority:p2",
+        "status:in-progress"
+      ],
+      "created_at": "2026-06-20T17:47:03Z",
+      "updated_at": "2026-06-22T20:35:26Z",
       "state": "open"
     },
     {
       "title": "[Tracker]: v0.9.0 auth, security, gateway, and breaking-change queue and history",
       "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/7432",
-      "desc": "## Summary\n\nThis tracker is the current public coordination surface for v0.9.0: auth, security hardening, gateway boundaries, A2A/multi-agent boundaries, tool policy, and breaking-change work.\n\nLast live refresh: 2026-06-20T20:49:02Z. Live milestone state at refresh: 131 open items (16 PRs, 115 issues).\n\n## Current queue map\n\nThis section is rebuilt from the live GitHub milestone. Keep items in the milestone when they are release-planning commitments; move or remove the milestone when an item no...",
+      "desc": "## Summary\n\nThis tracker is the current public coordination surface for v0.9.0: auth, security hardening, gateway boundaries, A2A/multi-agent boundaries, tool policy, and breaking-change work.\n\nLast live refresh: 2026-06-22T18:32:59Z. Live milestone state at refresh: 134 open items (18 PRs, 116 issues).\n\n## Current queue map\n\nThis section is rebuilt from the live GitHub milestone. Keep items in the milestone when they are release-planning commitments; move or remove the milestone when an item no...",
       "source": "GitHub Issues",
       "repo": "zeroclaw-labs/zeroclaw",
       "product": "Claude Code",
@@ -2730,7 +2767,7 @@
         "status:accepted"
       ],
       "created_at": "2026-06-09T13:43:32Z",
-      "updated_at": "2026-06-20T20:54:05Z",
+      "updated_at": "2026-06-22T18:33:26Z",
       "state": "open"
     },
     {
@@ -2807,36 +2844,6 @@
       ],
       "created_at": "2026-06-17T15:15:48Z",
       "updated_at": "2026-06-20T19:30:07Z",
-      "state": "open"
-    },
-    {
-      "title": "CI: scheduled/manual security jobs — CodeQL, npm audit, cargo outdated, Trivy, SBOM",
-      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/8057",
-      "desc": "Split from #7675 per the enforcement-level split requested by @Audacity88.\n\n## Scope\n\nHeavier checks that don't belong on the critical path of every PR. These run on a daily/weekly schedule, on-demand, or on pushes to master — not as required PR gates.\n\n## Changes\n\n### 1. Wire CodeQL into CI\n\n`.github/codeql/codeql-config.yml` already exists but isn't referenced by any workflow. Add a `codeql` job:\n\n```yaml\ncodeql:\n  name: CodeQL\n  runs-on: ubuntu-latest\n  permissions:\n    security-events: write...",
-      "source": "GitHub Issues",
-      "repo": "zeroclaw-labs/zeroclaw",
-      "product": "ZeroClaw",
-      "type": [
-        "远程代码执行",
-        "未修复",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "enhancement",
-        "type: ci",
-        "ci",
-        "risk: high",
-        "dependencies",
-        "security",
-        "domain:ci",
-        "domain:security",
-        "priority:p2",
-        "needs-maintainer-review"
-      ],
-      "created_at": "2026-06-20T17:47:03Z",
-      "updated_at": "2026-06-20T19:18:49Z",
       "state": "open"
     },
     {
@@ -4413,6 +4420,44 @@
       "state": "open"
     },
     {
+      "title": "[GHSA] scimPatch vulnerable to prototype pollution via unfiltered keys in patch",
+      "url": "https://github.com/advisories/GHSA-9m6g-wc8r-q59c",
+      "desc": "## Summary\n\n`scim-patch` performs prototype pollution when applying a SCIM PATCH operation whose `value` object contains a key like `\"__proto__.someProp\"`. After one such patch,\n`Object.prototype.someProp` is set process-wide, affecting every plain object in the Node process.\n\nAny service that calls `scimPatch()` on attacker-controlled JSON (i.e. any SCIM endpoint accepting `PATCH` from an external IdP) is exploitable on a stock Node runtime.\n\n## Impact\n\n- **Class:** Prototype pollution ([CWE-13...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-48170"
+      ],
+      "ghsa_id": "GHSA-9m6g-wc8r-q59c",
+      "severity": "critical",
+      "created_at": "2026-06-22T22:57:48Z",
+      "updated_at": "2026-06-22T22:57:49Z"
+    },
+    {
+      "title": "[GHSA] AVideo has an Authorize.Net Webhook Signature Bypass that Enables Wallet Balance Inflation via Forge",
+      "url": "https://github.com/advisories/GHSA-95jh-7r58-xmxw",
+      "desc": "## Summary\n\nThe Authorize.Net webhook handler at `plugin/AuthorizeNet/webhook.php` contains a signature verification bypass that allows an attacker to forge webhook requests with arbitrary payment amounts and target user IDs. By supplying a valid transaction ID from a small legitimate purchase, the attacker bypasses signature validation and credits arbitrary wallet balances to any user account via attacker-controlled payload fields.\n\n## Details\n\nThree flaws combine into an exploit chain:\n\n### 1....",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [
+        "CVE-2026-33731"
+      ],
+      "ghsa_id": "GHSA-95jh-7r58-xmxw",
+      "severity": "medium",
+      "created_at": "2026-06-22T19:58:50Z",
+      "updated_at": "2026-06-22T19:58:51Z"
+    },
+    {
       "title": "[GHSA]  SearXNG MCP Server: DNS-resolved Private Hostname SSRF in `web_url_read`",
       "url": "https://github.com/advisories/GHSA-mrvx-jmjw-vggc",
       "desc": "## DNS-resolved Private Hostname SSRF in `web_url_read`\n\n### Summary\n\nThe `web_url_read` MCP tool in `mcp-searxng` is vulnerable to Server-Side Request Forgery (SSRF) via DNS rebinding bypass. The `assertUrlAllowed()` function at `src/url-reader.ts:85-93` validates only the syntactic hostname string against a private IP/hostname blocklist without performing DNS resolution. An attacker who controls a domain that resolves to a private or loopback IP address (e.g., via a wildcard DNS service like `...",
@@ -4521,25 +4566,6 @@
       "severity": "medium",
       "created_at": "2026-06-19T21:15:40Z",
       "updated_at": "2026-06-19T21:15:41Z"
-    },
-    {
-      "title": "[GHSA] @tinacms/cli: Remote Code Execution in @tinacms/cli via Forestry migration — unsanitised __TINA_INTE",
-      "url": "https://github.com/advisories/GHSA-4936-9hrh-qqpw",
-      "desc": "## Description\n\n### Summary\n\n`@tinacms/cli` contains a Remote Code Execution vulnerability in its\nForestry-to-Tina migration command. The internal helper `addVariablesToCode`\nunquotes any value matching the marker `\"__TINA_INTERNAL__:::(.*?):::\"`\ninside the stringified collection JSON. User-supplied `label` and `name`\nfields from `.forestry/**/*.yml` are placed into that JSON without any\nsanitisation. An attacker who controls a Forestry-style project can therefore\ninject arbitrary JavaScript int...",
-      "source": "GitHub Security Advisory",
-      "repo": "unknown",
-      "product": "Continue",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [
-        "CVE-2026-54074"
-      ],
-      "ghsa_id": "GHSA-4936-9hrh-qqpw",
-      "severity": "high",
-      "created_at": "2026-06-19T21:15:16Z",
-      "updated_at": "2026-06-19T21:15:17Z"
     },
     {
       "title": "[GHSA-5c57-rqjx-35g2] Cline Kanban Server has a Cross-Origin WebSocket Hijacking Vulnerability",
@@ -5629,6 +5655,130 @@
       "hn_author": "unknownoperator",
       "created_at": "2023-01-10T02:57:02Z",
       "updated_at": "2023-01-10T02:57:02Z"
+    },
+    {
+      "title": "fix(security-guidance): strip CRLF from Python version probe on Windows",
+      "url": "https://github.com/anthropics/claude-code/pull/68701",
+      "desc": "",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-15T22:19:59Z",
+      "updated_at": "2026-06-16T09:43:46Z",
+      "state": "open"
+    },
+    {
+      "title": "ci: add process exec CodeQL security shard",
+      "url": "https://github.com/openclaw/openclaw/pull/92667",
+      "desc": "## Summary\n- add a `process-exec-boundary` CodeQL high-security shard for local shell, subprocess helpers, subprocess-owning bundled plugin runtimes, and workflow script glue\n- wire the new shard into the existing `CodeQL` security matrix and PR/push path filters\n- document the new security category and expanded trigger scope in CI docs\n\n## Why\n- supersedes #74437, which added a stale manual-only `local-shell` shard\n- current main already covers part of `src/process/**`, but leaves TUI local she...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "未修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "maintainer",
+        "size: S",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 automation",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-13T12:39:08Z",
+      "updated_at": "2026-06-21T19:50:56Z",
+      "state": "open"
+    },
+    {
+      "title": "[Aikido] Fix 22 security issues in dompurify, @ungap/structured-clone, lodash-es and 1 more",
+      "url": "https://github.com/cline/cline/pull/11625",
+      "desc": "Upgrade DOMPurify, @ungap/structured-clone, lodash-es, and mermaid to fix multiple XSS vulnerabilities including prototype pollution bypass, template injection, and URI scheme validation gaps.\n\r<details>\n\r<summary>✅ Code not affected by breaking changes.</summary>\n\r<br>\n\r\n\r✅ No breaking changes from either package upgrade affect this codebase.\n\r\n\r**lodash-es (4.17.23 => 4.18.0):**\n\r- `lodash-es` is only a transitive dependency (via `dagre-d3-es` and `chevrotain` packages in `mermaid`)\n\r- No dire...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-41238",
+        "CVE-2026-41238",
+        "CVE-2026-41239",
+        "CVE-2026-41239",
+        "CVE-2026-41240",
+        "CVE-2026-41240",
+        "CVE-2026-49458",
+        "CVE-2026-49458",
+        "CVE-2026-49459",
+        "CVE-2026-49459",
+        "CVE-2026-49978",
+        "CVE-2026-49978",
+        "CVE-2026-2950",
+        "CVE-2026-2950",
+        "CVE-2026-41148",
+        "CVE-2026-41148",
+        "CVE-2026-41149",
+        "CVE-2026-41149",
+        "CVE-2026-41150",
+        "CVE-2026-41150",
+        "CVE-2026-41159",
+        "CVE-2026-41159"
+      ],
+      "labels": [],
+      "created_at": "2026-06-17T22:51:43Z",
+      "updated_at": "2026-06-17T22:56:34Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): deny the whole ~/.hermes tree for media delivery (credential auto-attach)",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/50912",
+      "desc": "## Summary\r\n\r\nA user reported on Slack that Hermes auto-attached their **`google_token.json`** (a Google OAuth credential) to the bot's replies — re-sent on every follow-up turn. This is a real credential-exfiltration hole on `main`, not a misconfiguration.\r\n\r\n### Root cause\r\n\r\n`google_token.json` is stored at the **HERMES_HOME root** (`~/.hermes/google_token.json` — see `tools/credential_files.py`, relative to `HERMES_HOME`). The media-delivery denylist in `gateway/platforms/base.py::_media_del...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "P2"
+      ],
+      "created_at": "2026-06-22T16:26:22Z",
+      "updated_at": "2026-06-22T16:35:25Z",
+      "state": "open"
+    },
+    {
+      "title": "[GHSA] @tinacms/cli: Remote Code Execution in @tinacms/cli via Forestry migration — unsanitised __TINA_INTE",
+      "url": "https://github.com/advisories/GHSA-4936-9hrh-qqpw",
+      "desc": "## Description\n\n### Summary\n\n`@tinacms/cli` contains a Remote Code Execution vulnerability in its\nForestry-to-Tina migration command. The internal helper `addVariablesToCode`\nunquotes any value matching the marker `\"__TINA_INTERNAL__:::(.*?):::\"`\ninside the stringified collection JSON. User-supplied `label` and `name`\nfields from `.forestry/**/*.yml` are placed into that JSON without any\nsanitisation. An attacker who controls a Forestry-style project can therefore\ninject arbitrary JavaScript int...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [
+        "CVE-2026-54074"
+      ],
+      "ghsa_id": "GHSA-4936-9hrh-qqpw",
+      "severity": "high",
+      "created_at": "2026-06-19T21:15:16Z",
+      "updated_at": "2026-06-19T21:15:17Z"
     }
   ]
 }
