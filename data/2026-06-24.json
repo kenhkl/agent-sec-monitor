@@ -1,30 +1,30 @@
 {
   "summary": {
-    "total": 258,
-    "generated_at": "2026-06-24T00:44:48.861020+08:00",
+    "total": 267,
+    "generated_at": "2026-06-24T06:41:38.415340+08:00",
     "date": "2026-06-24",
     "by_type": {
-      "已修复": 177,
-      "远程代码执行": 148,
-      "未修复": 51,
+      "已修复": 184,
+      "远程代码执行": 149,
+      "未修复": 54,
       "提示注入": 30,
+      "供应链攻击": 9,
       "权限绕过": 8,
-      "供应链攻击": 8,
       "信息泄露": 5,
       "沙箱逃逸": 3
     },
     "by_level": {
-      "严重": 159,
-      "高危": 45,
-      "低危": 42,
-      "中危": 12
+      "严重": 161,
+      "高危": 47,
+      "低危": 45,
+      "中危": 14
     },
     "by_product": {
-      "Claude Code": 64,
-      "Continue": 28,
+      "Claude Code": 66,
+      "Continue": 30,
+      "OpenClaw": 24,
       "通用AI编程工具": 24,
-      "OpenClaw": 21,
-      "Hermes Agent": 21,
+      "Hermes Agent": 23,
       "Cline": 18,
       "NanoBot": 17,
       "Aider": 13,
@@ -37,9 +37,9 @@
       "Cursor": 2
     },
     "by_source": {
-      "GitHub Issues": 195,
+      "GitHub Issues": 202,
       "Hacker News": 50,
-      "GitHub Security Advisory": 8,
+      "GitHub Security Advisory": 10,
       "OSV.dev": 5
     },
     "target_repos": [
@@ -66,6 +66,52 @@
     ]
   },
   "items": [
+    {
+      "title": "[DOCS] Setup and agent view docs omit endpoint-security scan delays for new binaries after v2.1.162",
+      "url": "https://github.com/anthropics/claude-code/issues/65193",
+      "desc": "### Documentation Type\n\nMissing documentation (feature not documented)\n\n### Documentation Location\n\n\nhttps://code.claude.com/docs/en/setup\n\n### Section/Topic\n\n\nAutomatic updates / `claude update` verification, plus the related background-service startup troubleshooting after a new binary is installed\n\n### Current Documentation\n\n\nThe setup page currently says:\n\n> Claude Code checks for updates on startup and periodically while running. Updates download and install in the background, then take eff...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "documentation",
+        "enhancement",
+        "area:docs"
+      ],
+      "created_at": "2026-06-03T22:28:34Z",
+      "updated_at": "2026-06-23T22:36:40Z",
+      "state": "open"
+    },
+    {
+      "title": "Security blocked trying to defend my system!",
+      "url": "https://github.com/anthropics/claude-code/issues/59402",
+      "desc": "**Bug Description**\nWTF is blocking me trying to protect my computer?!?!?\n\n**Environment Info**\n- Platform: linux\n- Terminal: vscode\n- Version: 2.1.142\n- Feedback ID: d4a6ca37-aced-4873-a42a-7afe0ee08866\n\n**Transcript**\n```\n❯ Research the NPM supply chain attack that came out in the past few days... Use this script to scan for this worm...\n\n  #!/usr/bin/env bash\n  # Scanner for the npm supply-chain attacks active around May 11-14, 2026:\n  #   - Mini Shai-Hulud (TanStack / @mistralai / @uipath / ...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "供应链攻击",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:linux",
+        "area:model",
+        "platform:vscode",
+        "stale"
+      ],
+      "created_at": "2026-05-15T13:35:29Z",
+      "updated_at": "2026-06-23T22:29:42Z",
+      "state": "open"
+    },
     {
       "title": "[BUG] Security: permissions.deny rules not working",
       "url": "https://github.com/anthropics/claude-code/issues/61268",
@@ -461,43 +507,91 @@
       "state": "open"
     },
     {
-      "title": "fix(security-guidance): block symlink escape in extensibility config reads",
-      "url": "https://github.com/anthropics/claude-code/pull/68689",
-      "desc": "",
+      "title": "fix(security): close active April 4 transport and auth gaps",
+      "url": "https://github.com/openclaw/openclaw/pull/60488",
+      "desc": "## Summary\n\n- Problem: config-time explicit provider proxies accepted blocked internal hosts, `config.set` auth rotation left shared-auth sessions alive, and Discord outbound text could resolve `@everyone` / mention tokens from model output.\n- Why it matters: these gaps leave room for SSRF via operator config, stale access after token rotation, and prompt-injected Discord-wide pings.\n- What changed: added config-time proxy URL validation for explicit provider proxies, disconnected shared-auth cl...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
       "type": [
+        "未修复",
         "已修复"
       ],
-      "level": "高危",
+      "level": "中危",
       "cve": [],
-      "labels": [],
-      "created_at": "2026-06-15T21:39:35Z",
-      "updated_at": "2026-06-16T09:43:57Z",
+      "labels": [
+        "channel: discord",
+        "gateway",
+        "agents",
+        "maintainer",
+        "size: S",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 message-delivery",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-04-03T19:02:06Z",
+      "updated_at": "2026-06-23T22:30:19Z",
       "state": "open"
     },
     {
-      "title": "fix(security-guidance): normalize CLAUDE_PLUGIN_ROOT path separators on Windows",
-      "url": "https://github.com/anthropics/claude-code/pull/68694",
-      "desc": "",
+      "title": "fix(security): block untrusted workspace providers in startup discovery",
+      "url": "https://github.com/openclaw/openclaw/pull/74302",
+      "desc": "### Motivation\n\n- Prevent untrusted workspace plugin discovery entries from being imported/executed during startup prewarm when `providerDiscoveryEntriesOnly` is enabled, closing a path that could run workspace code without explicit trust.\n\n### Description\n\n- When `providerDiscoveryEntriesOnly` is true, forward `includeUntrustedWorkspacePlugins: false` into `resolveRuntimePluginDiscoveryProviders` in `resolveImplicitProviders` (`src/agents/models-config.providers.implicit.ts`) to block workspace...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
       "type": [
         "已修复"
       ],
-      "level": "高危",
+      "level": "低危",
       "cve": [],
-      "labels": [],
-      "created_at": "2026-06-15T21:53:58Z",
-      "updated_at": "2026-06-16T09:43:51Z",
+      "labels": [
+        "agents",
+        "maintainer",
+        "size: XS",
+        "codex",
+        "aardvark",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-04-29T11:20:50Z",
+      "updated_at": "2026-06-23T22:18:30Z",
+      "state": "open"
+    },
+    {
+      "title": "docs(security): fix unbalanced inline-code backtick in audit-checks table [AI-assisted]",
+      "url": "https://github.com/openclaw/openclaw/pull/96066",
+      "desc": "## What Problem This Solves\n\n`docs/gateway/security/audit-checks.md` had a row with an **odd number of inline-code backticks**, which breaks inline-code parsing on that row (and can bleed the code-span state into following content depending on the renderer). The offending row was the `security.trust_model.multi_user_heuristic` finding:\n\nThe \"Relevant config\" cell read:\n\n```\nsplit trust boundaries, or shared-user hardening (`sandbox.mode`, tool deny/workspace scoping`)\n```\n\nThe leading backtick b...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "docs",
+        "gateway",
+        "security",
+        "size: XS",
+        "triage: low-signal-docs",
+        "P3",
+        "rating: 🦞 diamond lobster",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-23T10:04:52Z",
+      "updated_at": "2026-06-23T21:40:47Z",
       "state": "open"
     },
     {
       "title": "fix: sSH transport security check rejects connection before tunnel is established",
       "url": "https://github.com/openclaw/openclaw/pull/96134",
-      "desc": "## Summary\n\n- Fix classification: Root-cause fix for the Gateway remote SSH transport lifecycle/contract.\n- Maintainer-ready confidence: High. The branch has fresh focused Gateway/logs regression tests, core and test-src typechecks, and a passing local ClawSweeper review after merging the latest `origin/main`.\n- Root cause: The plaintext `ws://` validator treated the configured remote Gateway URL as the final connection target before the SSH transport resolver could establish the managed tunnel....",
+      "desc": "## Summary\n\n- Fix classification: Root-cause fix for configured remote Gateway SSH transport setup, URL safety, and managed tunnel lifecycle.\n- Maintainer-ready confidence: High. The branch has focused regression coverage for Gateway call/bootstrap/status/logs paths, SSH launcher failures, status diagnostics, default SSH port handling, core/test-src typechecks, `git diff --check`, and a fresh local ClawSweeper commit review with no actionable findings.\n- Root cause: The source-of-truth invariant...",
       "source": "GitHub Issues",
       "repo": "openclaw/openclaw",
       "product": "OpenClaw",
@@ -514,7 +608,110 @@
         "size: XL"
       ],
       "created_at": "2026-06-23T15:21:11Z",
-      "updated_at": "2026-06-23T16:28:22Z",
+      "updated_at": "2026-06-23T18:33:30Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): suppress acknowledged audit findings without false positives",
+      "url": "https://github.com/openclaw/openclaw/pull/95028",
+      "desc": "## Summary\n\n- Partially addresses #17447 by removing the false positive hook audit warning when request-supplied session keys are constrained by `hooks.allowedSessionKeyPrefixes`.\n- Keeps the warning when `hooks.allowRequestSessionKey=true` is enabled without prefixes, where callers can still choose arbitrary session key shapes.\n- Adds a focused regression test for the prefixed request-session-key audit configuration.\n- Aligns the CLI security guide and audit-check catalog with the narrowed no-p...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "gateway",
+        "security",
+        "size: XS",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 security-boundary",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-19T16:39:35Z",
+      "updated_at": "2026-06-23T18:33:01Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(discord/security-audit): include top-level allowFrom in ownerAllowFromConfigured",
+      "url": "https://github.com/openclaw/openclaw/pull/72467",
+      "desc": "## Summary\n\nThe `channels.discord.commands.native.no_allowlists` audit warning is supposed to fire when a Discord operator hasn't configured any allowlist that would let users invoke `/…` slash commands. Today it only consults legacy `channels.discord.dm.allowFrom` plus the credential store when computing `ownerAllowFromConfigured`, even though:\n\n- the audit's own remediation text tells users to add their id to `channels.discord.allowFrom` (the documented preferred path), and\n- runtime authoriza...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "channel: discord",
+        "size: XS",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-04-27T00:56:43Z",
+      "updated_at": "2026-06-23T17:48:11Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security]: GEMINI_API_KEY written as a plaintext literal in the generated systemd service unit",
+      "url": "https://github.com/openclaw/openclaw/issues/95895",
+      "desc": "## Summary\n\nWhen OpenClaw is configured with a Google/Gemini provider API key and the gateway is installed as a systemd user service via `openclaw gateway install`, the generated `~/.config/systemd/user/openclaw-gateway.service` contains the key as a literal `Environment=GEMINI_API_KEY=*** line. It is not a `${VAR}` reference and is not managed via the runtime injection pattern.\n\nEvery other provider secret in the same file (OpenAI, xAI, Discord tokens, Slack tokens, Brave, GBrain database URL) ...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "security",
+        "P1",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:needs-security-review",
+        "clawsweeper:source-repro",
+        "clawsweeper:linked-pr-open",
+        "impact:security",
+        "impact:auth-provider",
+        "issue-rating: 🦞 diamond lobster"
+      ],
+      "created_at": "2026-06-23T00:26:14Z",
+      "updated_at": "2026-06-23T17:25:06Z",
+      "state": "open"
+    },
+    {
+      "title": "fix #95895: [Security]: GEMINI_API_KEY written as a plaintext literal in the generated systemd service unit",
+      "url": "https://github.com/openclaw/openclaw/pull/96149",
+      "desc": "## Summary\n\n- Mark Google/Gemini env refs collected from config SecretRefs and auth profiles as systemd file-backed service env values.\n- Keep the secret values available to the generated service through the owner-only EnvironmentFile instead of inline `Environment=` assignments in the unit file.\n- Add a regression test for the install-plan value-source contract and keep the fixture valid under test type-checking.\n\n## What Problem This Solves\n\n`openclaw gateway install` could carry `GEMINI_API_K...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "commands",
+        "size: S"
+      ],
+      "created_at": "2026-06-23T16:03:57Z",
+      "updated_at": "2026-06-23T16:50:44Z",
       "state": "open"
     },
     {
@@ -629,27 +826,6 @@
       ],
       "created_at": "2026-03-13T08:50:43Z",
       "updated_at": "2026-06-23T16:16:41Z",
-      "state": "open"
-    },
-    {
-      "title": "fix #95895: [Security]: GEMINI_API_KEY written as a plaintext literal in the generated systemd service unit",
-      "url": "https://github.com/openclaw/openclaw/pull/96149",
-      "desc": "## Summary\n\n- Mark Google/Gemini env refs collected from config SecretRefs and auth profiles as systemd file-backed service env values.\n- Keep the secret values available to the generated service through the owner-only EnvironmentFile instead of inline `Environment=` assignments in the unit file.\n- Add a regression test for the install-plan value-source contract.\n\n## What Problem This Solves\n\n`openclaw gateway install` could carry `GEMINI_API_KEY`/`GOOGLE_API_KEY` env-ref values into the service...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "commands",
-        "size: S"
-      ],
-      "created_at": "2026-06-23T16:03:57Z",
-      "updated_at": "2026-06-23T16:04:16Z",
       "state": "open"
     },
     {
@@ -814,29 +990,6 @@
       "state": "open"
     },
     {
-      "title": "docs(security): fix unbalanced inline-code backtick in audit-checks table [AI-assisted]",
-      "url": "https://github.com/openclaw/openclaw/pull/96066",
-      "desc": "## What Problem This Solves\n\n`docs/gateway/security/audit-checks.md` had a row with an **odd number of inline-code backticks**, which breaks inline-code parsing on that row (and can bleed the code-span state into following content depending on the renderer). The offending row was the `security.trust_model.multi_user_heuristic` finding:\n\nThe \"Relevant config\" cell read:\n\n```\nsplit trust boundaries, or shared-user hardening (`sandbox.mode`, tool deny/workspace scoping`)\n```\n\nThe leading backtick b...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "docs",
-        "gateway",
-        "security",
-        "size: XS",
-        "triage: low-signal-docs"
-      ],
-      "created_at": "2026-06-23T10:04:52Z",
-      "updated_at": "2026-06-23T10:05:10Z",
-      "state": "open"
-    },
-    {
       "title": "Security: add configurable unpaired DM responses",
       "url": "https://github.com/openclaw/openclaw/pull/39065",
       "desc": "## Summary\n\n- Problem: unknown DM senders in pairing mode always received a branded OpenClaw reply with a pairing code.\n- Why it matters: operators could not choose a silent or de-branded pairing posture without changing DM policy semantics.\n- What changed: added `unpairedResponse` config support (`silent | code-only | branded`) and wired it through the shared pairing helpers and core DM pairing flows.\n- What did NOT change (scope boundary): default behavior remains `branded`, and non-pairing DM...",
@@ -904,129 +1057,6 @@
       ],
       "created_at": "2026-03-07T17:43:25Z",
       "updated_at": "2026-06-23T08:35:45Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): suppress acknowledged audit findings without false positives",
-      "url": "https://github.com/openclaw/openclaw/pull/95028",
-      "desc": "## Summary\n\n- Partially addresses #17447 by removing the false positive hook audit warning when request-supplied session keys are constrained by `hooks.allowedSessionKeyPrefixes`.\n- Keeps the warning when `hooks.allowRequestSessionKey=true` is enabled without prefixes, where callers can still choose arbitrary session key shapes.\n- Adds a focused regression test for the prefixed request-session-key audit configuration.\n- Aligns the CLI security guide and audit-check catalog with the narrowed no-p...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "docs",
-        "gateway",
-        "security",
-        "size: XS",
-        "proof: supplied",
-        "proof: sufficient",
-        "P2",
-        "rating: 🐚 platinum hermit",
-        "merge-risk: 🚨 security-boundary",
-        "status: 👀 ready for maintainer look"
-      ],
-      "created_at": "2026-06-19T16:39:35Z",
-      "updated_at": "2026-06-23T03:12:53Z",
-      "state": "open"
-    },
-    {
-      "title": "security: wrap tool results at transport boundary",
-      "url": "https://github.com/openclaw/openclaw/pull/78521",
-      "desc": "## Summary\\n- wrap tool-result text at the generic transport boundary using existing external-content security markers\\n- preserve already bounded tool results to avoid double-wrapping\\n- add regression coverage for wrapped and already-wrapped tool results\\n\\n## Verification\\n- pnpm exec vitest run src/agents/transport-message-transform.test.ts\\n- pnpm exec tsc -p tsconfig.core.json --noEmit --pretty false\\n- git diff --check",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "未修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "agents",
-        "size: S",
-        "triage: needs-real-behavior-proof",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-05-06T15:13:21Z",
-      "updated_at": "2026-06-23T00:32:48Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security]: GEMINI_API_KEY written as a plaintext literal in the generated systemd service unit",
-      "url": "https://github.com/openclaw/openclaw/issues/95895",
-      "desc": "## Summary\n\nWhen OpenClaw is configured with a Google/Gemini provider API key and the gateway is installed as a systemd user service via `openclaw gateway install`, the generated `~/.config/systemd/user/openclaw-gateway.service` contains the key as a literal `Environment=GEMINI_API_KEY=*** line. It is not a `${VAR}` reference and is not managed via the runtime injection pattern.\n\nEvery other provider secret in the same file (OpenAI, xAI, Discord tokens, Slack tokens, Brave, GBrain database URL) ...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-06-23T00:26:14Z",
-      "updated_at": "2026-06-23T00:32:04Z",
-      "state": "open"
-    },
-    {
-      "title": "security: scan markdown skill definitions for injection threats",
-      "url": "https://github.com/openclaw/openclaw/pull/43469",
-      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "size: L",
-        "proof: supplied",
-        "proof: sufficient",
-        "P2",
-        "rating: 🦪 silver shellfish",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-03-11T21:06:37Z",
-      "updated_at": "2026-06-22T23:20:22Z",
-      "state": "open"
-    },
-    {
-      "title": "chore(ci): harden security ownership and workflow permissions",
-      "url": "https://github.com/openclaw/openclaw/pull/78334",
-      "desc": "Summary\n- broaden secops CODEOWNERS coverage for workflow, action, and release/security automation\n- keep release-manager ownership while preserving required secops review on release paths\n- default release and publish workflows to top-level permissions: {}\n\nVerification\n- git diff --check origin/main...HEAD\n- pnpm check:workflows",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "未修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "maintainer",
-        "size: S",
-        "P2",
-        "rating: 🦐 gold shrimp",
-        "merge-risk: 🚨 automation",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-05-06T07:15:55Z",
-      "updated_at": "2026-06-22T23:11:58Z",
       "state": "open"
     },
     {
@@ -2177,6 +2207,51 @@
       "state": "open"
     },
     {
+      "title": "[Bug]: Tirith security scanner fails to      install on Windows (MSYS/git-bash) -      \"unsupported_platform\"",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/26044",
+      "desc": " Bug Description\n     Tirith security scanner fails to install on\n     Windows (MSYS/git-bash) with\n     \"unsupported_platform\" error, even though\n     Windows is a supported platform.\n     Steps to Reproduce\n     1. Install Hermes Agent on Windows\n     2. Run hermes or hermes chat\n     3. Observe warning: \"tirith security scanner\n     enabled but not available — command scanning\n     will use pattern matching only\"\n     4. Check\n     ~/.hermes-agent/.tirith-install-failed\n     contains: \"unsupp...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/bug",
+        "comp/tools",
+        "tool/terminal",
+        "P3"
+      ],
+      "created_at": "2026-05-15T01:58:39Z",
+      "updated_at": "2026-06-23T22:31:07Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): deny home-root single-file credential stores in media delivery",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/51453",
+      "desc": "## Problem\n\n`build_write_denied_paths` (`agent/file_safety.py:49-53`) already forbids the agent from **writing** five home-root single-file credential stores:\n\n```python\nos.path.join(home, \".netrc\"),\nos.path.join(home, \".pgpass\"),\nos.path.join(home, \".npmrc\"),\nos.path.join(home, \".pypirc\"),\nos.path.join(home, \".git-credentials\"),\n```\n\nBut the **media-delivery** denylist in `gateway/platforms/base.py` does not cover them. #51055 recently extended that denylist so \"the delivery/exfil side can't tr...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-23T17:09:27Z",
+      "updated_at": "2026-06-23T17:16:03Z",
+      "state": "open"
+    },
+    {
       "title": "fix(security): suppress tirith hostname false-positives inside sed/awk patterns",
       "url": "https://github.com/NousResearch/hermes-agent/pull/34586",
       "desc": "Tirith's hostname scanner flags alternative sed/awk delimiters (|, #, %, ,, @) as invalid hostname characters, causing false blocks on legitimate sed substitution patterns like `s|...|...|`.\n\n## Changes\n- Add `_is_sed_pattern_false_positive()` regex filter\n- Post-filter findings in `check_command_security()`\n- Downgrade block→allow when ALL findings are sed false-positives\n- Add 10 tests covering pipe/hash/percent/comma/at delimiters, mixed real+false findings, and dummy-pattern isolation\n\n## Te...",
@@ -2699,60 +2774,6 @@
       ],
       "created_at": "2026-05-30T18:08:19Z",
       "updated_at": "2026-06-21T23:52:15Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(egress): close three P0 security gaps in iron-proxy integration",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/48073",
-      "desc": "Closes the three **P0** security gaps @maxpetrusenko flagged in the #30179 review. Opening directly against `feat/iron-proxy` as offered in https://github.com/NousResearch/hermes-agent/pull/30179#issuecomment-4736002564 — single commit on top of current `feat/iron-proxy` HEAD (1 ahead, 0 behind).\n\n### P0-1 — version probe env leak\n`iron_proxy_version()` now builds a minimal env from `_PROXY_SUBPROCESS_ENV_ALLOWLIST` and passes it explicitly to the subprocess. PATH-resolved binaries no longer rec...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/agent",
-        "backend/docker",
-        "area/auth",
-        "P1",
-        "sweeper:risk-security-boundary",
-        "sweeper:risk-compatibility",
-        "sweeper:blast-moderate"
-      ],
-      "created_at": "2026-06-17T22:19:10Z",
-      "updated_at": "2026-06-21T22:31:06Z",
-      "state": "open"
-    },
-    {
-      "title": "security: upgrade Baileys from rc.9 to rc.13 (GHSA-qvv5-jq5g-4cgg)",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/47805",
-      "desc": "## Summary\n\nUpgrades `@whiskeysockets/baileys` from commit `01047de` (v7.0.0-rc.9) to `a3eeccd` (v7.0.0-rc.13) in `scripts/whatsapp-bridge/`.\n\n**Patches GHSA-qvv5-jq5g-4cgg** — a CRITICAL security vulnerability in Baileys protocol message handling affecting versions rc.1 through rc.11. The vulnerability enables:\n- Message upsert and history sync spoofing via maliciously crafted `protocolMessage` payloads\n- App state corruption\n- Spoofed message delivery confirmations\n\n## Version rationale\n\n- **r...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/gateway",
-        "platform/whatsapp",
-        "P1",
-        "sweeper:risk-message-delivery",
-        "sweeper:risk-security-boundary",
-        "sweeper:risk-compatibility",
-        "sweeper:blast-moderate"
-      ],
-      "created_at": "2026-06-17T10:52:07Z",
-      "updated_at": "2026-06-21T22:30:55Z",
       "state": "open"
     },
     {
@@ -4482,6 +4503,44 @@
       "state": "open"
     },
     {
+      "title": "[GHSA] Gogs allows users to write to readonly repositories using receive-pack + service=git-upload-pack con",
+      "url": "https://github.com/advisories/GHSA-wmfg-5p4h-5fw3",
+      "desc": "### Summary\n\nGit smart HTTP authorizes `POST …/git-receive-pack` using the client-supplied service query string (so `?service=git-upload-pack` is evaluated as read access) while routing still runs git receive-pack, allowing push where only read should be allowed.\n\n### Details\n\nGogs' Git Smart HTTP handler for repository RPCs relies on a client-supplied query parameter to decide which authorization policy to apply. The Git protocol exposes two primary RPCs over HTTP: `upload-pack` for fetch (read...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [
+        "CVE-2026-52810"
+      ],
+      "ghsa_id": "GHSA-wmfg-5p4h-5fw3",
+      "severity": "high",
+      "created_at": "2026-06-23T17:03:41Z",
+      "updated_at": "2026-06-23T17:03:42Z"
+    },
+    {
+      "title": "[GHSA] Gogs vulnerable to RCE via git rebase --exec argument injection in pull request merge",
+      "url": "https://github.com/advisories/GHSA-qf6p-p7ww-cwr9",
+      "desc": "# Gogs: RCE via `git rebase --exec` Argument Injection in PR Merge\n\n## Summary\n\nGogs allows authenticated users to achieve Remote Code Execution (RCE) on the server by creating a pull request with a specially crafted branch name that injects the `--exec` flag into the `git rebase` command during the \"Rebase before merging\" merge operation.\n\n## Severity\n\n**Critical** - CVSS 3.1 Base Score: 9.9 (AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H)\n\n## Affected Versions\n\n- **Gogs 0.14.2** (latest supported release...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-52806"
+      ],
+      "ghsa_id": "GHSA-qf6p-p7ww-cwr9",
+      "severity": "critical",
+      "created_at": "2026-06-23T17:02:40Z",
+      "updated_at": "2026-06-23T17:02:42Z"
+    },
+    {
       "title": "[GHSA] @actual-app/sync-server: Disabled OpenID users keep access through existing session tokens",
       "url": "https://github.com/advisories/GHSA-cq9c-6w48-qmfg",
       "desc": "### Summary\n\nIn OpenID multi-user mode, disabling a user only blocks future OpenID login for that identity. Existing Actual session tokens for the disabled user remain valid, so the user can continue calling authenticated server endpoints after an administrator has disabled the account.\n\n### Details\n\nThe disabled-user check is present during OpenID login finalization. Existing users are only accepted when the matching row has `enabled = 1`, and a disabled row causes the OpenID grant to fail befo...",
@@ -4574,61 +4633,6 @@
       "severity": "medium",
       "created_at": "2026-06-22T19:58:50Z",
       "updated_at": "2026-06-22T19:58:51Z"
-    },
-    {
-      "title": "[GHSA]  SearXNG MCP Server: DNS-resolved Private Hostname SSRF in `web_url_read`",
-      "url": "https://github.com/advisories/GHSA-mrvx-jmjw-vggc",
-      "desc": "## DNS-resolved Private Hostname SSRF in `web_url_read`\n\n### Summary\n\nThe `web_url_read` MCP tool in `mcp-searxng` is vulnerable to Server-Side Request Forgery (SSRF) via DNS rebinding bypass. The `assertUrlAllowed()` function at `src/url-reader.ts:85-93` validates only the syntactic hostname string against a private IP/hostname blocklist without performing DNS resolution. An attacker who controls a domain that resolves to a private or loopback IP address (e.g., via a wildcard DNS service like `...",
-      "source": "GitHub Security Advisory",
-      "repo": "unknown",
-      "product": "Continue",
-      "type": [
-        "提示注入",
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "ghsa_id": "GHSA-mrvx-jmjw-vggc",
-      "severity": "high",
-      "created_at": "2026-06-19T21:42:46Z",
-      "updated_at": "2026-06-19T21:42:51Z"
-    },
-    {
-      "title": "[GHSA]  SearXNG MCP Server: Unbounded Response Body Read Bypasses URL Size Limit in `web_url_read`",
-      "url": "https://github.com/advisories/GHSA-xcqx-9jf5-w339",
-      "desc": "## Unbounded Response Body Read Bypasses URL Size Limit in `web_url_read`\n\n### Summary\n\nThe `web_url_read` MCP tool in mcp-searxng enforces its 5 MiB response-size limit exclusively by inspecting the `Content-Length` header of a preliminary HEAD request. When a server omits `Content-Length` — a standard HTTP practice — `checkContentLength()` returns `null`, the guard condition short-circuits to `false`, and `response.text()` loads the entire response body into memory without any byte cap. An una...",
-      "source": "GitHub Security Advisory",
-      "repo": "unknown",
-      "product": "Continue",
-      "type": [
-        "提示注入",
-        "远程代码执行"
-      ],
-      "level": "高危",
-      "cve": [],
-      "ghsa_id": "GHSA-xcqx-9jf5-w339",
-      "severity": "high",
-      "created_at": "2026-06-19T21:42:43Z",
-      "updated_at": "2026-06-19T21:42:45Z"
-    },
-    {
-      "title": "[GHSA] Network-AI: EnvironmentManager.restore() backup ID path traversal copies arbitrary directories into ",
-      "url": "https://github.com/advisories/GHSA-48x2-6pr9-2jjf",
-      "desc": "### Summary\n`EnvironmentManager.restore(env, backupId)` computes the backup path with `join(envDir, '.backups', backupId)` and only checks that this path exists. It does not resolve the result or verify that it remains under `data/<env>/.backups`.\n\nA caller can pass a traversal backup ID such as `../../../outside/source-dir` to restore files from an arbitrary directory into the target environment data directory. Confirmed in Network-AI 5.12.1.\n\n### Details\n`restore()` builds `backupPath` directl...",
-      "source": "GitHub Security Advisory",
-      "repo": "unknown",
-      "product": "Continue",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "ghsa_id": "GHSA-48x2-6pr9-2jjf",
-      "severity": "medium",
-      "created_at": "2026-06-19T21:42:38Z",
-      "updated_at": "2026-06-19T21:42:40Z"
     },
     {
       "title": "[GHSA-5c57-rqjx-35g2] Cline Kanban Server has a Cross-Origin WebSocket Hijacking Vulnerability",
@@ -5718,6 +5722,226 @@
       "hn_author": "unknownoperator",
       "created_at": "2023-01-10T02:57:02Z",
       "updated_at": "2023-01-10T02:57:02Z"
+    },
+    {
+      "title": "fix(security-guidance): block symlink escape in extensibility config reads",
+      "url": "https://github.com/anthropics/claude-code/pull/68689",
+      "desc": "",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-15T21:39:35Z",
+      "updated_at": "2026-06-16T09:43:57Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security-guidance): normalize CLAUDE_PLUGIN_ROOT path separators on Windows",
+      "url": "https://github.com/anthropics/claude-code/pull/68694",
+      "desc": "",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-15T21:53:58Z",
+      "updated_at": "2026-06-16T09:43:51Z",
+      "state": "open"
+    },
+    {
+      "title": "security: wrap tool results at transport boundary",
+      "url": "https://github.com/openclaw/openclaw/pull/78521",
+      "desc": "## Summary\\n- wrap tool-result text at the generic transport boundary using existing external-content security markers\\n- preserve already bounded tool results to avoid double-wrapping\\n- add regression coverage for wrapped and already-wrapped tool results\\n\\n## Verification\\n- pnpm exec vitest run src/agents/transport-message-transform.test.ts\\n- pnpm exec tsc -p tsconfig.core.json --noEmit --pretty false\\n- git diff --check",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "agents",
+        "size: S",
+        "triage: needs-real-behavior-proof",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-06T15:13:21Z",
+      "updated_at": "2026-06-23T00:32:48Z",
+      "state": "open"
+    },
+    {
+      "title": "security: scan markdown skill definitions for injection threats",
+      "url": "https://github.com/openclaw/openclaw/pull/43469",
+      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "size: L",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🦪 silver shellfish",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-03-11T21:06:37Z",
+      "updated_at": "2026-06-22T23:20:22Z",
+      "state": "open"
+    },
+    {
+      "title": "chore(ci): harden security ownership and workflow permissions",
+      "url": "https://github.com/openclaw/openclaw/pull/78334",
+      "desc": "Summary\n- broaden secops CODEOWNERS coverage for workflow, action, and release/security automation\n- keep release-manager ownership while preserving required secops review on release paths\n- default release and publish workflows to top-level permissions: {}\n\nVerification\n- git diff --check origin/main...HEAD\n- pnpm check:workflows",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "maintainer",
+        "size: S",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "merge-risk: 🚨 automation",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-05-06T07:15:55Z",
+      "updated_at": "2026-06-22T23:11:58Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(egress): close three P0 security gaps in iron-proxy integration",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/48073",
+      "desc": "Closes the three **P0** security gaps @maxpetrusenko flagged in the #30179 review. Opening directly against `feat/iron-proxy` as offered in https://github.com/NousResearch/hermes-agent/pull/30179#issuecomment-4736002564 — single commit on top of current `feat/iron-proxy` HEAD (1 ahead, 0 behind).\n\n### P0-1 — version probe env leak\n`iron_proxy_version()` now builds a minimal env from `_PROXY_SUBPROCESS_ENV_ALLOWLIST` and passes it explicitly to the subprocess. PATH-resolved binaries no longer rec...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "backend/docker",
+        "area/auth",
+        "P1",
+        "sweeper:risk-security-boundary",
+        "sweeper:risk-compatibility",
+        "sweeper:blast-moderate"
+      ],
+      "created_at": "2026-06-17T22:19:10Z",
+      "updated_at": "2026-06-21T22:31:06Z",
+      "state": "open"
+    },
+    {
+      "title": "security: upgrade Baileys from rc.9 to rc.13 (GHSA-qvv5-jq5g-4cgg)",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/47805",
+      "desc": "## Summary\n\nUpgrades `@whiskeysockets/baileys` from commit `01047de` (v7.0.0-rc.9) to `a3eeccd` (v7.0.0-rc.13) in `scripts/whatsapp-bridge/`.\n\n**Patches GHSA-qvv5-jq5g-4cgg** — a CRITICAL security vulnerability in Baileys protocol message handling affecting versions rc.1 through rc.11. The vulnerability enables:\n- Message upsert and history sync spoofing via maliciously crafted `protocolMessage` payloads\n- App state corruption\n- Spoofed message delivery confirmations\n\n## Version rationale\n\n- **r...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "platform/whatsapp",
+        "P1",
+        "sweeper:risk-message-delivery",
+        "sweeper:risk-security-boundary",
+        "sweeper:risk-compatibility",
+        "sweeper:blast-moderate"
+      ],
+      "created_at": "2026-06-17T10:52:07Z",
+      "updated_at": "2026-06-21T22:30:55Z",
+      "state": "open"
+    },
+    {
+      "title": "[GHSA]  SearXNG MCP Server: DNS-resolved Private Hostname SSRF in `web_url_read`",
+      "url": "https://github.com/advisories/GHSA-mrvx-jmjw-vggc",
+      "desc": "## DNS-resolved Private Hostname SSRF in `web_url_read`\n\n### Summary\n\nThe `web_url_read` MCP tool in `mcp-searxng` is vulnerable to Server-Side Request Forgery (SSRF) via DNS rebinding bypass. The `assertUrlAllowed()` function at `src/url-reader.ts:85-93` validates only the syntactic hostname string against a private IP/hostname blocklist without performing DNS resolution. An attacker who controls a domain that resolves to a private or loopback IP address (e.g., via a wildcard DNS service like `...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "提示注入",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "ghsa_id": "GHSA-mrvx-jmjw-vggc",
+      "severity": "high",
+      "created_at": "2026-06-19T21:42:46Z",
+      "updated_at": "2026-06-19T21:42:51Z"
+    },
+    {
+      "title": "[GHSA]  SearXNG MCP Server: Unbounded Response Body Read Bypasses URL Size Limit in `web_url_read`",
+      "url": "https://github.com/advisories/GHSA-xcqx-9jf5-w339",
+      "desc": "## Unbounded Response Body Read Bypasses URL Size Limit in `web_url_read`\n\n### Summary\n\nThe `web_url_read` MCP tool in mcp-searxng enforces its 5 MiB response-size limit exclusively by inspecting the `Content-Length` header of a preliminary HEAD request. When a server omits `Content-Length` — a standard HTTP practice — `checkContentLength()` returns `null`, the guard condition short-circuits to `false`, and `response.text()` loads the entire response body into memory without any byte cap. An una...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "提示注入",
+        "远程代码执行"
+      ],
+      "level": "高危",
+      "cve": [],
+      "ghsa_id": "GHSA-xcqx-9jf5-w339",
+      "severity": "high",
+      "created_at": "2026-06-19T21:42:43Z",
+      "updated_at": "2026-06-19T21:42:45Z"
+    },
+    {
+      "title": "[GHSA] Network-AI: EnvironmentManager.restore() backup ID path traversal copies arbitrary directories into ",
+      "url": "https://github.com/advisories/GHSA-48x2-6pr9-2jjf",
+      "desc": "### Summary\n`EnvironmentManager.restore(env, backupId)` computes the backup path with `join(envDir, '.backups', backupId)` and only checks that this path exists. It does not resolve the result or verify that it remains under `data/<env>/.backups`.\n\nA caller can pass a traversal backup ID such as `../../../outside/source-dir` to restore files from an arbitrary directory into the target environment data directory. Confirmed in Network-AI 5.12.1.\n\n### Details\n`restore()` builds `backupPath` directl...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "ghsa_id": "GHSA-48x2-6pr9-2jjf",
+      "severity": "medium",
+      "created_at": "2026-06-19T21:42:38Z",
+      "updated_at": "2026-06-19T21:42:40Z"
     }
   ]
 }
