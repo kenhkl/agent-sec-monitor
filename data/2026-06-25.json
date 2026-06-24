@@ -1,12 +1,12 @@
 {
   "summary": {
-    "total": 257,
-    "generated_at": "2026-06-25T00:34:29.731899+08:00",
+    "total": 262,
+    "generated_at": "2026-06-25T06:42:23.951871+08:00",
     "date": "2026-06-25",
     "by_type": {
-      "已修复": 173,
-      "远程代码执行": 145,
-      "未修复": 54,
+      "已修复": 177,
+      "远程代码执行": 146,
+      "未修复": 55,
       "提示注入": 28,
       "供应链攻击": 9,
       "权限绕过": 8,
@@ -14,17 +14,17 @@
       "沙箱逃逸": 4
     },
     "by_level": {
-      "严重": 161,
-      "低危": 43,
-      "高危": 40,
-      "中危": 13
+      "严重": 162,
+      "低危": 44,
+      "高危": 42,
+      "中危": 14
     },
     "by_product": {
-      "Claude Code": 66,
-      "Continue": 28,
-      "通用AI编程工具": 24,
-      "Hermes Agent": 20,
-      "OpenClaw": 18,
+      "Claude Code": 67,
+      "Continue": 29,
+      "通用AI编程工具": 25,
+      "Hermes Agent": 21,
+      "OpenClaw": 19,
       "Cline": 18,
       "NanoBot": 17,
       "Aider": 13,
@@ -37,9 +37,9 @@
       "Cursor": 2
     },
     "by_source": {
-      "GitHub Issues": 195,
-      "Hacker News": 50,
-      "GitHub Security Advisory": 7,
+      "GitHub Issues": 198,
+      "Hacker News": 51,
+      "GitHub Security Advisory": 8,
       "OSV.dev": 5
     },
     "target_repos": [
@@ -504,6 +504,32 @@
       ],
       "created_at": "2026-05-20T16:17:34Z",
       "updated_at": "2026-06-18T11:26:02Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(discord/security-audit): include top-level allowFrom in ownerAllowFromConfigured",
+      "url": "https://github.com/openclaw/openclaw/pull/72467",
+      "desc": "## Summary\n\nThe `channels.discord.commands.native.no_allowlists` audit warning is supposed to fire when a Discord operator hasn't configured any allowlist that would let users invoke `/…` slash commands. Today it only consults legacy `channels.discord.dm.allowFrom` plus the credential store when computing `ownerAllowFromConfigured`, even though:\n\n- the audit's own remediation text tells users to add their id to `channels.discord.allowFrom` (the documented preferred path), and\n- runtime authoriza...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "channel: discord",
+        "size: XS",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-04-27T00:56:43Z",
+      "updated_at": "2026-06-24T18:13:26Z",
       "state": "open"
     },
     {
@@ -1045,36 +1071,6 @@
       ],
       "created_at": "2026-03-11T21:06:37Z",
       "updated_at": "2026-06-24T07:45:49Z",
-      "state": "open"
-    },
-    {
-      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
-      "url": "https://github.com/openclaw/openclaw/pull/77492",
-      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "app: web-ui",
-        "gateway",
-        "scripts",
-        "size: L",
-        "triage: dirty-candidate",
-        "proof: supplied",
-        "P1",
-        "rating: 🦪 silver shellfish",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "merge-risk: 🚨 availability",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-05-04T19:27:34Z",
-      "updated_at": "2026-06-24T03:36:42Z",
       "state": "open"
     },
     {
@@ -2225,6 +2221,30 @@
       "state": "open"
     },
     {
+      "title": "fix(security): prevent session file cleanup from escaping sessions dir",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52017",
+      "desc": "## What does this PR do?\r\n\r\n`SessionDB._remove_session_files()` derives on-disk paths directly from a\r\nsession id that can be client-controlled. The REST API's create/fork endpoints\r\naccept an arbitrary `id` and only reject CR/LF/NUL plus over-length values, so an\r\nid containing `/` or `..` is persisted as a normal DB row. Later, when that row\r\nis cleaned up, the function builds `sessions_dir / f\"{id}.json\"` / `.jsonl` and\r\nthe `request_dump_{id}_*` glob from the raw id and calls `unlink()` on t...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "P2",
+        "sweeper:risk-session-state",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-24T16:58:59Z",
+      "updated_at": "2026-06-24T17:12:18Z",
+      "state": "open"
+    },
+    {
       "title": "feat(plugins): enhance security-guidance with severity tiers, audit tool, and execution coverage",
       "url": "https://github.com/NousResearch/hermes-agent/pull/33186",
       "desc": "## Summary\n\nEnhancement to the existing `security-guidance` plugin (#33131) that adds severity-ranked output, an on-demand audit tool, and coverage for code execution paths.\n\n## What is added\n\n| Feature | Description |\n|---|---|\n| **Severity tiers** | All 25 rules mapped to critical/high/medium/low/info. Findings sorted by severity. Emoji prefixes (🚨⚠️🔶) for visual triage. |\n| **Two warning delivery paths** | 1) `transform_tool_result` — inline warning appended immediately. 2) `post_tool_call` →...",
@@ -2774,27 +2794,6 @@
       "state": "open"
     },
     {
-      "title": "fix(deps): patch security alerts",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/48984",
-      "desc": "## Summary\n- patch vulnerable npm transitive dependencies across the root lockfile, website lockfile, and Photon sidecar lockfile\n- raise Python lockfile security floors for python-multipart, pytest, cbor2, and PyNaCl\n- keep Discord voice support while avoiding discord.py[voice]'s stale PyNaCl upper bound by making the voice dependencies explicit\n- add a small website postinstall patch so gray-matter can run against js-yaml 4.x without breaking Docusaurus front matter parsing\n\n## Duplicate check...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "P3",
-        "dependencies"
-      ],
-      "created_at": "2026-06-19T10:46:22Z",
-      "updated_at": "2026-06-22T11:14:19Z",
-      "state": "open"
-    },
-    {
       "title": "test(self_test): add unit tests for security policy and tool registry checks",
       "url": "https://github.com/zeroclaw-labs/zeroclaw/pull/8209",
       "desc": "## Summary\n\nAdd test coverage for security policy and tool registry checks in the self-test command.\n\n- `check_security_policy_with_no_enabled_agents`: verifies security check fails with empty agents\n- `check_tool_registry_with_no_enabled_agents`: verifies tool registry check fails with empty agents\n\n**What changed and why:** Added two tests that exercise the \"no enabled agents\" early-return failure branch in both production functions. Both tests use `Config::default()` which has no agents confi...",
@@ -3185,28 +3184,6 @@
       "state": "open"
     },
     {
-      "title": "fix(security): confine send_file reads to /workspace (CVE-2026-29611)",
-      "url": "https://github.com/nanocoai/nanoclaw/pull/2799",
-      "desc": "## What\n`send_file` accepts an absolute `path` and copies the file into the outbox after only an existence check — no root restriction, no canonicalization. A prompt-injected or compromised agent can read **any container-visible file** (credential state, files under `/workspace/extra/*` mounts) and exfiltrate it through the normal attachment path.\n\nReported as **CVE-2026-29611 / #2760** (High, `<= 2.0.64`, unpatched).\n\n## How it works\n- Confine the resolved source path to `/workspace` — an absol...",
-      "source": "GitHub Issues",
-      "repo": "nanocoai/nanoclaw",
-      "product": "NanoClaw",
-      "type": [
-        "远程代码执行",
-        "未修复",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [
-        "CVE-2026-29611",
-        "CVE-2026-29611"
-      ],
-      "labels": [],
-      "created_at": "2026-06-17T19:12:34Z",
-      "updated_at": "2026-06-20T04:54:06Z",
-      "state": "open"
-    },
-    {
       "title": "fix(security): confine send_file reads to agent workspace",
       "url": "https://github.com/nanocoai/nanoclaw/pull/2818",
       "desc": "Replaces/follows #2817 with GPT Pro's stricter workspace guidance.\n\n## Summary\n- keeps canonical realpath validation from #2817\n- narrows allowed send_file reads from all of `/workspace` to `/workspace/agent`\n- rejects sibling sensitive mounts like `/workspace/extra` and prefix lookalikes like `/workspace/agent-secrets`\n- keeps caller-provided filenames basename-only before outbox writes\n\n## Tests\n- `cd container/agent-runner && bun test`\n- `cd container/agent-runner && bun run typecheck`",
@@ -3488,6 +3465,23 @@
       ],
       "created_at": "2026-05-18T23:44:13Z",
       "updated_at": "2026-05-23T17:27:33Z",
+      "state": "open"
+    },
+    {
+      "title": "[security] fix(container): reject symlinked host-managed directories",
+      "url": "https://github.com/nanocoai/nanoclaw/pull/1999",
+      "desc": "## Summary\n\nThis PR hardens NanoClaw's host/container filesystem boundary for host-managed directories that live under container-writable mounts.\n\n- Adds a shared guard that requires host-managed child directories to be real directories, not symlinks.\n- Applies the guard to `.claude-fragments` before host-side CLAUDE.md composition reconciles fragment files.\n- Applies the same guard to `.claude-shared/skills` before host-side skill symlink reconciliation.\n- Adds regression coverage proving a sym...",
+      "source": "GitHub Issues",
+      "repo": "nanocoai/nanoclaw",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-04-25T02:51:14Z",
+      "updated_at": "2026-05-20T10:44:02Z",
       "state": "open"
     },
     {
@@ -3846,232 +3840,6 @@
       "labels": [],
       "created_at": "2026-03-06T02:50:33Z",
       "updated_at": "2026-03-06T02:50:33Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] PicoClaw Feishu reply-context expansion bypasses `allow_from` for fetched parent messages",
-      "url": "https://github.com/sipeed/picoclaw/issues/3082",
-      "desc": "### Advisory Details\n\n**Title**: PicoClaw Feishu reply-context expansion bypasses `allow_from` for fetched parent messages\n\n**Description**:\n\n### Summary\n\nPicoClaw's Feishu channel enforces `allow_from` on the current event sender, but it does not re-check the sender of a fetched parent/replied message before prepending that parent content into downstream agent input. In practice, an allowlisted Feishu user can reply to an earlier message written by a non-allowlisted user, and PicoClaw will impo...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "权限绕过",
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:42:30Z",
-      "updated_at": "2026-06-16T19:17:05Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] Approval hook `cwd` symlink race allows `exec` to run in a different directory than the approved one",
-      "url": "https://github.com/sipeed/picoclaw/issues/3081",
-      "desc": "### Advisory Details\n\n**Title**: Approval hook `cwd` symlink race allows `exec` to run in a different directory than the approved one\n\n**Description**:\n\n### Summary\n\nPicoClaw's approval flow for the `exec` tool does not bind the reviewed working-directory identity to the directory ultimately used for process execution. An attacker who can influence `cwd` and retarget a workspace-local symlink while approval is pending can cause `exec` to run in a different directory than the approval hook inspec...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:42:27Z",
-      "updated_at": "2026-06-16T19:17:03Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] PicoClaw `exec` command whitelist allows jq environment disclosure by skipping deny-pattern enforcement",
-      "url": "https://github.com/sipeed/picoclaw/issues/3079",
-      "desc": "picoclaw: PicoClaw `exec` command whitelist allows jq environment disclosure by skipping deny-pattern enforcement\n\n### Advisory Details\n\n**Title**: PicoClaw `exec` command whitelist allows jq environment disclosure by skipping deny-pattern enforcement\n\n**Description**:\n\n### Summary\n\nPicoClaw's `exec` tool lets operators add regex-based `custom_allow_patterns` as a command whitelist. At release `v0.2.9` and earlier, a command matching any custom allow rule is treated as fully exempt from deny-pat...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:41:16Z",
-      "updated_at": "2026-06-16T19:17:01Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] PicoClaw `web_fetch` SSRF protection can be bypassed via environment-configured HTTP proxy",
-      "url": "https://github.com/sipeed/picoclaw/issues/3078",
-      "desc": "picoclaw: PicoClaw `web_fetch` SSRF protection can be bypassed via environment-configured HTTP proxy\n\n### Advisory Details\n\n**Title**: PicoClaw `web_fetch` SSRF protection can be bypassed via environment-configured HTTP proxy\n\n**Description**:\n\n### Summary\n\nPicoClaw's default-enabled `web_fetch` tool can be coerced into reaching internal or loopback-only HTTP targets when the PicoClaw process is started with `HTTP_PROXY`, `HTTPS_PROXY`, or `ALL_PROXY` set and `tools.web.proxy` remains at its def...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "提示注入",
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [
-        "CVE-2026-22181"
-      ],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:41:13Z",
-      "updated_at": "2026-06-16T19:16:59Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] WeCom group trigger policy bypass allows unmentioned group messages to reach the PicoClaw agent runtime",
-      "url": "https://github.com/sipeed/picoclaw/issues/3076",
-      "desc": "### Advisory Details\n\n**Title**: WeCom group trigger policy bypass allows unmentioned group messages to reach the PicoClaw agent runtime\n\n**Description**:\n\n### Summary\n\nPicoClaw's WeCom inbound channel does not enforce the configured group trigger policy before publishing group messages to the internal inbound bus. In deployments that set `channels.wecom.group_trigger.mention_only=true`, any ordinary WeCom group participant can still send an unmentioned group message that becomes agent-visible i...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "提示注入",
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:33:54Z",
-      "updated_at": "2026-06-16T19:16:57Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] Untrusted repository-local `skills/` metadata is auto-loaded into PicoClaw's system prompt from the current working directory",
-      "url": "https://github.com/sipeed/picoclaw/issues/3075",
-      "desc": "### Advisory Details\n\n**Title**: Untrusted repository-local `skills/` metadata is auto-loaded into PicoClaw's system prompt from the current working directory\n\n**Description**:\n\n### Summary\n\nPicoClaw auto-discovers builtin skills from `./skills` under the process current working directory when `PICOCLAW_BUILTIN_SKILLS` is unset. As a result, an attacker-controlled cloned repository can place a malicious `skills/<name>/SKILL.md` file that is silently injected into the model's system prompt before...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "Continue",
-      "type": [
-        "提示注入",
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:33:47Z",
-      "updated_at": "2026-06-16T19:16:55Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] PicoClaw `web_fetch` SSRF guard bypass via ISATAP IPv6 literals embedding loopback/private IPv4",
-      "url": "https://github.com/sipeed/picoclaw/issues/3074",
-      "desc": "### Advisory Details\n\n**Title**: PicoClaw `web_fetch` SSRF guard bypass via ISATAP IPv6 literals embedding loopback/private IPv4\n\n**Description**:\n\n### Summary\n\nPicoClaw's `web_fetch` tool attempts to block requests to localhost and private network targets, but its IP classifier does not recognize RFC 5214 ISATAP IPv6 literals that embed loopback/private IPv4 addresses. An attacker who can cause the runtime to invoke `web_fetch` with a crafted URL can bypass the private-host restriction and forc...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:33:42Z",
-      "updated_at": "2026-06-16T19:16:54Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] Signed LINE webhook replay allows duplicate inbound event execution in PicoClaw",
-      "url": "https://github.com/sipeed/picoclaw/issues/3073",
-      "desc": "### Advisory Details\n\n**Title**: Signed LINE webhook replay allows duplicate inbound event execution in PicoClaw\n\n**Description**:\n\n### Summary\n\nPicoClaw's LINE channel accepts the same valid signed webhook delivery more than once and republishes the same logical inbound message each time. Because the webhook handler treats signature verification as sufficient authorization and performs no replay suppression keyed on the stable event identity, an attacker who can replay a previously captured val...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:33:37Z",
-      "updated_at": "2026-06-16T19:16:52Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] Cross-Site Request Forgery in PicoClaw Launcher First-Run Password Setup Allows Local Control-Plane Takeover",
-      "url": "https://github.com/sipeed/picoclaw/issues/3072",
-      "desc": "### Advisory Details\n\n**Title**: Cross-Site Request Forgery in PicoClaw Launcher First-Run Password Setup Allows Local Control-Plane Takeover\n\n**Description**:\n\n### Summary\n\nThe PicoClaw launcher exposes a first-run password bootstrap endpoint at `POST /api/auth/setup`. When the launcher has not yet been initialized, this endpoint is intentionally public so that the first user can create the dashboard password. However, the endpoint does not validate browser provenance via `Origin`, `Referer`, o...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:32:33Z",
-      "updated_at": "2026-06-16T19:16:50Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] Authenticated Pico WebSocket clients can trigger unauthorized gateway configuration reload via `/reload`",
-      "url": "https://github.com/sipeed/picoclaw/issues/3071",
-      "desc": "### Advisory Details\n\n**Title**: Authenticated Pico WebSocket clients can trigger unauthorized gateway configuration reload via `/reload`\n\n**Description**:\n\n### Summary\n\nPicoClaw exposes a privileged configuration reload action through the public Pico WebSocket chat interface. Any authenticated Pico client that knows the Pico token can send a normal `message.send` payload containing `/reload` and trigger live gateway configuration reload, even though the dedicated HTTP management endpoint `/relo...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "权限绕过",
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:32:17Z",
-      "updated_at": "2026-06-16T19:16:48Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] MQTT `allow_from` authorization can be bypassed by spoofing the topic `client_id`",
-      "url": "https://github.com/sipeed/picoclaw/issues/3068",
-      "desc": "### Advisory Details\n\n**Title**: MQTT `allow_from` authorization can be bypassed by spoofing the topic `client_id`\n\n**Description**:\n\n### Summary\n\nPicoClaw's MQTT channel authorizes inbound messages using the topic segment `{client_id}` from `/picoclaw/{agent_id}/{client_id}/request`. Because this value is client-controlled topic metadata rather than a broker-authenticated principal, any actor who can publish into the request topic namespace can impersonate an allowlisted sender and reach the in...",
-      "source": "GitHub Issues",
-      "repo": "sipeed/picoclaw",
-      "product": "PicoClaw",
-      "type": [
-        "权限绕过",
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "stale"
-      ],
-      "created_at": "2026-06-09T07:31:26Z",
-      "updated_at": "2026-06-16T19:16:43Z",
       "state": "open"
     },
     {
@@ -4524,6 +4292,25 @@
       "state": "open"
     },
     {
+      "title": "[GHSA] OliveTin has Unvalidated `ot_`-prefixed Arguments that Bypass Input Filtering",
+      "url": "https://github.com/advisories/GHSA-prj9-97mp-mwh2",
+      "desc": "### Description\n\nThe `filterToDefinedArgumentsOnly` function in the executor is intended to discard any arguments not explicitly defined in the action's configuration. However, a special case allows any argument whose name starts with `ot_` to bypass this filter. While two system arguments (`ot_executionTrackingId` and `ot_username`) are injected by OliveTin and overridden, all other `ot_`-prefixed arguments supplied by the user pass through unmodified.\n\nThese bypassed arguments are:\n\n1. **Not t...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [
+        "CVE-2026-53541"
+      ],
+      "ghsa_id": "GHSA-prj9-97mp-mwh2",
+      "severity": "medium",
+      "created_at": "2026-06-24T17:43:50Z",
+      "updated_at": "2026-06-24T17:43:52Z"
+    },
+    {
       "title": "[GHSA] Gogs allows users to write to readonly repositories using receive-pack + service=git-upload-pack con",
       "url": "https://github.com/advisories/GHSA-wmfg-5p4h-5fw3",
       "desc": "### Summary\n\nGit smart HTTP authorizes `POST …/git-receive-pack` using the client-supplied service query string (so `?service=git-upload-pack` is evaluated as read access) while routing still runs git receive-pack, allowing push where only read should be allowed.\n\n### Details\n\nGogs' Git Smart HTTP handler for repository RPCs relies on a client-supplied query parameter to decide which authorization policy to apply. The Git protocol exposes two primary RPCs over HTTP: `upload-pack` for fetch (read...",
@@ -4635,25 +4422,6 @@
       "severity": "critical",
       "created_at": "2026-06-22T22:57:48Z",
       "updated_at": "2026-06-22T22:57:49Z"
-    },
-    {
-      "title": "[GHSA] AVideo has an Authorize.Net Webhook Signature Bypass that Enables Wallet Balance Inflation via Forge",
-      "url": "https://github.com/advisories/GHSA-95jh-7r58-xmxw",
-      "desc": "## Summary\n\nThe Authorize.Net webhook handler at `plugin/AuthorizeNet/webhook.php` contains a signature verification bypass that allows an attacker to forge webhook requests with arbitrary payment amounts and target user IDs. By supplying a valid transaction ID from a small legitimate purchase, the attacker bypasses signature validation and credits arbitrary wallet balances to any user account via attacker-controlled payload fields.\n\n## Details\n\nThree flaws combine into an exploit chain:\n\n### 1....",
-      "source": "GitHub Security Advisory",
-      "repo": "unknown",
-      "product": "Continue",
-      "type": [
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [
-        "CVE-2026-33731"
-      ],
-      "ghsa_id": "GHSA-95jh-7r58-xmxw",
-      "severity": "medium",
-      "created_at": "2026-06-22T19:58:50Z",
-      "updated_at": "2026-06-22T19:58:51Z"
     },
     {
       "title": "[GHSA-5c57-rqjx-35g2] Cline Kanban Server has a Cross-Origin WebSocket Hijacking Vulnerability",
@@ -4840,6 +4608,25 @@
       "hn_author": "bveiseh",
       "created_at": "2025-05-28T16:00:44Z",
       "updated_at": "2025-05-28T16:00:44Z"
+    },
+    {
+      "title": "Same flaw, opposite verdict: what counts as a vulnerability in AI agents?",
+      "url": "https://medium.com/@nikrig/same-flaw-opposite-verdict-ai-agents-cant-agree-what-counts-as-a-security-vulnerability-995060e5b0a5",
+      "desc": "",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "通用AI编程工具",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "hn_id": "48666057",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "hn_author": "nrig",
+      "created_at": "2026-06-24T21:53:15Z",
+      "updated_at": "2026-06-24T21:53:15Z"
     },
     {
       "title": "A $5 Domain Purchase Exposed Critical AI Agent Security Flaws – Deep Dive",
@@ -5130,27 +4917,6 @@
       "hn_author": "oscarsixsecllc",
       "created_at": "2026-03-04T02:40:41Z",
       "updated_at": "2026-03-04T02:40:41Z"
-    },
-    {
-      "title": "Show HN: ClawShield – Open-source security proxy for AI agents (Go, eBPF)",
-      "url": "https://github.com/SleuthCo/clawshield-public",
-      "desc": "Author here. ClawShield is a security proxy that sits in front of OpenClaw (open-source AI gateway) and scans all inbound&#x2F;outbound messages.<p>The core is an HTTP&#x2F;WebSocket reverse proxy in Go (~6k lines) with four scanners:<p>1. Prompt injection detection - three tiers: regex heuristics (role overrides, instruction injection, delimiter attacks, encoding attacks), structural analysis (base64-decoded instruction blocks, imperative verb density scoring), and canary token leak detection.<...",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "OpenClaw",
-      "type": [
-        "提示注入",
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "hn_id": "47212666",
-      "hn_points": 2,
-      "hn_comments": 2,
-      "hn_author": "sleuthco",
-      "created_at": "2026-03-02T01:11:57Z",
-      "updated_at": "2026-03-02T01:11:57Z"
     },
     {
       "title": "Show HN: Vett – Scan, sign, and verify AI agent skills before installing",
@@ -5743,6 +5509,345 @@
       "hn_author": "unknownoperator",
       "created_at": "2023-01-10T02:57:02Z",
       "updated_at": "2023-01-10T02:57:02Z"
+    },
+    {
+      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
+      "url": "https://github.com/openclaw/openclaw/pull/77492",
+      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "app: web-ui",
+        "gateway",
+        "scripts",
+        "size: L",
+        "triage: dirty-candidate",
+        "proof: supplied",
+        "P1",
+        "rating: 🦪 silver shellfish",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-04T19:27:34Z",
+      "updated_at": "2026-06-24T03:36:42Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(deps): patch security alerts",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/48984",
+      "desc": "## Summary\n- patch vulnerable npm transitive dependencies across the root lockfile, website lockfile, and Photon sidecar lockfile\n- raise Python lockfile security floors for python-multipart, pytest, cbor2, and PyNaCl\n- keep Discord voice support while avoiding discord.py[voice]'s stale PyNaCl upper bound by making the voice dependencies explicit\n- add a small website postinstall patch so gray-matter can run against js-yaml 4.x without breaking Docusaurus front matter parsing\n\n## Duplicate check...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "P3",
+        "dependencies"
+      ],
+      "created_at": "2026-06-19T10:46:22Z",
+      "updated_at": "2026-06-22T11:14:19Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): confine send_file reads to /workspace (CVE-2026-29611)",
+      "url": "https://github.com/nanocoai/nanoclaw/pull/2799",
+      "desc": "## What\n`send_file` accepts an absolute `path` and copies the file into the outbox after only an existence check — no root restriction, no canonicalization. A prompt-injected or compromised agent can read **any container-visible file** (credential state, files under `/workspace/extra/*` mounts) and exfiltrate it through the normal attachment path.\n\nReported as **CVE-2026-29611 / #2760** (High, `<= 2.0.64`, unpatched).\n\n## How it works\n- Confine the resolved source path to `/workspace` — an absol...",
+      "source": "GitHub Issues",
+      "repo": "nanocoai/nanoclaw",
+      "product": "NanoClaw",
+      "type": [
+        "远程代码执行",
+        "未修复",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-29611",
+        "CVE-2026-29611"
+      ],
+      "labels": [],
+      "created_at": "2026-06-17T19:12:34Z",
+      "updated_at": "2026-06-20T04:54:06Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] PicoClaw Feishu reply-context expansion bypasses `allow_from` for fetched parent messages",
+      "url": "https://github.com/sipeed/picoclaw/issues/3082",
+      "desc": "### Advisory Details\n\n**Title**: PicoClaw Feishu reply-context expansion bypasses `allow_from` for fetched parent messages\n\n**Description**:\n\n### Summary\n\nPicoClaw's Feishu channel enforces `allow_from` on the current event sender, but it does not re-check the sender of a fetched parent/replied message before prepending that parent content into downstream agent input. In practice, an allowlisted Feishu user can reply to an earlier message written by a non-allowlisted user, and PicoClaw will impo...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "权限绕过",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:42:30Z",
+      "updated_at": "2026-06-16T19:17:05Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Approval hook `cwd` symlink race allows `exec` to run in a different directory than the approved one",
+      "url": "https://github.com/sipeed/picoclaw/issues/3081",
+      "desc": "### Advisory Details\n\n**Title**: Approval hook `cwd` symlink race allows `exec` to run in a different directory than the approved one\n\n**Description**:\n\n### Summary\n\nPicoClaw's approval flow for the `exec` tool does not bind the reviewed working-directory identity to the directory ultimately used for process execution. An attacker who can influence `cwd` and retarget a workspace-local symlink while approval is pending can cause `exec` to run in a different directory than the approval hook inspec...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:42:27Z",
+      "updated_at": "2026-06-16T19:17:03Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] PicoClaw `exec` command whitelist allows jq environment disclosure by skipping deny-pattern enforcement",
+      "url": "https://github.com/sipeed/picoclaw/issues/3079",
+      "desc": "picoclaw: PicoClaw `exec` command whitelist allows jq environment disclosure by skipping deny-pattern enforcement\n\n### Advisory Details\n\n**Title**: PicoClaw `exec` command whitelist allows jq environment disclosure by skipping deny-pattern enforcement\n\n**Description**:\n\n### Summary\n\nPicoClaw's `exec` tool lets operators add regex-based `custom_allow_patterns` as a command whitelist. At release `v0.2.9` and earlier, a command matching any custom allow rule is treated as fully exempt from deny-pat...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:41:16Z",
+      "updated_at": "2026-06-16T19:17:01Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] PicoClaw `web_fetch` SSRF protection can be bypassed via environment-configured HTTP proxy",
+      "url": "https://github.com/sipeed/picoclaw/issues/3078",
+      "desc": "picoclaw: PicoClaw `web_fetch` SSRF protection can be bypassed via environment-configured HTTP proxy\n\n### Advisory Details\n\n**Title**: PicoClaw `web_fetch` SSRF protection can be bypassed via environment-configured HTTP proxy\n\n**Description**:\n\n### Summary\n\nPicoClaw's default-enabled `web_fetch` tool can be coerced into reaching internal or loopback-only HTTP targets when the PicoClaw process is started with `HTTP_PROXY`, `HTTPS_PROXY`, or `ALL_PROXY` set and `tools.web.proxy` remains at its def...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "提示注入",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-22181"
+      ],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:41:13Z",
+      "updated_at": "2026-06-16T19:16:59Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] WeCom group trigger policy bypass allows unmentioned group messages to reach the PicoClaw agent runtime",
+      "url": "https://github.com/sipeed/picoclaw/issues/3076",
+      "desc": "### Advisory Details\n\n**Title**: WeCom group trigger policy bypass allows unmentioned group messages to reach the PicoClaw agent runtime\n\n**Description**:\n\n### Summary\n\nPicoClaw's WeCom inbound channel does not enforce the configured group trigger policy before publishing group messages to the internal inbound bus. In deployments that set `channels.wecom.group_trigger.mention_only=true`, any ordinary WeCom group participant can still send an unmentioned group message that becomes agent-visible i...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "提示注入",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:33:54Z",
+      "updated_at": "2026-06-16T19:16:57Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Untrusted repository-local `skills/` metadata is auto-loaded into PicoClaw's system prompt from the current working directory",
+      "url": "https://github.com/sipeed/picoclaw/issues/3075",
+      "desc": "### Advisory Details\n\n**Title**: Untrusted repository-local `skills/` metadata is auto-loaded into PicoClaw's system prompt from the current working directory\n\n**Description**:\n\n### Summary\n\nPicoClaw auto-discovers builtin skills from `./skills` under the process current working directory when `PICOCLAW_BUILTIN_SKILLS` is unset. As a result, an attacker-controlled cloned repository can place a malicious `skills/<name>/SKILL.md` file that is silently injected into the model's system prompt before...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "Continue",
+      "type": [
+        "提示注入",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:33:47Z",
+      "updated_at": "2026-06-16T19:16:55Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] PicoClaw `web_fetch` SSRF guard bypass via ISATAP IPv6 literals embedding loopback/private IPv4",
+      "url": "https://github.com/sipeed/picoclaw/issues/3074",
+      "desc": "### Advisory Details\n\n**Title**: PicoClaw `web_fetch` SSRF guard bypass via ISATAP IPv6 literals embedding loopback/private IPv4\n\n**Description**:\n\n### Summary\n\nPicoClaw's `web_fetch` tool attempts to block requests to localhost and private network targets, but its IP classifier does not recognize RFC 5214 ISATAP IPv6 literals that embed loopback/private IPv4 addresses. An attacker who can cause the runtime to invoke `web_fetch` with a crafted URL can bypass the private-host restriction and forc...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:33:42Z",
+      "updated_at": "2026-06-16T19:16:54Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Signed LINE webhook replay allows duplicate inbound event execution in PicoClaw",
+      "url": "https://github.com/sipeed/picoclaw/issues/3073",
+      "desc": "### Advisory Details\n\n**Title**: Signed LINE webhook replay allows duplicate inbound event execution in PicoClaw\n\n**Description**:\n\n### Summary\n\nPicoClaw's LINE channel accepts the same valid signed webhook delivery more than once and republishes the same logical inbound message each time. Because the webhook handler treats signature verification as sufficient authorization and performs no replay suppression keyed on the stable event identity, an attacker who can replay a previously captured val...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:33:37Z",
+      "updated_at": "2026-06-16T19:16:52Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Cross-Site Request Forgery in PicoClaw Launcher First-Run Password Setup Allows Local Control-Plane Takeover",
+      "url": "https://github.com/sipeed/picoclaw/issues/3072",
+      "desc": "### Advisory Details\n\n**Title**: Cross-Site Request Forgery in PicoClaw Launcher First-Run Password Setup Allows Local Control-Plane Takeover\n\n**Description**:\n\n### Summary\n\nThe PicoClaw launcher exposes a first-run password bootstrap endpoint at `POST /api/auth/setup`. When the launcher has not yet been initialized, this endpoint is intentionally public so that the first user can create the dashboard password. However, the endpoint does not validate browser provenance via `Origin`, `Referer`, o...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:32:33Z",
+      "updated_at": "2026-06-16T19:16:50Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Authenticated Pico WebSocket clients can trigger unauthorized gateway configuration reload via `/reload`",
+      "url": "https://github.com/sipeed/picoclaw/issues/3071",
+      "desc": "### Advisory Details\n\n**Title**: Authenticated Pico WebSocket clients can trigger unauthorized gateway configuration reload via `/reload`\n\n**Description**:\n\n### Summary\n\nPicoClaw exposes a privileged configuration reload action through the public Pico WebSocket chat interface. Any authenticated Pico client that knows the Pico token can send a normal `message.send` payload containing `/reload` and trigger live gateway configuration reload, even though the dedicated HTTP management endpoint `/relo...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "权限绕过",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:32:17Z",
+      "updated_at": "2026-06-16T19:16:48Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] MQTT `allow_from` authorization can be bypassed by spoofing the topic `client_id`",
+      "url": "https://github.com/sipeed/picoclaw/issues/3068",
+      "desc": "### Advisory Details\n\n**Title**: MQTT `allow_from` authorization can be bypassed by spoofing the topic `client_id`\n\n**Description**:\n\n### Summary\n\nPicoClaw's MQTT channel authorizes inbound messages using the topic segment `{client_id}` from `/picoclaw/{agent_id}/{client_id}/request`. Because this value is client-controlled topic metadata rather than a broker-authenticated principal, any actor who can publish into the request topic namespace can impersonate an allowlisted sender and reach the in...",
+      "source": "GitHub Issues",
+      "repo": "sipeed/picoclaw",
+      "product": "PicoClaw",
+      "type": [
+        "权限绕过",
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "stale"
+      ],
+      "created_at": "2026-06-09T07:31:26Z",
+      "updated_at": "2026-06-16T19:16:43Z",
+      "state": "open"
+    },
+    {
+      "title": "[GHSA] AVideo has an Authorize.Net Webhook Signature Bypass that Enables Wallet Balance Inflation via Forge",
+      "url": "https://github.com/advisories/GHSA-95jh-7r58-xmxw",
+      "desc": "## Summary\n\nThe Authorize.Net webhook handler at `plugin/AuthorizeNet/webhook.php` contains a signature verification bypass that allows an attacker to forge webhook requests with arbitrary payment amounts and target user IDs. By supplying a valid transaction ID from a small legitimate purchase, the attacker bypasses signature validation and credits arbitrary wallet balances to any user account via attacker-controlled payload fields.\n\n## Details\n\nThree flaws combine into an exploit chain:\n\n### 1....",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [
+        "CVE-2026-33731"
+      ],
+      "ghsa_id": "GHSA-95jh-7r58-xmxw",
+      "severity": "medium",
+      "created_at": "2026-06-22T19:58:50Z",
+      "updated_at": "2026-06-22T19:58:51Z"
+    },
+    {
+      "title": "Show HN: ClawShield – Open-source security proxy for AI agents (Go, eBPF)",
+      "url": "https://github.com/SleuthCo/clawshield-public",
+      "desc": "Author here. ClawShield is a security proxy that sits in front of OpenClaw (open-source AI gateway) and scans all inbound&#x2F;outbound messages.<p>The core is an HTTP&#x2F;WebSocket reverse proxy in Go (~6k lines) with four scanners:<p>1. Prompt injection detection - three tiers: regex heuristics (role overrides, instruction injection, delimiter attacks, encoding attacks), structural analysis (base64-decoded instruction blocks, imperative verb density scoring), and canary token leak detection.<...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "OpenClaw",
+      "type": [
+        "提示注入",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "47212666",
+      "hn_points": 2,
+      "hn_comments": 2,
+      "hn_author": "sleuthco",
+      "created_at": "2026-03-02T01:11:57Z",
+      "updated_at": "2026-03-02T01:11:57Z"
     }
   ]
 }
