@@ -1,11 +1,11 @@
 {
   "summary": {
-    "total": 267,
-    "generated_at": "2026-06-24T06:41:38.415340+08:00",
+    "total": 271,
+    "generated_at": "2026-06-24T15:54:39.257357+08:00",
     "date": "2026-06-24",
     "by_type": {
-      "已修复": 184,
-      "远程代码执行": 149,
+      "已修复": 188,
+      "远程代码执行": 152,
       "未修复": 54,
       "提示注入": 30,
       "供应链攻击": 9,
@@ -14,17 +14,17 @@
       "沙箱逃逸": 3
     },
     "by_level": {
-      "严重": 161,
-      "高危": 47,
-      "低危": 45,
-      "中危": 14
+      "严重": 164,
+      "低危": 46,
+      "高危": 46,
+      "中危": 15
     },
     "by_product": {
-      "Claude Code": 66,
-      "Continue": 30,
-      "OpenClaw": 24,
+      "Claude Code": 67,
+      "Continue": 31,
+      "OpenClaw": 25,
+      "Hermes Agent": 24,
       "通用AI编程工具": 24,
-      "Hermes Agent": 23,
       "Cline": 18,
       "NanoBot": 17,
       "Aider": 13,
@@ -37,7 +37,7 @@
       "Cursor": 2
     },
     "by_source": {
-      "GitHub Issues": 202,
+      "GitHub Issues": 206,
       "Hacker News": 50,
       "GitHub Security Advisory": 10,
       "OSV.dev": 5
@@ -66,6 +66,28 @@
     ]
   },
   "items": [
+    {
+      "title": "Background-agent security warning misfires on actions the parent conversation explicitly authorized",
+      "url": "https://github.com/anthropics/claude-code/issues/70489",
+      "desc": "## Summary\n\nWhen a forked subagent (`Agent` tool, `subagent_type: \"fork\"`) performs an \"external system write\" (e.g. `gh issue create`), the automated post-hoc security review attached to the task-notification flagged it as a potential policy violation — even though the parent conversation contained clear, explicit user authorization for that exact action, and the fork inherits the parent's full conversation context.\n\n## Steps to reproduce\n\n1. In a session, have the user explicitly instruct: \"fi...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "bug",
+        "area:security",
+        "area:agent"
+      ],
+      "created_at": "2026-06-24T02:29:56Z",
+      "updated_at": "2026-06-24T02:32:48Z",
+      "state": "open"
+    },
     {
       "title": "[DOCS] Setup and agent view docs omit endpoint-security scan delays for new binaries after v2.1.162",
       "url": "https://github.com/anthropics/claude-code/issues/65193",
@@ -483,27 +505,193 @@
       "state": "open"
     },
     {
-      "title": "[BUG] Cyber-safeguard false positive blocks /security-review skill in a fresh session",
-      "url": "https://github.com/anthropics/claude-code/issues/68791",
-      "desc": "# [BUG] Cyber-safeguard false positive blocks `/security-review` skill in a fresh session\n\n## What happened\n\nIn a **brand-new session**, my very first action was running the built-in `/security-review` skill on a local code folder. The skill was immediately blocked with a cyber-related Usage Policy violation — before any analysis took place.\n\nThere was **no prior context** in the session: no earlier messages, no \"exploit/backdoor\" wording from me, nothing to contaminate the conversation. The ski...",
+      "title": "security: scan markdown skill definitions for injection threats",
+      "url": "https://github.com/openclaw/openclaw/pull/43469",
+      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
       "type": [
-        "远程代码执行"
+        "远程代码执行",
+        "已修复"
       ],
       "level": "严重",
       "cve": [],
       "labels": [
-        "bug",
-        "duplicate",
-        "area:model",
-        "area:security",
-        "area:skills",
-        "api:anthropic"
+        "size: L",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
       ],
-      "created_at": "2026-06-16T10:23:31Z",
-      "updated_at": "2026-06-16T13:16:53Z",
+      "created_at": "2026-03-11T21:06:37Z",
+      "updated_at": "2026-06-24T07:45:49Z",
+      "state": "open"
+    },
+    {
+      "title": "fix: sSH transport security check rejects connection before tunnel is established",
+      "url": "https://github.com/openclaw/openclaw/pull/96134",
+      "desc": "## Summary\n\n- Fix classification: Root-cause fix for configured remote Gateway SSH transport setup, URL safety, and managed tunnel lifecycle.\n- Maintainer-ready confidence: High. The branch has a live configured-SSH Gateway proof using a real foreground OpenClaw Gateway plus an isolated local OpenSSH daemon, focused regression coverage for Gateway call/bootstrap/status/logs/TUI/TTS/security-audit/doctor/devices/Crestodian paths, SSH launcher failures, status diagnostics, default SSH port handlin...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "gateway",
+        "cli",
+        "commands",
+        "size: XL",
+        "proof: sufficient",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-06-23T15:21:11Z",
+      "updated_at": "2026-06-24T05:57:44Z",
+      "state": "open"
+    },
+    {
+      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
+      "url": "https://github.com/openclaw/openclaw/pull/77492",
+      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "app: web-ui",
+        "gateway",
+        "scripts",
+        "size: L",
+        "triage: dirty-candidate",
+        "proof: supplied",
+        "P1",
+        "rating: 🦪 silver shellfish",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-04T19:27:34Z",
+      "updated_at": "2026-06-24T03:36:42Z",
+      "state": "open"
+    },
+    {
+      "title": "fix #95895: [Security]: GEMINI_API_KEY written as a plaintext literal in the generated systemd service unit",
+      "url": "https://github.com/openclaw/openclaw/pull/96149",
+      "desc": "## Summary\n\n- Mark Google/Gemini env refs collected from config SecretRefs and auth profiles as systemd file-backed service env values.\n- Keep the secret values available to the generated service through the owner-only EnvironmentFile instead of inline `Environment=` assignments in the unit file.\n- Add a regression test for the install-plan value-source contract and keep the fixture valid under test type-checking.\n\n## What Problem This Solves\n\n`openclaw gateway install` could carry `GEMINI_API_K...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "commands",
+        "size: S",
+        "proof: sufficient",
+        "P1",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 auth-provider",
+        "merge-risk: 🚨 security-boundary",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-23T16:03:57Z",
+      "updated_at": "2026-06-24T01:25:04Z",
+      "state": "open"
+    },
+    {
+      "title": "security: wrap tool results at transport boundary",
+      "url": "https://github.com/openclaw/openclaw/pull/78521",
+      "desc": "## Summary\\n- wrap tool-result text at the generic transport boundary using existing external-content security markers\\n- preserve already bounded tool results to avoid double-wrapping\\n- add regression coverage for wrapped and already-wrapped tool results\\n\\n## Verification\\n- pnpm exec vitest run src/agents/transport-message-transform.test.ts\\n- pnpm exec tsc -p tsconfig.core.json --noEmit --pretty false\\n- git diff --check",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "agents",
+        "size: S",
+        "triage: needs-real-behavior-proof",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-06T15:13:21Z",
+      "updated_at": "2026-06-24T00:52:07Z",
+      "state": "open"
+    },
+    {
+      "title": "chore(ci): harden security ownership and workflow permissions",
+      "url": "https://github.com/openclaw/openclaw/pull/78334",
+      "desc": "Summary\n- broaden secops CODEOWNERS coverage for workflow, action, and release/security automation\n- keep release-manager ownership while preserving required secops review on release paths\n- default release and publish workflows to top-level permissions: {}\n\nVerification\n- git diff --check origin/main...HEAD\n- pnpm check:workflows",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "maintainer",
+        "size: S",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "merge-risk: 🚨 automation",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-05-06T07:15:55Z",
+      "updated_at": "2026-06-24T00:25:37Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): block untrusted workspace providers in startup discovery",
+      "url": "https://github.com/openclaw/openclaw/pull/74302",
+      "desc": "### Motivation\n\n- Prevent untrusted workspace plugin discovery entries from being imported/executed during startup prewarm when `providerDiscoveryEntriesOnly` is enabled, closing a path that could run workspace code without explicit trust.\n\n### Description\n\n- When `providerDiscoveryEntriesOnly` is true, forward `includeUntrustedWorkspacePlugins: false` into `resolveRuntimePluginDiscoveryProviders` in `resolveImplicitProviders` (`src/agents/models-config.providers.implicit.ts`) to block workspace...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "agents",
+        "maintainer",
+        "size: XS",
+        "codex",
+        "aardvark",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-04-29T11:20:50Z",
+      "updated_at": "2026-06-23T23:13:20Z",
       "state": "open"
     },
     {
@@ -537,32 +725,6 @@
       "state": "open"
     },
     {
-      "title": "fix(security): block untrusted workspace providers in startup discovery",
-      "url": "https://github.com/openclaw/openclaw/pull/74302",
-      "desc": "### Motivation\n\n- Prevent untrusted workspace plugin discovery entries from being imported/executed during startup prewarm when `providerDiscoveryEntriesOnly` is enabled, closing a path that could run workspace code without explicit trust.\n\n### Description\n\n- When `providerDiscoveryEntriesOnly` is true, forward `includeUntrustedWorkspacePlugins: false` into `resolveRuntimePluginDiscoveryProviders` in `resolveImplicitProviders` (`src/agents/models-config.providers.implicit.ts`) to block workspace...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "agents",
-        "maintainer",
-        "size: XS",
-        "codex",
-        "aardvark",
-        "P2",
-        "rating: 🐚 platinum hermit",
-        "status: 👀 ready for maintainer look"
-      ],
-      "created_at": "2026-04-29T11:20:50Z",
-      "updated_at": "2026-06-23T22:18:30Z",
-      "state": "open"
-    },
-    {
       "title": "docs(security): fix unbalanced inline-code backtick in audit-checks table [AI-assisted]",
       "url": "https://github.com/openclaw/openclaw/pull/96066",
       "desc": "## What Problem This Solves\n\n`docs/gateway/security/audit-checks.md` had a row with an **odd number of inline-code backticks**, which breaks inline-code parsing on that row (and can bleed the code-span state into following content depending on the renderer). The offending row was the `security.trust_model.multi_user_heuristic` finding:\n\nThe \"Relevant config\" cell read:\n\n```\nsplit trust boundaries, or shared-user hardening (`sandbox.mode`, tool deny/workspace scoping`)\n```\n\nThe leading backtick b...",
@@ -586,29 +748,6 @@
       ],
       "created_at": "2026-06-23T10:04:52Z",
       "updated_at": "2026-06-23T21:40:47Z",
-      "state": "open"
-    },
-    {
-      "title": "fix: sSH transport security check rejects connection before tunnel is established",
-      "url": "https://github.com/openclaw/openclaw/pull/96134",
-      "desc": "## Summary\n\n- Fix classification: Root-cause fix for configured remote Gateway SSH transport setup, URL safety, and managed tunnel lifecycle.\n- Maintainer-ready confidence: High. The branch has focused regression coverage for Gateway call/bootstrap/status/logs paths, SSH launcher failures, status diagnostics, default SSH port handling, core/test-src typechecks, `git diff --check`, and a fresh local ClawSweeper commit review with no actionable findings.\n- Root cause: The source-of-truth invariant...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "cli",
-        "commands",
-        "size: XL"
-      ],
-      "created_at": "2026-06-23T15:21:11Z",
-      "updated_at": "2026-06-23T18:33:30Z",
       "state": "open"
     },
     {
@@ -691,27 +830,6 @@
       ],
       "created_at": "2026-06-23T00:26:14Z",
       "updated_at": "2026-06-23T17:25:06Z",
-      "state": "open"
-    },
-    {
-      "title": "fix #95895: [Security]: GEMINI_API_KEY written as a plaintext literal in the generated systemd service unit",
-      "url": "https://github.com/openclaw/openclaw/pull/96149",
-      "desc": "## Summary\n\n- Mark Google/Gemini env refs collected from config SecretRefs and auth profiles as systemd file-backed service env values.\n- Keep the secret values available to the generated service through the owner-only EnvironmentFile instead of inline `Environment=` assignments in the unit file.\n- Add a regression test for the install-plan value-source contract and keep the fixture valid under test type-checking.\n\n## What Problem This Solves\n\n`openclaw gateway install` could carry `GEMINI_API_K...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "commands",
-        "size: S"
-      ],
-      "created_at": "2026-06-23T16:03:57Z",
-      "updated_at": "2026-06-23T16:50:44Z",
       "state": "open"
     },
     {
@@ -933,130 +1051,6 @@
       ],
       "created_at": "2026-05-16T10:23:18Z",
       "updated_at": "2026-06-23T13:18:26Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security/Bug] Sandbox 'skills' directory lacks initial read-only protection if host directory is missing upon agent creation",
-      "url": "https://github.com/openclaw/openclaw/issues/94425",
-      "desc": "### Description\nThere is a \"first-second writable\" security vulnerability window when a new sandboxed Agent is initialized.\n\nOpenClaw's security model dictates that sandbox skill directories (e.g., `/workspace/skills` and `/workspace/.agents/skills`) should be strictly mounted as read-only (`ro`) to prevent the LLM from autonomously installing or modifying executable skill code.\n\nHowever, when a new Agent is created, if the corresponding physical `skills` directories do not yet exist on the host...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "security",
-        "P1",
-        "clawsweeper:no-new-fix-pr",
-        "clawsweeper:needs-security-review",
-        "clawsweeper:source-repro",
-        "clawsweeper:linked-pr-open",
-        "impact:security",
-        "issue-rating: 🦞 diamond lobster"
-      ],
-      "created_at": "2026-06-18T04:15:30Z",
-      "updated_at": "2026-06-23T11:48:07Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): align audit symlink_escape boundary with skill loader",
-      "url": "https://github.com/openclaw/openclaw/pull/73948",
-      "desc": "## Summary\n- align the skills.workspace.symlink_escape audit probe with the workspace skills-directory realpath enforced by the skill loader\n- update title/detail/remediation copy so the finding consistently names the skills directory boundary\n- add the inside-workspace/outside-skills symlink regression test without lockfile or unrelated churn\n\n## Credit\nThis carries forward the narrow fix idea from @menhguin / Minh Nguyen in https://github.com/openclaw/openclaw/pull/60155 and the later duplicat...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "docs",
-        "gateway",
-        "size: XS",
-        "clawsweeper",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-04-29T01:58:50Z",
-      "updated_at": "2026-06-23T10:40:08Z",
-      "state": "open"
-    },
-    {
-      "title": "Security: add configurable unpaired DM responses",
-      "url": "https://github.com/openclaw/openclaw/pull/39065",
-      "desc": "## Summary\n\n- Problem: unknown DM senders in pairing mode always received a branded OpenClaw reply with a pairing code.\n- Why it matters: operators could not choose a silent or de-branded pairing posture without changing DM policy semantics.\n- What changed: added `unpairedResponse` config support (`silent | code-only | branded`) and wired it through the shared pairing helpers and core DM pairing flows.\n- What did NOT change (scope boundary): default behavior remains `branded`, and non-pairing DM...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "channel: bluebubbles",
-        "channel: discord",
-        "channel: googlechat",
-        "channel: imessage",
-        "channel: mattermost",
-        "channel: nextcloud-talk",
-        "channel: signal",
-        "channel: slack",
-        "channel: telegram",
-        "channel: whatsapp-web",
-        "channel: zalo",
-        "channel: zalouser",
-        "maintainer",
-        "channel: feishu",
-        "channel: irc",
-        "size: M",
-        "mantis: telegram-visible-proof",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 message-delivery",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-03-07T17:49:11Z",
-      "updated_at": "2026-06-23T08:35:55Z",
-      "state": "open"
-    },
-    {
-      "title": "Security: harden gateway timeouts and auth store sealing",
-      "url": "https://github.com/openclaw/openclaw/pull/39059",
-      "desc": "## Summary\n\n- Problem: `GatewayClient.request()` could hang indefinitely, auth stores were always plaintext at rest, and mirrored transcript writes did not re-assert restrictive permissions after append.\n- Why it matters: hung gateway RPCs leak pending state and stall callers; optional at-rest sealing gives operators a low-friction hardening path for OpenClaw-owned auth JSON stores.\n- What changed: added bounded gateway request timeouts, added optional `OPENCLAW_PASSPHRASE` sealing for `auth-pro...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "agents",
-        "maintainer",
-        "size: M",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 auth-provider",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-03-07T17:43:25Z",
-      "updated_at": "2026-06-23T08:35:45Z",
       "state": "open"
     },
     {
@@ -2207,6 +2201,52 @@
       "state": "open"
     },
     {
+      "title": "fix(security): don't gate benign commands on regex-literal hostnames",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/51647",
+      "desc": "## Problem\n\nThe terminal security scanner (`tools/tirith_security.py`) raises **HIGH `invalid_host_chars`** findings on commands that merely *contain a regex literal* matching a URL. The tirith static lint extracts a pseudo-hostname from the raw command text and flags characters \"never valid in DNS\" — but a regex such as\n\n```python\nre.finditer(r'https://www\\.alaskaair\\.com[^&\"<>\\s]+', data)\n```\n\nyields an \"extracted hostname\" of `www\\.alaskaair\\.com[^&`, whose `\\`, `[`, `^` are regex syntax, not...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Continue",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/bug",
+        "tool/terminal",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-24T03:14:32Z",
+      "updated_at": "2026-06-24T03:23:56Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Tirith approval gate does not cover non-shell tools — send_message, write_file bypass human-in-the-loop entirely",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/35357",
+      "desc": "## Bug Description\n\nTirith's approval and human-in-the-loop system currently only enforces gating on **terminal/shell command execution**. Non-shell built-in tools such as `send_message`, `write_file`, `delete_resource`, and MCP-connected tools execute **silently and automatically**, with no approval mechanism available — even when those tools perform irreversible or externally visible actions.\n\nThis creates a false sense of security: a user who disables the terminal toolset and trusts Tirith to...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "comp/tools",
+        "P3"
+      ],
+      "created_at": "2026-05-30T13:26:43Z",
+      "updated_at": "2026-06-24T01:01:19Z",
+      "state": "open"
+    },
+    {
       "title": "[Bug]: Tirith security scanner fails to      install on Windows (MSYS/git-bash) -      \"unsupported_platform\"",
       "url": "https://github.com/NousResearch/hermes-agent/issues/26044",
       "desc": " Bug Description\n     Tirith security scanner fails to install on\n     Windows (MSYS/git-bash) with\n     \"unsupported_platform\" error, even though\n     Windows is a supported platform.\n     Steps to Reproduce\n     1. Install Hermes Agent on Windows\n     2. Run hermes or hermes chat\n     3. Observe warning: \"tirith security scanner\n     enabled but not available — command scanning\n     will use pattern matching only\"\n     4. Check\n     ~/.hermes-agent/.tirith-install-failed\n     contains: \"unsupp...",
@@ -2732,34 +2772,32 @@
       "state": "open"
     },
     {
-      "title": "Security: optional CubeSandbox terminal backend for isolated shell/code execution",
-      "url": "https://github.com/NousResearch/hermes-agent/issues/50665",
-      "desc": "### Problem\n\nHermes today runs `terminal` and `execute_code` on the **same host process** when `terminal.backend` is `local` (the common gateway / container deployment). That is convenient for file tools and workspace persistence, but it means model-generated shell and Python execute **on the Hermes host** unless operators switch the *entire* terminal backend to Docker, Modal, Daytona, etc.\n\nFor deployments that already run a **CubeSandbox** (E2B-compatible KVM microVM) control plane, we need a ...",
+      "title": "test(self_test): add unit tests for security policy and tool registry checks",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw/pull/8209",
+      "desc": "## Summary\n\nAdd test coverage for security policy and tool registry checks in the self-test command.\n\n- `check_security_policy_with_no_enabled_agents`: verifies security check fails with empty agents\n- `check_tool_registry_with_no_enabled_agents`: verifies tool registry check fails with empty agents\n\n**What changed and why:** Added two tests that exercise the \"no enabled agents\" early-return failure branch in both production functions. Both tests use `Config::default()` which has no agents confi...",
       "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
+      "repo": "zeroclaw-labs/zeroclaw",
+      "product": "ZeroClaw",
       "type": [
-        "已修复"
+        "未修复"
       ],
-      "level": "高危",
+      "level": "低危",
       "cve": [],
       "labels": [
-        "type/feature",
-        "comp/tools",
-        "area/config",
-        "P3"
+        "risk:low",
+        "size:XS"
       ],
-      "created_at": "2026-06-22T07:06:44Z",
-      "updated_at": "2026-06-22T07:25:50Z",
+      "created_at": "2026-06-23T02:37:05Z",
+      "updated_at": "2026-06-24T02:38:31Z",
       "state": "open"
     },
     {
-      "title": "feat(lsp): make npm command configurable for supply-chain security",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/35475",
-      "desc": "Fixes #35448.\n\n## Why\n\n`agent/lsp/install.py::_install_npm` previously hardcoded `shutil.which(\"npm\")`, which means the LSP install path bypasses any pnpm-based supply-chain protection the user has configured elsewhere (Skills Guard, OSV audit, Tirith). Users on pnpm 11+ specifically lose `minimumReleaseAge`, `blockExoticSubdeps`, and `allowBuilds` defaults during LSP installs.\n\n`HERMES_NODE_PACKAGE_MANAGER` (proposed in #17735 for `scripts/install.sh`) doesn't reach this code path.\n\n## What\n\nTw...",
+      "title": "[RFC]: Apply security policy and channel config updates without full daemon reload",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/7897",
+      "desc": "### Summary\n\nAdd a scoped zero-downtime reload path for security policy and channel configuration changes that are currently written through the gateway config API but still require subsystem re-instantiation or daemon reload to fully take effect.\n\n### Problem statement\n\nThe current gateway config API can persist config edits and swap the in-memory `Config` snapshot. It also marks `pending_reload` because some subsystems still need to be re-instantiated before changes fully apply. `/admin/reload...",
       "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
+      "repo": "zeroclaw-labs/zeroclaw",
+      "product": "ZeroClaw",
       "type": [
         "远程代码执行",
         "已修复"
@@ -2767,13 +2805,19 @@
       "level": "严重",
       "cve": [],
       "labels": [
-        "type/feature",
-        "comp/agent",
-        "area/config",
-        "P3"
+        "enhancement",
+        "risk: high",
+        "channel",
+        "config",
+        "daemon",
+        "gateway",
+        "security",
+        "type:rfc",
+        "status:accepted",
+        "priority:p3"
       ],
-      "created_at": "2026-05-30T18:08:19Z",
-      "updated_at": "2026-06-21T23:52:15Z",
+      "created_at": "2026-06-17T21:00:03Z",
+      "updated_at": "2026-06-24T00:16:30Z",
       "state": "open"
     },
     {
@@ -2804,23 +2848,6 @@
       ],
       "created_at": "2026-06-09T13:43:32Z",
       "updated_at": "2026-06-23T15:41:23Z",
-      "state": "open"
-    },
-    {
-      "title": "test(self_test): add unit tests for security policy and tool registry checks",
-      "url": "https://github.com/zeroclaw-labs/zeroclaw/pull/8209",
-      "desc": "## Summary\nAdd test coverage for security policy and tool registry checks in the self-test command.\n\n## Changes\n- `check_security_policy_with_no_enabled_agents`: verifies failure when no agents enabled\n- `check_tool_registry_with_no_enabled_agents`: verifies failure when no agents enabled\n\nThese tests improve the self-test diagnostic suite coverage for agent-dependent checks.",
-      "source": "GitHub Issues",
-      "repo": "zeroclaw-labs/zeroclaw",
-      "product": "ZeroClaw",
-      "type": [
-        "未修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-06-23T02:37:05Z",
-      "updated_at": "2026-06-23T02:37:06Z",
       "state": "open"
     },
     {
@@ -2874,35 +2901,6 @@
       ],
       "created_at": "2026-06-15T11:06:14Z",
       "updated_at": "2026-06-20T20:06:47Z",
-      "state": "open"
-    },
-    {
-      "title": "[Feature]: Apply security policy and channel config updates without full daemon reload",
-      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/7897",
-      "desc": "### Summary\n\nAdd a scoped zero-downtime reload path for security policy and channel configuration changes that are currently written through the gateway config API but still require subsystem re-instantiation or daemon reload to fully take effect.\n\n### Problem statement\n\nThe current gateway config API can persist config edits and swap the in-memory `Config` snapshot. It also marks `pending_reload` because some subsystems still need to be re-instantiated before changes fully apply. `/admin/reload...",
-      "source": "GitHub Issues",
-      "repo": "zeroclaw-labs/zeroclaw",
-      "product": "ZeroClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "enhancement",
-        "risk: high",
-        "channel",
-        "config",
-        "daemon",
-        "gateway",
-        "security",
-        "type:rfc",
-        "status:accepted",
-        "priority:p3"
-      ],
-      "created_at": "2026-06-17T21:00:03Z",
-      "updated_at": "2026-06-20T20:01:48Z",
       "state": "open"
     },
     {
@@ -3470,24 +3468,6 @@
       "state": "open"
     },
     {
-      "title": "[Security] nanobot MCP `enabledTools` allowlist bypass exposes resource and prompt capabilities",
-      "url": "https://github.com/HKUDS/nanobot/issues/4435",
-      "desc": "### Advisory Details\n\n**Title**: nanobot MCP `enabledTools` allowlist bypass exposes resource and prompt capabilities\n\n**Description**:\n\n`tools.mcpServers.<name>.enabledTools` is documented as a per-server MCP allowlist where `[]` should register no capabilities from that server. In `nanobot` `v0.2.1` and earlier, the allowlist is enforced only for `session.list_tools()` results. `session.list_resources()` and `session.list_prompts()` are still wrapped and registered, so an authorized chat or AP...",
-      "source": "GitHub Issues",
-      "repo": "HKUDS/nanobot",
-      "product": "Continue",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-06-21T15:03:02Z",
-      "updated_at": "2026-06-21T15:03:02Z",
-      "state": "open"
-    },
-    {
       "title": "[Security] Nanobot MCP `enabledTools` deny-all policy bypass exposes MCP resources and prompts to the model",
       "url": "https://github.com/HKUDS/nanobot/issues/4434",
       "desc": "### Advisory Details\n\n**Title**: Nanobot MCP `enabledTools` deny-all policy bypass exposes MCP resources and prompts to the model\n\n**Description**:\n\n### Summary\n\n`nanobot` documents `tools.mcpServers.<name>.enabledTools` as the per-server MCP allowlist and states that `enabledTools: []` registers no tools from that server. In `<= 0.2.1`, that policy is only enforced for ordinary MCP tools returned by `session.list_tools()`. MCP resources and prompts returned by `session.list_resources()` and `se...",
@@ -3502,7 +3482,25 @@
       "cve": [],
       "labels": [],
       "created_at": "2026-06-21T15:02:53Z",
-      "updated_at": "2026-06-21T15:02:53Z",
+      "updated_at": "2026-06-24T02:48:00Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] nanobot MCP `enabledTools` allowlist bypass exposes resource and prompt capabilities",
+      "url": "https://github.com/HKUDS/nanobot/issues/4435",
+      "desc": "### Advisory Details\n\n**Title**: nanobot MCP `enabledTools` allowlist bypass exposes resource and prompt capabilities\n\n**Description**:\n\n`tools.mcpServers.<name>.enabledTools` is documented as a per-server MCP allowlist where `[]` should register no capabilities from that server. In `nanobot` `v0.2.1` and earlier, the allowlist is enforced only for `session.list_tools()` results. `session.list_resources()` and `session.list_prompts()` are still wrapped and registered, so an authorized chat or AP...",
+      "source": "GitHub Issues",
+      "repo": "HKUDS/nanobot",
+      "product": "Continue",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-21T15:03:02Z",
+      "updated_at": "2026-06-24T02:47:58Z",
       "state": "open"
     },
     {
@@ -5172,45 +5170,6 @@
       "updated_at": "2026-05-27T04:01:44Z"
     },
     {
-      "title": "Show HN: KeelTest – AI-driven VS Code unit test generator with bug discovery",
-      "url": "https://keelcode.dev/keeltest",
-      "desc": "I built this because Cursor, Claude Code and other agentic AI tools kept giving me tests that looked fine but failed when I ran them. Or worse - I&#x27;d ask the agent to run them and it would start looping: fix tests, those fail, then it starts &quot;fixing&quot; my code so tests pass, or just deletes assertions so they &quot;pass&quot;.<p>Out of that frustration I built KeelTest - a VS Code extension that generates pytest tests and executes them, got hooked and decided to push this project for...",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "hn_id": "46526088",
-      "hn_points": 30,
-      "hn_comments": 15,
-      "hn_author": "bulba4aur",
-      "created_at": "2026-01-07T13:22:35Z",
-      "updated_at": "2026-01-07T13:22:35Z"
-    },
-    {
-      "title": "Show HN: OmoiOS–190K lines of Python to stop babysitting AI agents (Apache 2.0)",
-      "url": "https://github.com/kivo360/OmoiOS",
-      "desc": "AI coding agents generate decent code. The problem is everything around the code - checking progress, catching drift, deciding if it&#x27;s actually done. I spent months trying to make autonomous agents work. The bottleneck was always me.<p>Attempt 1 - Claude&#x2F;GPT directly: works for small stuff, but you re-explain context endlessly.<p>Attempt 2 - Copilot&#x2F;Cursor: great autocomplete, still doing 95% of the thinking.<p>Attempt 3 - continuous agents: keeps working without prompting, but &q...",
-      "source": "Hacker News",
-      "repo": "",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "hn_id": "47263360",
-      "hn_points": 2,
-      "hn_comments": 2,
-      "hn_author": "kanddle",
-      "created_at": "2026-03-05T16:07:21Z",
-      "updated_at": "2026-03-05T16:07:21Z"
-    },
-    {
       "title": "Show HN: Oc-mnemoria – Persistent memory for AI coding agents",
       "url": "https://github.com/one-bit/oc-mnemoria",
       "desc": "I built this to solve a problem that kept annoying me: every time I start a new AI coding session, the agent has zero memory of what happened before. Decisions, discoveries, bug fixes - all gone.\noc-mnemoria is an OpenCode plugin that gives all agents a shared persistent memory store - a &quot;hive mind.&quot; The plan agent records a decision, the build agent sees it. The review agent flags a bug pattern, and next session the build agent knows about it.\nThe storage engine is mnemoria, a Rust cr...",
@@ -5724,6 +5683,238 @@
       "updated_at": "2023-01-10T02:57:02Z"
     },
     {
+      "title": "[BUG] Cyber-safeguard false positive blocks /security-review skill in a fresh session",
+      "url": "https://github.com/anthropics/claude-code/issues/68791",
+      "desc": "# [BUG] Cyber-safeguard false positive blocks `/security-review` skill in a fresh session\n\n## What happened\n\nIn a **brand-new session**, my very first action was running the built-in `/security-review` skill on a local code folder. The skill was immediately blocked with a cyber-related Usage Policy violation — before any analysis took place.\n\nThere was **no prior context** in the session: no earlier messages, no \"exploit/backdoor\" wording from me, nothing to contaminate the conversation. The ski...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "bug",
+        "duplicate",
+        "area:model",
+        "area:security",
+        "area:skills",
+        "api:anthropic"
+      ],
+      "created_at": "2026-06-16T10:23:31Z",
+      "updated_at": "2026-06-16T13:16:53Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security/Bug] Sandbox 'skills' directory lacks initial read-only protection if host directory is missing upon agent creation",
+      "url": "https://github.com/openclaw/openclaw/issues/94425",
+      "desc": "### Description\nThere is a \"first-second writable\" security vulnerability window when a new sandboxed Agent is initialized.\n\nOpenClaw's security model dictates that sandbox skill directories (e.g., `/workspace/skills` and `/workspace/.agents/skills`) should be strictly mounted as read-only (`ro`) to prevent the LLM from autonomously installing or modifying executable skill code.\n\nHowever, when a new Agent is created, if the corresponding physical `skills` directories do not yet exist on the host...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "security",
+        "P1",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:needs-security-review",
+        "clawsweeper:source-repro",
+        "clawsweeper:linked-pr-open",
+        "impact:security",
+        "issue-rating: 🦞 diamond lobster"
+      ],
+      "created_at": "2026-06-18T04:15:30Z",
+      "updated_at": "2026-06-23T11:48:07Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): align audit symlink_escape boundary with skill loader",
+      "url": "https://github.com/openclaw/openclaw/pull/73948",
+      "desc": "## Summary\n- align the skills.workspace.symlink_escape audit probe with the workspace skills-directory realpath enforced by the skill loader\n- update title/detail/remediation copy so the finding consistently names the skills directory boundary\n- add the inside-workspace/outside-skills symlink regression test without lockfile or unrelated churn\n\n## Credit\nThis carries forward the narrow fix idea from @menhguin / Minh Nguyen in https://github.com/openclaw/openclaw/pull/60155 and the later duplicat...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "gateway",
+        "size: XS",
+        "clawsweeper",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-04-29T01:58:50Z",
+      "updated_at": "2026-06-23T10:40:08Z",
+      "state": "open"
+    },
+    {
+      "title": "Security: add configurable unpaired DM responses",
+      "url": "https://github.com/openclaw/openclaw/pull/39065",
+      "desc": "## Summary\n\n- Problem: unknown DM senders in pairing mode always received a branded OpenClaw reply with a pairing code.\n- Why it matters: operators could not choose a silent or de-branded pairing posture without changing DM policy semantics.\n- What changed: added `unpairedResponse` config support (`silent | code-only | branded`) and wired it through the shared pairing helpers and core DM pairing flows.\n- What did NOT change (scope boundary): default behavior remains `branded`, and non-pairing DM...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "channel: bluebubbles",
+        "channel: discord",
+        "channel: googlechat",
+        "channel: imessage",
+        "channel: mattermost",
+        "channel: nextcloud-talk",
+        "channel: signal",
+        "channel: slack",
+        "channel: telegram",
+        "channel: whatsapp-web",
+        "channel: zalo",
+        "channel: zalouser",
+        "maintainer",
+        "channel: feishu",
+        "channel: irc",
+        "size: M",
+        "mantis: telegram-visible-proof",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 message-delivery",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-03-07T17:49:11Z",
+      "updated_at": "2026-06-23T08:35:55Z",
+      "state": "open"
+    },
+    {
+      "title": "Security: harden gateway timeouts and auth store sealing",
+      "url": "https://github.com/openclaw/openclaw/pull/39059",
+      "desc": "## Summary\n\n- Problem: `GatewayClient.request()` could hang indefinitely, auth stores were always plaintext at rest, and mirrored transcript writes did not re-assert restrictive permissions after append.\n- Why it matters: hung gateway RPCs leak pending state and stall callers; optional at-rest sealing gives operators a low-friction hardening path for OpenClaw-owned auth JSON stores.\n- What changed: added bounded gateway request timeouts, added optional `OPENCLAW_PASSPHRASE` sealing for `auth-pro...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "gateway",
+        "agents",
+        "maintainer",
+        "size: M",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 auth-provider",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-03-07T17:43:25Z",
+      "updated_at": "2026-06-23T08:35:45Z",
+      "state": "open"
+    },
+    {
+      "title": "Security: optional CubeSandbox terminal backend for isolated shell/code execution",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/50665",
+      "desc": "### Problem\n\nHermes today runs `terminal` and `execute_code` on the **same host process** when `terminal.backend` is `local` (the common gateway / container deployment). That is convenient for file tools and workspace persistence, but it means model-generated shell and Python execute **on the Hermes host** unless operators switch the *entire* terminal backend to Docker, Modal, Daytona, etc.\n\nFor deployments that already run a **CubeSandbox** (E2B-compatible KVM microVM) control plane, we need a ...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/feature",
+        "comp/tools",
+        "area/config",
+        "P3"
+      ],
+      "created_at": "2026-06-22T07:06:44Z",
+      "updated_at": "2026-06-22T07:25:50Z",
+      "state": "open"
+    },
+    {
+      "title": "feat(lsp): make npm command configurable for supply-chain security",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/35475",
+      "desc": "Fixes #35448.\n\n## Why\n\n`agent/lsp/install.py::_install_npm` previously hardcoded `shutil.which(\"npm\")`, which means the LSP install path bypasses any pnpm-based supply-chain protection the user has configured elsewhere (Skills Guard, OSV audit, Tirith). Users on pnpm 11+ specifically lose `minimumReleaseAge`, `blockExoticSubdeps`, and `allowBuilds` defaults during LSP installs.\n\n`HERMES_NODE_PACKAGE_MANAGER` (proposed in #17735 for `scripts/install.sh`) doesn't reach this code path.\n\n## What\n\nTw...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/feature",
+        "comp/agent",
+        "area/config",
+        "P3"
+      ],
+      "created_at": "2026-05-30T18:08:19Z",
+      "updated_at": "2026-06-21T23:52:15Z",
+      "state": "open"
+    },
+    {
+      "title": "Show HN: KeelTest – AI-driven VS Code unit test generator with bug discovery",
+      "url": "https://keelcode.dev/keeltest",
+      "desc": "I built this because Cursor, Claude Code and other agentic AI tools kept giving me tests that looked fine but failed when I ran them. Or worse - I&#x27;d ask the agent to run them and it would start looping: fix tests, those fail, then it starts &quot;fixing&quot; my code so tests pass, or just deletes assertions so they &quot;pass&quot;.<p>Out of that frustration I built KeelTest - a VS Code extension that generates pytest tests and executes them, got hooked and decided to push this project for...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "46526088",
+      "hn_points": 30,
+      "hn_comments": 15,
+      "hn_author": "bulba4aur",
+      "created_at": "2026-01-07T13:22:35Z",
+      "updated_at": "2026-01-07T13:22:35Z"
+    },
+    {
+      "title": "Show HN: OmoiOS–190K lines of Python to stop babysitting AI agents (Apache 2.0)",
+      "url": "https://github.com/kivo360/OmoiOS",
+      "desc": "AI coding agents generate decent code. The problem is everything around the code - checking progress, catching drift, deciding if it&#x27;s actually done. I spent months trying to make autonomous agents work. The bottleneck was always me.<p>Attempt 1 - Claude&#x2F;GPT directly: works for small stuff, but you re-explain context endlessly.<p>Attempt 2 - Copilot&#x2F;Cursor: great autocomplete, still doing 95% of the thinking.<p>Attempt 3 - continuous agents: keeps working without prompting, but &q...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "hn_id": "47263360",
+      "hn_points": 2,
+      "hn_comments": 2,
+      "hn_author": "kanddle",
+      "created_at": "2026-03-05T16:07:21Z",
+      "updated_at": "2026-03-05T16:07:21Z"
+    },
+    {
       "title": "fix(security-guidance): block symlink escape in extensibility config reads",
       "url": "https://github.com/anthropics/claude-code/pull/68689",
       "desc": "",
@@ -5755,83 +5946,6 @@
       "labels": [],
       "created_at": "2026-06-15T21:53:58Z",
       "updated_at": "2026-06-16T09:43:51Z",
-      "state": "open"
-    },
-    {
-      "title": "security: wrap tool results at transport boundary",
-      "url": "https://github.com/openclaw/openclaw/pull/78521",
-      "desc": "## Summary\\n- wrap tool-result text at the generic transport boundary using existing external-content security markers\\n- preserve already bounded tool results to avoid double-wrapping\\n- add regression coverage for wrapped and already-wrapped tool results\\n\\n## Verification\\n- pnpm exec vitest run src/agents/transport-message-transform.test.ts\\n- pnpm exec tsc -p tsconfig.core.json --noEmit --pretty false\\n- git diff --check",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "未修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "agents",
-        "size: S",
-        "triage: needs-real-behavior-proof",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-05-06T15:13:21Z",
-      "updated_at": "2026-06-23T00:32:48Z",
-      "state": "open"
-    },
-    {
-      "title": "security: scan markdown skill definitions for injection threats",
-      "url": "https://github.com/openclaw/openclaw/pull/43469",
-      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "size: L",
-        "proof: supplied",
-        "proof: sufficient",
-        "P2",
-        "rating: 🦪 silver shellfish",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-03-11T21:06:37Z",
-      "updated_at": "2026-06-22T23:20:22Z",
-      "state": "open"
-    },
-    {
-      "title": "chore(ci): harden security ownership and workflow permissions",
-      "url": "https://github.com/openclaw/openclaw/pull/78334",
-      "desc": "Summary\n- broaden secops CODEOWNERS coverage for workflow, action, and release/security automation\n- keep release-manager ownership while preserving required secops review on release paths\n- default release and publish workflows to top-level permissions: {}\n\nVerification\n- git diff --check origin/main...HEAD\n- pnpm check:workflows",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "未修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "maintainer",
-        "size: S",
-        "P2",
-        "rating: 🦐 gold shrimp",
-        "merge-risk: 🚨 automation",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-05-06T07:15:55Z",
-      "updated_at": "2026-06-22T23:11:58Z",
       "state": "open"
     },
     {
