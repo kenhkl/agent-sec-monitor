@@ -1,32 +1,32 @@
 {
   "summary": {
-    "total": 255,
-    "generated_at": "2026-06-27T06:38:59.571944+08:00",
+    "total": 271,
+    "generated_at": "2026-06-27T15:29:34.541063+08:00",
     "date": "2026-06-27",
     "by_type": {
-      "已修复": 158,
-      "远程代码执行": 134,
-      "未修复": 63,
+      "已修复": 173,
+      "远程代码执行": 140,
+      "未修复": 64,
       "提示注入": 23,
       "供应链攻击": 8,
+      "信息泄露": 6,
       "权限绕过": 6,
-      "信息泄露": 4,
       "沙箱逃逸": 3
     },
     "by_level": {
-      "严重": 143,
-      "高危": 50,
-      "低危": 44,
-      "中危": 18
+      "严重": 149,
+      "高危": 56,
+      "低危": 47,
+      "中危": 19
     },
     "by_product": {
-      "Claude Code": 73,
-      "Continue": 27,
+      "Claude Code": 74,
+      "Continue": 31,
+      "Hermes Agent": 27,
       "通用AI编程工具": 25,
-      "Hermes Agent": 21,
+      "OpenClaw": 22,
       "NanoBot": 19,
-      "OpenClaw": 18,
-      "Cline": 16,
+      "Cline": 17,
       "Aider": 13,
       "NanoClaw": 12,
       "IronClaw": 10,
@@ -37,9 +37,9 @@
       "Cursor": 2
     },
     "by_source": {
-      "GitHub Issues": 192,
+      "GitHub Issues": 203,
       "Hacker News": 50,
-      "GitHub Security Advisory": 7,
+      "GitHub Security Advisory": 12,
       "OSV.dev": 6
     },
     "target_repos": [
@@ -511,203 +511,6 @@
       "state": "open"
     },
     {
-      "title": "security: scan markdown skill definitions for injection threats",
-      "url": "https://github.com/openclaw/openclaw/pull/43469",
-      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "size: L",
-        "proof: supplied",
-        "proof: sufficient",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-03-11T21:06:37Z",
-      "updated_at": "2026-06-26T22:35:15Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(exec): bypass fail-closed interpreter heuristic when security is full",
-      "url": "https://github.com/openclaw/openclaw/pull/97107",
-      "desc": "## Problem\n\nWhen `exec.security` is `\"full\"` and `exec.ask` is `\"on-miss\"` (a common production config), `shouldSkipExecScriptPreflight` returns `false` because it requires `ask === \"off\"`. This causes `validateScriptFileForShellBleed` to run the fail-closed interpreter heuristic even though the operator has explicitly declared full agent trust.\n\nThe heuristic blocks commands that contain an interpreter invocation + complex shell syntax (pipe, `&&`, etc.) when the script target path cannot be ex...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "docs",
-        "agents",
-        "size: S",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof",
-        "triage: needs-pr-context"
-      ],
-      "created_at": "2026-06-26T22:05:10Z",
-      "updated_at": "2026-06-26T22:22:13Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): use constant-time comparison for TLS fingerprint verification",
-      "url": "https://github.com/openclaw/openclaw/pull/49083",
-      "desc": "## Summary\n\nTLS certificate fingerprint verification in `src/gateway/client.ts` uses `!==` (standard JavaScript string equality), which is vulnerable to **timing side-channel attacks** (CWE-208).\n\nAn attacker on the network path can measure response time differences to iteratively guess the correct fingerprint byte-by-byte, potentially bypassing TLS pinning for MITM attacks on gateway connections.\n\n## Root cause\n\nTwo locations perform fingerprint comparison with `!==`:\n\n| Location | Context |\n|-...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "size: XS",
-        "triage: needs-real-behavior-proof",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-03-17T14:57:08Z",
-      "updated_at": "2026-06-26T20:51:02Z",
-      "state": "open"
-    },
-    {
-      "title": "security: create session dirs with private permissions",
-      "url": "https://github.com/openclaw/openclaw/pull/45901",
-      "desc": "## Summary\r\n\r\nDescribe the problem and fix in 2–5 bullets:\r\n\r\n- Problem: managed `agents/<id>/sessions/` directories were created with default permissions, which landed as `0755` on POSIX hosts in practice.\r\n- Why it matters: session transcripts are sensitive state, so managed session directories should default to private permissions.\r\n- What changed: added `ensurePrivateSessionsDir(...)` for managed session directories and reused it across setup, onboarding, agent creation, and managed session ...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "未修复",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "commands",
-        "agents",
-        "size: XL",
-        "triage: needs-real-behavior-proof",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 session-state",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-03-14T08:48:53Z",
-      "updated_at": "2026-06-26T20:50:10Z",
-      "state": "open"
-    },
-    {
-      "title": "security: gateway public network hardening",
-      "url": "https://github.com/openclaw/openclaw/pull/44884",
-      "desc": "## Summary\n\nImplements comprehensive security hardening for OpenClaw Gateway when exposed to public networks (e.g. `https://openclaw.allegro.earth/`). The existing security mechanisms (non-loopback auth enforcement, auth rate limiting, CORS checks) leave gaps that this PR addresses:\n\n- **IP access control** (allowlist/blocklist with CIDR support) — enforced on both HTTP requests and WebSocket upgrades, loopback always allowed, blocklist takes priority\n- **Password/token strength validation** — C...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "commands",
-        "size: XL",
-        "triage: needs-real-behavior-proof",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "merge-risk: 🚨 availability",
-        "status: 📣 needs proof",
-        "triage: needs-pr-context"
-      ],
-      "created_at": "2026-03-13T08:50:43Z",
-      "updated_at": "2026-06-26T20:49:59Z",
-      "state": "open"
-    },
-    {
-      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
-      "url": "https://github.com/openclaw/openclaw/pull/77492",
-      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "app: web-ui",
-        "gateway",
-        "scripts",
-        "size: L",
-        "triage: dirty-candidate",
-        "proof: supplied",
-        "P1",
-        "rating: 🦪 silver shellfish",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "merge-risk: 🚨 availability",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-05-04T19:27:34Z",
-      "updated_at": "2026-06-26T20:21:47Z",
-      "state": "open"
-    },
-    {
-      "title": "#92561: fix(security): bound context file ancestor walk to workspace root",
-      "url": "https://github.com/openclaw/openclaw/pull/93368",
-      "desc": "## Summary\n\nBound the `loadProjectContextFiles` ancestor directory walk to a trusted workspace root boundary instead of the filesystem root. This prevents untrusted `AGENTS.md`/`CLAUDE.md` files outside the workspace from being silently injected into agent context, while preserving legitimate context files from ancestor directories WITHIN the workspace.\n\nCloses #92561\n\n## What changed from the initial fix\n\nThe initial fix (`currentDir === resolvedCwd`) was incorrect — it stopped the walk after t...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "agents",
-        "size: M",
-        "proof: supplied",
-        "proof: sufficient",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-06-15T16:28:19Z",
-      "updated_at": "2026-06-26T16:37:15Z",
-      "state": "open"
-    },
-    {
       "title": "Security: harden gateway timeouts and auth store sealing",
       "url": "https://github.com/openclaw/openclaw/pull/39059",
       "desc": "## Summary\n\n- Problem: `GatewayClient.request()` could hang indefinitely, auth stores were always plaintext at rest, and mirrored transcript writes did not re-assert restrictive permissions after append.\n- Why it matters: hung gateway RPCs leak pending state and stall callers; optional at-rest sealing gives operators a low-friction hardening path for OpenClaw-owned auth JSON stores.\n- What changed: added bounded gateway request timeouts, added optional `OPENCLAW_PASSPHRASE` sealing for `auth-pro...",
@@ -733,7 +536,7 @@
         "status: ⏳ waiting on author"
       ],
       "created_at": "2026-03-07T17:43:25Z",
-      "updated_at": "2026-06-26T15:36:29Z",
+      "updated_at": "2026-06-27T07:11:08Z",
       "state": "open"
     },
     {
@@ -774,7 +577,343 @@
         "status: 📣 needs proof"
       ],
       "created_at": "2026-03-07T17:49:11Z",
-      "updated_at": "2026-06-26T13:03:03Z",
+      "updated_at": "2026-06-27T06:47:14Z",
+      "state": "open"
+    },
+    {
+      "title": "security fix(gateway): defend pre-auth device-signature verify against CPU DoS",
+      "url": "https://github.com/openclaw/openclaw/pull/77492",
+      "desc": "Closes #77979\n\n## Summary\n\n- Pre-auth WS handshakes that include a `device` block ran `crypto.createPublicKey` plus a v3-then-v2 `crypto.verify` per request, gated only by frame-size limits. An unauthenticated remote attacker could pin a single Gateway core: PoC against a real running gateway hits **~510 forged handshakes/s/IP**, degrading legit handshake p50 by **48.7×** (1.16 ms → 56.6 ms) and p99 by **94.7×**.\n- Fix is layered: schema cap on `device.publicKey` (1024) and `device.signature` (2...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "app: web-ui",
+        "gateway",
+        "scripts",
+        "size: L",
+        "triage: dirty-candidate",
+        "proof: supplied",
+        "P1",
+        "rating: 🦪 silver shellfish",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-05-04T19:27:34Z",
+      "updated_at": "2026-06-27T03:58:54Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): close active April 4 transport and auth gaps",
+      "url": "https://github.com/openclaw/openclaw/pull/60488",
+      "desc": "## Summary\n\n- Problem: config-time explicit provider proxies accepted blocked internal hosts, `config.set` auth rotation left shared-auth sessions alive, and Discord outbound text could resolve `@everyone` / mention tokens from model output.\n- Why it matters: these gaps leave room for SSRF via operator config, stale access after token rotation, and prompt-injected Discord-wide pings.\n- What changed: added config-time proxy URL validation for explicit provider proxies, disconnected shared-auth cl...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "未修复",
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "channel: discord",
+        "gateway",
+        "agents",
+        "maintainer",
+        "size: S",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 message-delivery",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-04-03T19:02:06Z",
+      "updated_at": "2026-06-27T00:33:33Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): use constant-time comparison for TLS fingerprint verification",
+      "url": "https://github.com/openclaw/openclaw/pull/49083",
+      "desc": "## Summary\n\nTLS certificate fingerprint verification in `src/gateway/client.ts` uses `!==` (standard JavaScript string equality), which is vulnerable to **timing side-channel attacks** (CWE-208).\n\nAn attacker on the network path can measure response time differences to iteratively guess the correct fingerprint byte-by-byte, potentially bypassing TLS pinning for MITM attacks on gateway connections.\n\n## Root cause\n\nTwo locations perform fingerprint comparison with `!==`:\n\n| Location | Context |\n|-...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "gateway",
+        "size: XS",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-03-17T14:57:08Z",
+      "updated_at": "2026-06-27T00:28:39Z",
+      "state": "open"
+    },
+    {
+      "title": "security: create session dirs with private permissions",
+      "url": "https://github.com/openclaw/openclaw/pull/45901",
+      "desc": "## Summary\r\n\r\nDescribe the problem and fix in 2–5 bullets:\r\n\r\n- Problem: managed `agents/<id>/sessions/` directories were created with default permissions, which landed as `0755` on POSIX hosts in practice.\r\n- Why it matters: session transcripts are sensitive state, so managed session directories should default to private permissions.\r\n- What changed: added `ensurePrivateSessionsDir(...)` for managed session directories and reused it across setup, onboarding, agent creation, and managed session ...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "未修复",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "gateway",
+        "commands",
+        "agents",
+        "size: XL",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 session-state",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-03-14T08:48:53Z",
+      "updated_at": "2026-06-27T00:27:12Z",
+      "state": "open"
+    },
+    {
+      "title": "security: gateway public network hardening",
+      "url": "https://github.com/openclaw/openclaw/pull/44884",
+      "desc": "## Summary\n\nImplements comprehensive security hardening for OpenClaw Gateway when exposed to public networks (e.g. `https://openclaw.allegro.earth/`). The existing security mechanisms (non-loopback auth enforcement, auth rate limiting, CORS checks) leave gaps that this PR addresses:\n\n- **IP access control** (allowlist/blocklist with CIDR support) — enforced on both HTTP requests and WebSocket upgrades, loopback always allowed, blocklist takes priority\n- **Password/token strength validation** — C...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "gateway",
+        "commands",
+        "size: XL",
+        "triage: needs-real-behavior-proof",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof",
+        "triage: needs-pr-context"
+      ],
+      "created_at": "2026-03-13T08:50:43Z",
+      "updated_at": "2026-06-27T00:27:03Z",
+      "state": "open"
+    },
+    {
+      "title": "security: scan markdown skill definitions for injection threats",
+      "url": "https://github.com/openclaw/openclaw/pull/43469",
+      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "size: L",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-03-11T21:06:37Z",
+      "updated_at": "2026-06-27T00:25:57Z",
+      "state": "open"
+    },
+    {
+      "title": "[codex] fix security audit request headers",
+      "url": "https://github.com/openclaw/openclaw/pull/95303",
+      "desc": "## Summary\n\nAlign `models.providers.*.request.headers.*` with the shared model-provider header sensitivity policy used by the existing config security audit surfaces.\n\nThis fixes the `Wafer-ZDR` false positive from #89664 without creating a Wafer-only carveout, and keeps sensitive request headers such as `Authorization` flagged.\n\n## Changes\n\n- reuse `isLikelySensitiveModelProviderHeaderName(...)` for `models.providers.*.request.headers.*` in both `openclaw doctor` and `openclaw secrets audit`\n- ...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "commands",
+        "size: S",
+        "proof: sufficient",
+        "P2",
+        "rating: 🦐 gold shrimp",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author",
+        "triage: needs-pr-context"
+      ],
+      "created_at": "2026-06-20T10:17:37Z",
+      "updated_at": "2026-06-27T00:20:27Z",
+      "state": "open"
+    },
+    {
+      "title": "fix #10827: Skill supply-chain security: provenance tracking + permission manifests",
+      "url": "https://github.com/openclaw/openclaw/pull/95220",
+      "desc": "## Summary\n\n- **Behavior or issue addressed:** Adds audit-only skill permission manifests for issue #10827 so skills can declare expected command/tool/filesystem/network needs under `metadata.openclaw.permissions`.\n- **Why it matters / User impact:** Operators and users currently see skill provenance/install metadata, but not a structured declaration of what a skill says it needs to touch before install/update. This makes risky skills that request memory/config writes or broad network access eas...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "size: M",
+        "proof: sufficient",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 compatibility",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-20T04:17:15Z",
+      "updated_at": "2026-06-27T00:17:58Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Ship a dedicated/bundled Node binary so macOS TCC permissions (FDA, Accessibility) are scoped to OpenClaw only",
+      "url": "https://github.com/openclaw/openclaw/issues/69799",
+      "desc": "## Problem\n\nWhen users grant **Full Disk Access** (or Accessibility) to OpenClaw on macOS, they must grant it to the shared `node` binary (e.g. `/usr/local/bin/node` or an nvm-managed path). macOS TCC has no mechanism to scope that permission to OpenClaw specifically — the grant applies to **every process that runs through the same binary**, including:\n\n- All globally installed npm packages\n- All `node_modules` in any project on the machine\n- Any supply-chain-compromised dependency\n\nThis means a...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "security",
+        "stale",
+        "P1",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:fix-shape-clear",
+        "clawsweeper:needs-maintainer-review",
+        "clawsweeper:needs-product-decision",
+        "clawsweeper:needs-security-review",
+        "clawsweeper:needs-live-repro",
+        "impact:security",
+        "issue-rating: 🐚 platinum hermit"
+      ],
+      "created_at": "2026-04-21T17:41:54Z",
+      "updated_at": "2026-06-26T23:23:39Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): suppress acknowledged audit findings without false positives",
+      "url": "https://github.com/openclaw/openclaw/pull/95028",
+      "desc": "## Summary\n\n- Partially addresses #17447 by removing the false positive hook audit warning when request-supplied session keys are constrained by `hooks.allowedSessionKeyPrefixes`.\n- Keeps the warning when `hooks.allowRequestSessionKey=true` is enabled without prefixes, where callers can still choose arbitrary session key shapes.\n- Adds a focused regression test for the prefixed request-session-key audit configuration.\n- Aligns the CLI security guide and audit-check catalog with the narrowed no-p...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "gateway",
+        "security",
+        "size: XS",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 security-boundary",
+        "status: 👀 ready for maintainer look"
+      ],
+      "created_at": "2026-06-19T16:39:35Z",
+      "updated_at": "2026-06-26T23:21:35Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(exec): bypass fail-closed interpreter heuristic when security is full",
+      "url": "https://github.com/openclaw/openclaw/pull/97107",
+      "desc": "## What Problem This Solves\n\nWhen `exec.security` is `\"full\"` and `exec.ask` is `\"on-miss\"` (a common production config), `shouldSkipExecScriptPreflight` returns `false` because it requires `ask === \"off\"`. This causes `validateScriptFileForShellBleed` to run the fail-closed interpreter heuristic even though the operator has explicitly declared full agent trust.\n\nThe heuristic blocks commands that contain an interpreter invocation + complex shell syntax (pipe, `&&`, etc.) when the script target ...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "docs",
+        "agents",
+        "size: S",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
+      ],
+      "created_at": "2026-06-26T22:05:10Z",
+      "updated_at": "2026-06-26T22:57:44Z",
+      "state": "open"
+    },
+    {
+      "title": "#92561: fix(security): bound context file ancestor walk to workspace root",
+      "url": "https://github.com/openclaw/openclaw/pull/93368",
+      "desc": "## Summary\n\nBound the `loadProjectContextFiles` ancestor directory walk to a trusted workspace root boundary instead of the filesystem root. This prevents untrusted `AGENTS.md`/`CLAUDE.md` files outside the workspace from being silently injected into agent context, while preserving legitimate context files from ancestor directories WITHIN the workspace.\n\nCloses #92561\n\n## What changed from the initial fix\n\nThe initial fix (`currentDir === resolvedCwd`) was incorrect — it stopped the walk after t...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "agents",
+        "size: M",
+        "proof: supplied",
+        "proof: sufficient",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
+      ],
+      "created_at": "2026-06-15T16:28:19Z",
+      "updated_at": "2026-06-26T16:37:15Z",
       "state": "open"
     },
     {
@@ -887,36 +1026,6 @@
       "state": "open"
     },
     {
-      "title": "fix(security): close active April 4 transport and auth gaps",
-      "url": "https://github.com/openclaw/openclaw/pull/60488",
-      "desc": "## Summary\n\n- Problem: config-time explicit provider proxies accepted blocked internal hosts, `config.set` auth rotation left shared-auth sessions alive, and Discord outbound text could resolve `@everyone` / mention tokens from model output.\n- Why it matters: these gaps leave room for SSRF via operator config, stale access after token rotation, and prompt-injected Discord-wide pings.\n- What changed: added config-time proxy URL validation for explicit provider proxies, disconnected shared-auth cl...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "未修复",
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "channel: discord",
-        "gateway",
-        "agents",
-        "maintainer",
-        "size: S",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 message-delivery",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-04-03T19:02:06Z",
-      "updated_at": "2026-06-26T02:42:48Z",
-      "state": "open"
-    },
-    {
       "title": "[Bug]: ClawHub API returns Vercel Security Checkpoint (403) instead of JSON",
       "url": "https://github.com/openclaw/openclaw/issues/96820",
       "desc": "### Bug type\n\nRegression (worked before, now fails)\n\n### Beta release blocker\n\nNo\n\n### Summary\n\nAll ClawHub API endpoints return a Vercel Security Checkpoint HTML page\ninstead of JSON, making the CLI completely unusable.\n\nSteps to reproduce:\n  openclaw skills search \"calendar\"\n  openclaw skills install @<any-package>\n\nResult:\n  ClawHubRequestError: ClawHub /api/v1/search failed (403): <!DOCTYPE html>...\n  (Vercel Security Checkpoint page)\n\nAlso: clawhub.io SSL certificate appears to be expired.\n...",
@@ -976,119 +1085,9 @@
       "state": "open"
     },
     {
-      "title": "feat(security/exec): add tools.exec.denyPathPatterns hard-deny gate (#74379)",
-      "url": "https://github.com/openclaw/openclaw/pull/88075",
-      "desc": "## Summary\n\nAdds an opt-in `tools.exec.denyPathPatterns` — a config-level deny gate that blocks `exec` / `system.run` invocations whose path arguments match configured glob patterns, **before** allowlist/approval/safe-bin checks. A denied path (e.g. `~/.openclaw/secrets/**`, `**/.ssh/id_*`) cannot be reached via `security=\"full\"`, allow-always, or safe-bins.\n\n- New `src/infra/exec-deny-path.ts`: glob compilation, home-dir expansion, cwd-relative resolution, and best-effort POSIX shell `-c` paylo...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "docs",
-        "agents",
-        "size: L",
-        "proof: supplied",
-        "proof: sufficient",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author",
-        "feature: ✨ showcase"
-      ],
-      "created_at": "2026-05-29T16:45:38Z",
-      "updated_at": "2026-06-25T00:01:07Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] OAuth callback host/URI inconsistency allows authorization code interception (V-01)",
-      "url": "https://github.com/openclaw/openclaw/issues/96485",
-      "desc": "## Summary\n\n`OPENCLAW_OAUTH_CALLBACK_HOST` changes the address the local callback HTTP server listens on, but `REDIRECT_URI` is **hardcoded** to `http://localhost:53692/callback` regardless of that env var.\n\n## Location\n\n`src/llm/utils/oauth/anthropic.ts:49`\n\n```ts\nconst CALLBACK_HOST = process.env.OPENCLAW_OAUTH_CALLBACK_HOST || \"127.0.0.1\";\n// ...\nconst REDIRECT_URI = `http://localhost:${CALLBACK_PORT}${CALLBACK_PATH}`;  // always localhost\n```\n\n## Impact\n\n**Severity: Medium**\n\n1. **Normal mis...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "security",
-        "P2",
-        "clawsweeper:no-new-fix-pr",
-        "clawsweeper:needs-maintainer-review",
-        "clawsweeper:needs-security-review",
-        "clawsweeper:source-repro",
-        "impact:security",
-        "impact:auth-provider",
-        "issue-rating: 🦞 diamond lobster"
-      ],
-      "created_at": "2026-06-24T16:12:22Z",
-      "updated_at": "2026-06-24T16:31:16Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] CSRF risk via dangerouslyAllowHostHeaderOriginFallback on network-exposed gateway (V-02)",
-      "url": "https://github.com/openclaw/openclaw/issues/96486",
-      "desc": "## Summary\n\nWhen `gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback=true` is configured, the Control UI falls back from **Origin header verification** to trusting the `Host` header for CSRF protection. A gateway exposed beyond loopback with this flag set has no effective CSRF protection.\n\n## Location\n\n`src/security/core-dangerous-config-flags.ts:8`\n\n## Impact\n\n**Severity: Medium**\n\nIf the gateway is accessible from a LAN or via Tailscale and the operator visits a malicious web page, tha...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "未修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "P2",
-        "clawsweeper:no-new-fix-pr",
-        "clawsweeper:needs-maintainer-review",
-        "clawsweeper:needs-product-decision",
-        "clawsweeper:needs-security-review",
-        "impact:security",
-        "issue-rating: 🦪 silver shellfish"
-      ],
-      "created_at": "2026-06-24T16:12:40Z",
-      "updated_at": "2026-06-24T16:28:51Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] API keys stored as plaintext in env.vars config block (V-05)",
-      "url": "https://github.com/openclaw/openclaw/issues/96489",
-      "desc": "## Summary\n\nThe `env.vars` block in `openclaw.json` allows storing provider API keys and channel tokens directly in the config file as plaintext. Unlike `~/.openclaw/.env` (which has enforced file permissions of 0600), `openclaw.json` has no such enforcement and is routinely included in backups, cloud sync, and version control.\n\n## Location\n\n`src/config/types.openclaw.ts` — `env.vars` config type\n`src/infra/dotenv.ts` — loading implementation\n\nExample of at-risk config:\n```json\n{\n  \"env\": {\n    ...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "security",
-        "P2",
-        "clawsweeper:no-new-fix-pr",
-        "clawsweeper:needs-maintainer-review",
-        "clawsweeper:needs-product-decision",
-        "clawsweeper:needs-security-review",
-        "clawsweeper:source-repro",
-        "impact:security",
-        "impact:auth-provider",
-        "issue-rating: 🦞 diamond lobster"
-      ],
-      "created_at": "2026-06-24T16:13:15Z",
-      "updated_at": "2026-06-24T16:27:30Z",
-      "state": "open"
-    },
-    {
-      "title": "[Aikido] Fix 7 security issues in axios, undici",
-      "url": "https://github.com/cline/cline/pull/11694",
-      "desc": "Upgrade axios and undici to fix credential leakage on redirects, WebSocket DoS via unbounded fragments, malformed URL bypass, and HTTP header injection via cookie parsing.\n\r<details>\n\r<summary>✅ 7 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[AIKIDO-2026-38469](https://app.aikido.dev/issues/32369056/detail?groupId=39595#AIKIDO-202...",
+      "title": "[Aikido] Fix 18 security issues in axios, protobufjs, hono and 3 more",
+      "url": "https://github.com/cline/cline/pull/11898",
+      "desc": "Upgrade dependencies to fix credential leakage on redirects, WebSocket DoS via unbounded fragments, protobuf stack exhaustion, and malformed URL bypass vulnerabilities.\n\r<details>\n\r<summary>✅ 18 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[AIKIDO-2026-291630](https://app.aikido.dev/issues/32369056/detail?groupId=39595#AIKIDO-2026...",
       "source": "GitHub Issues",
       "repo": "cline/cline",
       "product": "Cline",
@@ -1106,11 +1105,23 @@
         "CVE-2026-11525",
         "CVE-2026-11525",
         "CVE-2026-6733",
-        "CVE-2026-6733"
+        "CVE-2026-6733",
+        "CVE-2026-48712",
+        "CVE-2026-48712",
+        "CVE-2026-54269",
+        "CVE-2026-54269",
+        "CVE-2026-41148",
+        "CVE-2026-41148",
+        "CVE-2026-41149",
+        "CVE-2026-41149",
+        "CVE-2026-41150",
+        "CVE-2026-41150",
+        "CVE-2026-41159",
+        "CVE-2026-41159"
       ],
       "labels": [],
-      "created_at": "2026-06-20T22:47:12Z",
-      "updated_at": "2026-06-24T23:11:45Z",
+      "created_at": "2026-06-26T22:50:20Z",
+      "updated_at": "2026-06-26T22:54:44Z",
       "state": "open"
     },
     {
@@ -2170,6 +2181,190 @@
       "state": "open"
     },
     {
+      "title": "security(gateway): scope /resume and /sessions to the caller's origin (IDOR)",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52355",
+      "desc": "/resume resolved a persisted session id/title with no ownership check on any\nadapter except Matrix, so an authorized caller could bind their gateway session\nto another user's/room's transcript and read it. The titled-session listing and\nnumeric index were also globally enumerable on non-Matrix platforms, exposing\nthe ids and previews needed to target the IDOR.\n\nGeneralize the Matrix-only room guard to an adapter-agnostic ownership check\n(live origin when active; DB row source + user_id for persi...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "area/auth",
+        "P1",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-25T05:48:19Z",
+      "updated_at": "2026-06-27T07:24:13Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): dashboard security hardening",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/13176",
+      "desc": "## What does this PR do?\r\n\r\nHardens the Hermes web dashboard's security posture so that even when a user legitimately uses the --insecure flag to bind to a non-localhost interface, the damage surface is meaningfully smaller than before.\r\n\r\n### Two complementary changes:\r\n\r\n1. Stop embedding the session token in server-rendered HTML. The dashboard previously injected `<script>window.__HERMES_SESSION_TOKEN__=\"<token>\"</script>` into index.html, which was served unauthenticated. Anyone in the netwo...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/tools",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary",
+        "comp/dashboard"
+      ],
+      "created_at": "2026-04-20T20:06:54Z",
+      "updated_at": "2026-06-27T02:09:56Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): gate plugin assets + extend write denylist",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/24886",
+      "desc": "## Summary\n\nTwo security hardening improvements for the dashboard and file write safety layer:\n\n1. **Plugin assets authentication** — The `/dashboard-plugins/{name}/{path}` route now requires a valid session token. Previously, this route was outside the `/api/` prefix and therefore not covered by the auth middleware. After this change, plugin static assets follow the same authentication rules as all other dashboard endpoints.\n\n2. **Write denylist extension** — `build_write_denied_paths()` now in...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary",
+        "comp/dashboard"
+      ],
+      "created_at": "2026-05-13T07:54:52Z",
+      "updated_at": "2026-06-26T23:46:37Z",
+      "state": "open"
+    },
+    {
+      "title": "security(memory): enforce user_id isolation in hermes_state session queries",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/26136",
+      "desc": "## Summary\n\nEnforces multi-user SQL isolation in `hermes_state.py` session queries.\n\n### What changed\n\n**Core (hermes_state.py):**\n- `_REQUIRED` sentinel pattern: `list_sessions_rich()`, `search_messages()`, `search_sessions()` now require `user_id`\n- Missing `user_id` raises `TypeError` (fail-closed, not fail-open)\n- `user_id=None` explicitly opts out (admin/CLI/single-user paths)\n- `user_id=str` adds `WHERE s.user_id = ?` to all SQL queries\n- `idx_sessions_user` index for query performance\n- `...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "信息泄露",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "comp/cli",
+        "comp/gateway",
+        "comp/tui",
+        "comp/acp",
+        "tool/memory",
+        "P2",
+        "sweeper:risk-session-state",
+        "sweeper:risk-security-boundary",
+        "comp/dashboard"
+      ],
+      "created_at": "2026-05-15T05:40:57Z",
+      "updated_at": "2026-06-26T23:36:34Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): denylist ~/.hermes/mcp-tokens/ for media delivery",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/37222",
+      "desc": "## This is a sibling follow-up to commit 4ec0adebe (#35634 family)\n\n- #35634 / commit `4ec0adebe` covered: media-delivery denylist now blocks `~/.hermes/config.yaml` (joining the existing `.env`, `auth.json`, `credentials/`).\n- That family did NOT touch: `~/.hermes/mcp-tokens/` — the directory holding live MCP OAuth **access tokens** (`<server>.json`) and dynamically-registered OAuth **client credentials** (`<server>.client.json`), layout per `tools/mcp_oauth.py`.\n- This PR adds the same per-Her...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "tool/mcp",
+        "area/auth",
+        "P1",
+        "sweeper:risk-message-delivery",
+        "sweeper:risk-security-boundary",
+        "sweeper:blast-moderate"
+      ],
+      "created_at": "2026-06-02T05:18:36Z",
+      "updated_at": "2026-06-26T23:31:00Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(dashboard): add browser security headers",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/26816",
+      "desc": "## Summary\n\n- Add browser security headers to the local dashboard FastAPI server.\n- Use a dashboard-compatible CSP that keeps same-origin assets, the required inline token bootstrap, and loopback WebSocket channels working while blocking framing and broad resource loading.\n- Cover both public dashboard API responses and auth-denied API responses in regression tests.\n\nCloses #16456.\nRelated #7487.\n\n## Verification\n\nReal environment tested: macOS local workstation, Python 3.11.13 via existing Herm...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "P3",
+        "sweeper:risk-security-boundary",
+        "comp/dashboard"
+      ],
+      "created_at": "2026-05-16T07:43:07Z",
+      "updated_at": "2026-06-26T23:25:31Z",
+      "state": "open"
+    },
+    {
+      "title": "fix: address 14 security and code quality findings from audit",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/26863",
+      "desc": "## Summary\n\nComprehensive security audit identified 1 Critical, 4 High, 6 Medium, and 2 Low issues. This PR fixes all 14 actionable findings (1 was already resolved upstream).\n\n## Changes\n\n### Critical\n- **C1** `model_tools.py` — Add `threading.Lock` around `_last_resolved_tool_names` global to prevent race conditions when multiple gateway sessions call `get_tool_definitions()` concurrently\n\n### High\n- **H1** `hermes_cli/web_server.py` + `web/src/pages/ChatPage.tsx` — Switch PTY WebSocket auth f...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "comp/cli",
+        "comp/gateway",
+        "comp/tui",
+        "comp/cron",
+        "tool/terminal",
+        "tool/file",
+        "tool/delegate",
+        "platform/webhook",
+        "P1",
+        "sweeper:risk-security-boundary",
+        "comp/dashboard"
+      ],
+      "created_at": "2026-05-16T10:01:40Z",
+      "updated_at": "2026-06-26T23:25:25Z",
+      "state": "open"
+    },
+    {
       "title": "fix: harden verified security boundaries",
       "url": "https://github.com/NousResearch/hermes-agent/pull/35130",
       "desc": "## Summary\n\nRemediates 28 verified Hermes Agent security findings across command authorization, approval isolation, file/path confinement, SSRF hardening, webhook authentication, dashboard auth, TUI session isolation, and unsafe comparison boundaries.\n\n## Commits\n\n- 4e7cbfbe2 fix: scope TUI gateway sessions by dashboard identity\n- 5d4586a5d fix: harden verified security boundaries\n\n## Validation\n\nFocused Python validation passed across the affected security areas, including:\n\n- approval isolatio...",
@@ -2497,170 +2692,33 @@
       "state": "open"
     },
     {
-      "title": "fix(security): detect and block commands that destroy agent's own runtime",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/7780",
-      "desc": "## What\n\nAdds a **non-bypassable hard block** in `check_all_command_guards()` that prevents commands from destroying the agent's own Python runtime. The guard runs *before* all bypass logic (yolo mode, `force=True`, smart approval, container skip).\n\nIntroduces `detect_runtime_mutation()` — a structural (non-regex) check that parses shell commands with `shlex`, extracts target paths from known environment-mutating commands, resolves them against cwd, and flags the command when the target resolves...",
+      "title": "[Tracker]: v0.9.0 auth, security, gateway, and breaking-change queue and history",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/7432",
+      "desc": "## Summary\n\nThis tracker is the current public coordination surface for v0.9.0: auth, security hardening, gateway boundaries, A2A/multi-agent boundaries, tool policy, and breaking-change work.\n\nLast live refresh: 2026-06-27. Live milestone state at refresh: 110 open items (9 PRs, 101 issues).\n\n## Current queue map\n\nThis section is rebuilt from the live GitHub milestone. Keep items in the milestone when they are release-planning commitments; move or remove the milestone when an item no longer bel...",
       "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
+      "repo": "zeroclaw-labs/zeroclaw",
+      "product": "Claude Code",
       "type": [
         "远程代码执行",
+        "未修复",
         "已修复"
       ],
       "level": "严重",
       "cve": [],
       "labels": [
-        "type/security",
-        "comp/tools",
-        "tool/terminal",
-        "P1",
-        "sweeper:risk-security-boundary"
+        "enhancement",
+        "config",
+        "gateway",
+        "runtime",
+        "security",
+        "domain:security",
+        "domain:architecture",
+        "priority:p2",
+        "status:accepted",
+        "risk:high"
       ],
-      "created_at": "2026-04-11T15:06:28Z",
-      "updated_at": "2026-06-26T14:41:39Z",
-      "state": "open"
-    },
-    {
-      "title": "feat(security): opt-in encryption-at-rest and credential hardening",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/32783",
-      "desc": "## Summary\r\n\r\nAdds an opt-in encryption-at-rest layer for Hermes Agent. When enabled via `hermes encrypt enable`, sensitive files under `HERMES_HOME` (`.env`, `auth.json`, OAuth tokens, and — optionally — `state.db` / `kanban.db`) are stored AES-256-GCM encrypted and decrypted into process memory only at runtime. Everything is off by default; an existing install is unaffected unless the operator explicitly enables it.\r\n\r\nPairs naturally with a runtime sandbox (e.g. NVIDIA OpenShell) — this PR co...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "未修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "type/feature",
-        "comp/agent",
-        "comp/cli",
-        "tool/code-exec",
-        "backend/local",
-        "area/auth",
-        "P3",
-        "needs-decision",
-        "sweeper:risk-security-boundary",
-        "sweeper:risk-compatibility"
-      ],
-      "created_at": "2026-05-26T19:41:02Z",
-      "updated_at": "2026-06-26T14:11:06Z",
-      "state": "open"
-    },
-    {
-      "title": "security(agent): redact Slack Socket Mode app tokens in logs",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/5282",
-      "desc": "###  Problem Description\r\nWhile bot and user tokens (`xoxb-`, `xoxp-`) were already being correctly redacted by the centralized logging utility, I noticed that Slack **App-level tokens** (`xapp-`) used for Socket Mode were slipping through and being logged in plain text during connection retries or adapter exceptions.\r\n\r\nThis created an inconsistency in how Slack credentials were handled across the codebase, specifically in `gateway/platforms/slack.py`.\r\n\r\n###  Proposed Changes\r\n- **Pattern Upda...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/agent",
-        "platform/slack",
-        "P2",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-04-05T18:43:24Z",
-      "updated_at": "2026-06-26T14:10:58Z",
-      "state": "open"
-    },
-    {
-      "title": "security(delegate): restrict model-controlled acp_command to the supported ACP transport",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/52346",
-      "desc": "delegate_task exposes acp_command / acp_args as free-form, model-controllable\ntool-call arguments. They propagate unvalidated through child construction into\nsubprocess.Popen([acp_command] + acp_args, ...) (agent/copilot_acp_client.py),\nso a prompt-injected delegate_task call with acp_command=\"python\" (or\npowershell/bash + inline code in acp_args) is arbitrary host-process execution\nthat bypasses the terminal backend's sandboxing and command approvals — a\nmodel-reachable RCE crossing the OS boun...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "tool/delegate",
-        "P1",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-06-25T05:47:16Z",
-      "updated_at": "2026-06-26T14:05:03Z",
-      "state": "open"
-    },
-    {
-      "title": "security(agent): strip Hermes secrets from codex/copilot subprocess env",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/52348",
-      "desc": "The codex app-server and copilot ACP transports spawn model-driven coding\nagents (they execute model-chosen tool calls) but build the child env from a\nbare os.environ.copy(), bypassing the standard _sanitize_subprocess_env\nscrubber used at the other six spawn sites. The child therefore inherits every\nHermes-managed secret: provider API keys/OAuth, HERMES_DASHBOARD_SESSION_TOKEN,\nGATEWAY_ALLOWED_USERS, GH_TOKEN, GITHUB_APP_PRIVATE_KEY_PATH, MODAL/DAYTONA\ntokens. A model-controlled action can read...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/agent",
-        "comp/acp",
-        "area/auth",
-        "P1",
-        "codex",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-06-25T05:48:03Z",
-      "updated_at": "2026-06-26T14:04:54Z",
-      "state": "open"
-    },
-    {
-      "title": "security(browser): enforce cloud-metadata floor on all backends; CDP is non-local",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/52349",
-      "desc": "browser_navigate's always-blocked cloud-metadata floor (169.254.169.254,\nmetadata.google.internal, ECS/Azure/GCP IMDS) was gated on\n`not _is_local_backend()`, contradicting both the adjacent comment and the\nis_always_blocked_url docstring (\"denied regardless of backend\"). A default\nlocal headless Chromium on a cloud VM — or an off-host CDP browser — could\nnavigate to IMDS and read instance credentials into the model context. Make the\nfloor unconditional on the initial-nav and post-redirect paths...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "tool/browser",
-        "P1",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-06-25T05:48:06Z",
-      "updated_at": "2026-06-26T14:04:44Z",
-      "state": "open"
-    },
-    {
-      "title": "security(mcp): scrub all secret headers on cross-origin redirects",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/52350",
-      "desc": "Remote MCP servers are configured with custom auth headers (X-API-Key, vendor\ntokens, ${VAR} secrets). Every authenticated HTTP path followed redirects with\nthose headers attached, and the only scrubber stripped Authorization alone\n(which httpx already strips) — custom secret headers leaked to a redirect target\norigin. Three paths had no scrubbing at all: the preflight probe, the\ndefault-TLS SSE client, and the deprecated streamablehttp client.\n\nAdd one shared _make_redirect_secret_scrubber (str...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "tool/mcp",
-        "area/auth",
-        "P2",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-06-25T05:48:08Z",
-      "updated_at": "2026-06-26T14:04:33Z",
+      "created_at": "2026-06-09T13:43:32Z",
+      "updated_at": "2026-06-27T06:03:11Z",
       "state": "open"
     },
     {
@@ -2767,36 +2825,6 @@
       ],
       "created_at": "2026-06-15T11:06:14Z",
       "updated_at": "2026-06-26T18:04:38Z",
-      "state": "open"
-    },
-    {
-      "title": "[Tracker]: v0.9.0 auth, security, gateway, and breaking-change queue and history",
-      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/7432",
-      "desc": "## Summary\n\nThis tracker is the current public coordination surface for v0.9.0: auth, security hardening, gateway boundaries, A2A/multi-agent boundaries, tool policy, and breaking-change work.\n\nLast live refresh: 2026-06-25T06:16:54Z. Live milestone state at refresh: 116 open items (13 PRs, 103 issues).\n\n## Current queue map\n\nThis section is rebuilt from the live GitHub milestone. Keep items in the milestone when they are release-planning commitments; move or remove the milestone when an item no...",
-      "source": "GitHub Issues",
-      "repo": "zeroclaw-labs/zeroclaw",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行",
-        "未修复",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "enhancement",
-        "config",
-        "gateway",
-        "runtime",
-        "security",
-        "domain:security",
-        "domain:architecture",
-        "priority:p2",
-        "status:accepted",
-        "risk:high"
-      ],
-      "created_at": "2026-06-09T13:43:32Z",
-      "updated_at": "2026-06-26T18:03:01Z",
       "state": "open"
     },
     {
@@ -3369,44 +3397,7 @@
       "cve": [],
       "labels": [],
       "created_at": "2026-06-26T22:33:23Z",
-      "updated_at": "2026-06-26T22:33:23Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] `exec.allowPatterns` shell-chain bypass allows unintended command execution",
-      "url": "https://github.com/HKUDS/nanobot/issues/4521",
-      "desc": "### Advisory Details\n\n**Title**: `exec.allowPatterns` shell-chain bypass allows unintended command execution\n\n**Description**:\n\n### Summary\n\n`nanobot`'s `exec` tool can be configured with `tools.exec.allowPatterns` so operators can limit which shell commands are allowed to run. In affected versions, the allowlist check is applied to the raw command string with `re.search(...)`, and the same raw string is later executed via `bash -c`. This lets an attacker append an extra shell segment such as `&...",
-      "source": "GitHub Issues",
-      "repo": "HKUDS/nanobot",
-      "product": "NanoBot",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-06-25T09:14:02Z",
-      "updated_at": "2026-06-25T09:14:02Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security] Default login-shell execution in `exec` reintroduces secrets from shell startup files",
-      "url": "https://github.com/HKUDS/nanobot/issues/4518",
-      "desc": "### Advisory Details\n\n**Title**: Default login-shell execution in `exec` reintroduces secrets from shell startup files\n\n**Description**:\n\n### Summary\n\n`nanobot`'s built-in `exec` tool tries to run child commands with a curated Unix environment, but it also defaults to login-shell execution for `bash` and `zsh`. Because login shells read startup files such as `~/.bash_profile`, an attacker who can trigger a normal `exec` tool call can recover secrets that those startup files export, even though t...",
-      "source": "GitHub Issues",
-      "repo": "HKUDS/nanobot",
-      "product": "NanoBot",
-      "type": [
-        "远程代码执行",
-        "信息泄露",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-06-25T09:13:28Z",
-      "updated_at": "2026-06-25T09:13:28Z",
+      "updated_at": "2026-06-27T04:31:37Z",
       "state": "open"
     },
     {
@@ -4124,6 +4115,97 @@
       "created_at": "2026-03-20T22:51:09Z",
       "updated_at": "2026-03-20T22:51:09Z",
       "state": "open"
+    },
+    {
+      "title": "[GHSA] pnpm: `patch-remove` could delete project-selected files outside the patches directory",
+      "url": "https://github.com/advisories/GHSA-72r4-9c5j-mj57",
+      "desc": "## Summary\n\nThe `patch-remove` deletion-scope issue tracked as GHSA-72r4-9c5j-mj57 / CAND-PNPM-030 has been addressed in pnpm.\n\nA crafted patch entry could resolve outside the configured patches directory and cause `pnpm patch-remove` to delete an arbitrary reachable file. This patch validates the configured directory and every resolved target before unlinking anything, then deletes the final directory entry without following it.\n\n## Security boundary\n\n- Traversal and absolute paths that resolve...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "ghsa_id": "GHSA-72r4-9c5j-mj57",
+      "severity": "high",
+      "created_at": "2026-06-27T00:12:39Z",
+      "updated_at": "2026-06-27T00:12:40Z"
+    },
+    {
+      "title": "[GHSA] pnpm: Hoisted install imports lockfile alias outside node_modules",
+      "url": "https://github.com/advisories/GHSA-fr4h-3cph-29xv",
+      "desc": "## Summary\n\nThe hoisted dependency alias issue tracked as GHSA-fr4h-3cph-29xv / CAND-PNPM-059 has been addressed in both pnpm and pacquet.\n\nA crafted lockfile alias could be joined directly under a hoisted `node_modules` directory. Traversal aliases could escape that directory, while reserved aliases such as `.bin` or `.pnpm` could overwrite pnpm-owned layout. This patch validates package-name semantics and path containment before graph insertion or filesystem work.\n\n## Security boundary\n\n- The ...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "ghsa_id": "GHSA-fr4h-3cph-29xv",
+      "severity": "high",
+      "created_at": "2026-06-27T00:02:51Z",
+      "updated_at": "2026-06-27T00:03:05Z"
+    },
+    {
+      "title": "[GHSA] pnpm: Project env lockfile can short-circuit package-manager resolution and execute lockfile-selecte",
+      "url": "https://github.com/advisories/GHSA-w466-c33r-3gjp",
+      "desc": "<!-- maintainer-action:start -->\n## Maintainer Action Plan\n\nThis report is ready to review with the shared patch branch. Start with the PR and the expected fixed behavior, then use the detailed exploit narrative below only if you want to replay the original path.\n\n- Advisory: `CAND-PNPM-063` / `GHSA-w466-c33r-3gjp`\n- Advisory URL: https://github.com/pnpm/pnpm/security/advisories/GHSA-w466-c33r-3gjp\n- Shared patch PR: https://github.com/pnpm/pnpm-ghsa-j2hc-m6cf-6jm8/pull/1\n- Shared patch branch: ...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [
+        "CVE-2026-55698"
+      ],
+      "ghsa_id": "GHSA-w466-c33r-3gjp",
+      "severity": "high",
+      "created_at": "2026-06-26T23:34:06Z",
+      "updated_at": "2026-06-26T23:34:07Z"
+    },
+    {
+      "title": "[GHSA] pnpm: Manifest identity spoof satisfies allowBuilds and runs attacker lifecycle",
+      "url": "https://github.com/advisories/GHSA-5wx6-mg75-v57r",
+      "desc": "## Summary\n\nKeep build approval for opaque dependency sources byte-exact for GHSA-5wx6-mg75-v57r / CAND-PNPM-123.\n\nMerged upstream commit `bf1b731ee6` fixed the original name-only approval bypass by making build policy consume the resolved dependency identity. One collision remained: the generic peer-suffix normalizer also stripped parenthesized text from git, URL, tarball, file, and other opaque locators. Approval for one source string could therefore authorize a different attacker-controlled s...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Continue",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [
+        "CVE-2026-55487"
+      ],
+      "ghsa_id": "GHSA-5wx6-mg75-v57r",
+      "severity": "high",
+      "created_at": "2026-06-26T23:18:13Z",
+      "updated_at": "2026-06-26T23:18:14Z"
+    },
+    {
+      "title": "[GHSA] Nezha Monitoring: Authenticated users can claim the dashboard Host through NAT and preempt all dashb",
+      "url": "https://github.com/advisories/GHSA-x6fg-52vr-hj4w",
+      "desc": "### Summary\nAn authenticated non-admin user who owns any server can create or update a NAT profile whose `domain` is equal to the dashboard's own HTTP Host (for example, `dashboard.example:8008`). The dashboard's top-level HTTP/gRPC multiplexer checks `NATShared.GetNATConfigByDomain(r.Host)` before dispatching requests to the dashboard API, frontend, or gRPC handler, so a member-controlled NAT profile for the dashboard Host takes precedence over the real dashboard.\n\nA disabled claimed NAT profil...",
+      "source": "GitHub Security Advisory",
+      "repo": "unknown",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [
+        "CVE-2026-53520"
+      ],
+      "ghsa_id": "GHSA-x6fg-52vr-hj4w",
+      "severity": "medium",
+      "created_at": "2026-06-26T23:00:14Z",
+      "updated_at": "2026-06-26T23:00:14Z"
     },
     {
       "title": "[GHSA] PhpWeasyPrint vulnerable to arbitrary file deletion at shutdown via public $temporaryFiles",
@@ -5292,6 +5374,348 @@
       "updated_at": "2023-01-10T02:57:02Z"
     },
     {
+      "title": "feat(security/exec): add tools.exec.denyPathPatterns hard-deny gate (#74379)",
+      "url": "https://github.com/openclaw/openclaw/pull/88075",
+      "desc": "## Summary\n\nAdds an opt-in `tools.exec.denyPathPatterns` — a config-level deny gate that blocks `exec` / `system.run` invocations whose path arguments match configured glob patterns, **before** allowlist/approval/safe-bin checks. A denied path (e.g. `~/.openclaw/secrets/**`, `**/.ssh/id_*`) cannot be reached via `security=\"full\"`, allow-always, or safe-bins.\n\n- New `src/infra/exec-deny-path.ts`: glob compilation, home-dir expansion, cwd-relative resolution, and best-effort POSIX shell `-c` paylo...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "docs",
+        "agents",
+        "size: L",
+        "proof: supplied",
+        "proof: sufficient",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author",
+        "feature: ✨ showcase"
+      ],
+      "created_at": "2026-05-29T16:45:38Z",
+      "updated_at": "2026-06-25T00:01:07Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] OAuth callback host/URI inconsistency allows authorization code interception (V-01)",
+      "url": "https://github.com/openclaw/openclaw/issues/96485",
+      "desc": "## Summary\n\n`OPENCLAW_OAUTH_CALLBACK_HOST` changes the address the local callback HTTP server listens on, but `REDIRECT_URI` is **hardcoded** to `http://localhost:53692/callback` regardless of that env var.\n\n## Location\n\n`src/llm/utils/oauth/anthropic.ts:49`\n\n```ts\nconst CALLBACK_HOST = process.env.OPENCLAW_OAUTH_CALLBACK_HOST || \"127.0.0.1\";\n// ...\nconst REDIRECT_URI = `http://localhost:${CALLBACK_PORT}${CALLBACK_PATH}`;  // always localhost\n```\n\n## Impact\n\n**Severity: Medium**\n\n1. **Normal mis...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "security",
+        "P2",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:needs-maintainer-review",
+        "clawsweeper:needs-security-review",
+        "clawsweeper:source-repro",
+        "impact:security",
+        "impact:auth-provider",
+        "issue-rating: 🦞 diamond lobster"
+      ],
+      "created_at": "2026-06-24T16:12:22Z",
+      "updated_at": "2026-06-24T16:31:16Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] CSRF risk via dangerouslyAllowHostHeaderOriginFallback on network-exposed gateway (V-02)",
+      "url": "https://github.com/openclaw/openclaw/issues/96486",
+      "desc": "## Summary\n\nWhen `gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback=true` is configured, the Control UI falls back from **Origin header verification** to trusting the `Host` header for CSRF protection. A gateway exposed beyond loopback with this flag set has no effective CSRF protection.\n\n## Location\n\n`src/security/core-dangerous-config-flags.ts:8`\n\n## Impact\n\n**Severity: Medium**\n\nIf the gateway is accessible from a LAN or via Tailscale and the operator visits a malicious web page, tha...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "P2",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:needs-maintainer-review",
+        "clawsweeper:needs-product-decision",
+        "clawsweeper:needs-security-review",
+        "impact:security",
+        "issue-rating: 🦪 silver shellfish"
+      ],
+      "created_at": "2026-06-24T16:12:40Z",
+      "updated_at": "2026-06-24T16:28:51Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] API keys stored as plaintext in env.vars config block (V-05)",
+      "url": "https://github.com/openclaw/openclaw/issues/96489",
+      "desc": "## Summary\n\nThe `env.vars` block in `openclaw.json` allows storing provider API keys and channel tokens directly in the config file as plaintext. Unlike `~/.openclaw/.env` (which has enforced file permissions of 0600), `openclaw.json` has no such enforcement and is routinely included in backups, cloud sync, and version control.\n\n## Location\n\n`src/config/types.openclaw.ts` — `env.vars` config type\n`src/infra/dotenv.ts` — loading implementation\n\nExample of at-risk config:\n```json\n{\n  \"env\": {\n    ...",
+      "source": "GitHub Issues",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "security",
+        "P2",
+        "clawsweeper:no-new-fix-pr",
+        "clawsweeper:needs-maintainer-review",
+        "clawsweeper:needs-product-decision",
+        "clawsweeper:needs-security-review",
+        "clawsweeper:source-repro",
+        "impact:security",
+        "impact:auth-provider",
+        "issue-rating: 🦞 diamond lobster"
+      ],
+      "created_at": "2026-06-24T16:13:15Z",
+      "updated_at": "2026-06-24T16:27:30Z",
+      "state": "open"
+    },
+    {
+      "title": "[Aikido] Fix 7 security issues in axios, undici",
+      "url": "https://github.com/cline/cline/pull/11694",
+      "desc": "Upgrade axios and undici to fix credential leakage on redirects, WebSocket DoS via unbounded fragments, malformed URL bypass, and HTTP header injection via cookie parsing.\n\r<details>\n\r<summary>✅ 7 CVEs resolved by this upgrade</summary>\n\r<br>\n\r\n\rThis PR will resolve the following CVEs:\n\r| Issue | Severity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |\n| --- | --- | --- |\n| <pre>[AIKIDO-2026-38469](https://app.aikido.dev/issues/32369056/detail?groupId=39595#AIKIDO-202...",
+      "source": "GitHub Issues",
+      "repo": "cline/cline",
+      "product": "Cline",
+      "type": [
+        "远程代码执行",
+        "信息泄露",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2026-12151",
+        "CVE-2026-12151",
+        "CVE-2026-9679",
+        "CVE-2026-9679",
+        "CVE-2026-11525",
+        "CVE-2026-11525",
+        "CVE-2026-6733",
+        "CVE-2026-6733"
+      ],
+      "labels": [],
+      "created_at": "2026-06-20T22:47:12Z",
+      "updated_at": "2026-06-24T23:11:45Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): detect and block commands that destroy agent's own runtime",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/7780",
+      "desc": "## What\n\nAdds a **non-bypassable hard block** in `check_all_command_guards()` that prevents commands from destroying the agent's own Python runtime. The guard runs *before* all bypass logic (yolo mode, `force=True`, smart approval, container skip).\n\nIntroduces `detect_runtime_mutation()` — a structural (non-regex) check that parses shell commands with `shlex`, extracts target paths from known environment-mutating commands, resolves them against cwd, and flags the command when the target resolves...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/tools",
+        "tool/terminal",
+        "P1",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-04-11T15:06:28Z",
+      "updated_at": "2026-06-26T14:41:39Z",
+      "state": "open"
+    },
+    {
+      "title": "feat(security): opt-in encryption-at-rest and credential hardening",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/32783",
+      "desc": "## Summary\r\n\r\nAdds an opt-in encryption-at-rest layer for Hermes Agent. When enabled via `hermes encrypt enable`, sensitive files under `HERMES_HOME` (`.env`, `auth.json`, OAuth tokens, and — optionally — `state.db` / `kanban.db`) are stored AES-256-GCM encrypted and decrypted into process memory only at runtime. Everything is off by default; an existing install is unaffected unless the operator explicitly enables it.\r\n\r\nPairs naturally with a runtime sandbox (e.g. NVIDIA OpenShell) — this PR co...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/feature",
+        "comp/agent",
+        "comp/cli",
+        "tool/code-exec",
+        "backend/local",
+        "area/auth",
+        "P3",
+        "needs-decision",
+        "sweeper:risk-security-boundary",
+        "sweeper:risk-compatibility"
+      ],
+      "created_at": "2026-05-26T19:41:02Z",
+      "updated_at": "2026-06-26T14:11:06Z",
+      "state": "open"
+    },
+    {
+      "title": "security(agent): redact Slack Socket Mode app tokens in logs",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/5282",
+      "desc": "###  Problem Description\r\nWhile bot and user tokens (`xoxb-`, `xoxp-`) were already being correctly redacted by the centralized logging utility, I noticed that Slack **App-level tokens** (`xapp-`) used for Socket Mode were slipping through and being logged in plain text during connection retries or adapter exceptions.\r\n\r\nThis created an inconsistency in how Slack credentials were handled across the codebase, specifically in `gateway/platforms/slack.py`.\r\n\r\n###  Proposed Changes\r\n- **Pattern Upda...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "platform/slack",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-04-05T18:43:24Z",
+      "updated_at": "2026-06-26T14:10:58Z",
+      "state": "open"
+    },
+    {
+      "title": "security(delegate): restrict model-controlled acp_command to the supported ACP transport",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52346",
+      "desc": "delegate_task exposes acp_command / acp_args as free-form, model-controllable\ntool-call arguments. They propagate unvalidated through child construction into\nsubprocess.Popen([acp_command] + acp_args, ...) (agent/copilot_acp_client.py),\nso a prompt-injected delegate_task call with acp_command=\"python\" (or\npowershell/bash + inline code in acp_args) is arbitrary host-process execution\nthat bypasses the terminal backend's sandboxing and command approvals — a\nmodel-reachable RCE crossing the OS boun...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "tool/delegate",
+        "P1",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-25T05:47:16Z",
+      "updated_at": "2026-06-26T14:05:03Z",
+      "state": "open"
+    },
+    {
+      "title": "security(agent): strip Hermes secrets from codex/copilot subprocess env",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52348",
+      "desc": "The codex app-server and copilot ACP transports spawn model-driven coding\nagents (they execute model-chosen tool calls) but build the child env from a\nbare os.environ.copy(), bypassing the standard _sanitize_subprocess_env\nscrubber used at the other six spawn sites. The child therefore inherits every\nHermes-managed secret: provider API keys/OAuth, HERMES_DASHBOARD_SESSION_TOKEN,\nGATEWAY_ALLOWED_USERS, GH_TOKEN, GITHUB_APP_PRIVATE_KEY_PATH, MODAL/DAYTONA\ntokens. A model-controlled action can read...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "comp/acp",
+        "area/auth",
+        "P1",
+        "codex",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-25T05:48:03Z",
+      "updated_at": "2026-06-26T14:04:54Z",
+      "state": "open"
+    },
+    {
+      "title": "security(browser): enforce cloud-metadata floor on all backends; CDP is non-local",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52349",
+      "desc": "browser_navigate's always-blocked cloud-metadata floor (169.254.169.254,\nmetadata.google.internal, ECS/Azure/GCP IMDS) was gated on\n`not _is_local_backend()`, contradicting both the adjacent comment and the\nis_always_blocked_url docstring (\"denied regardless of backend\"). A default\nlocal headless Chromium on a cloud VM — or an off-host CDP browser — could\nnavigate to IMDS and read instance credentials into the model context. Make the\nfloor unconditional on the initial-nav and post-redirect paths...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "tool/browser",
+        "P1",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-25T05:48:06Z",
+      "updated_at": "2026-06-26T14:04:44Z",
+      "state": "open"
+    },
+    {
+      "title": "security(mcp): scrub all secret headers on cross-origin redirects",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52350",
+      "desc": "Remote MCP servers are configured with custom auth headers (X-API-Key, vendor\ntokens, ${VAR} secrets). Every authenticated HTTP path followed redirects with\nthose headers attached, and the only scrubber stripped Authorization alone\n(which httpx already strips) — custom secret headers leaked to a redirect target\norigin. Three paths had no scrubbing at all: the preflight probe, the\ndefault-TLS SSE client, and the deprecated streamablehttp client.\n\nAdd one shared _make_redirect_secret_scrubber (str...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "tool/mcp",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-25T05:48:08Z",
+      "updated_at": "2026-06-26T14:04:33Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] `exec.allowPatterns` shell-chain bypass allows unintended command execution",
+      "url": "https://github.com/HKUDS/nanobot/issues/4521",
+      "desc": "### Advisory Details\n\n**Title**: `exec.allowPatterns` shell-chain bypass allows unintended command execution\n\n**Description**:\n\n### Summary\n\n`nanobot`'s `exec` tool can be configured with `tools.exec.allowPatterns` so operators can limit which shell commands are allowed to run. In affected versions, the allowlist check is applied to the raw command string with `re.search(...)`, and the same raw string is later executed via `bash -c`. This lets an attacker append an extra shell segment such as `&...",
+      "source": "GitHub Issues",
+      "repo": "HKUDS/nanobot",
+      "product": "NanoBot",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-25T09:14:02Z",
+      "updated_at": "2026-06-25T09:14:02Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security] Default login-shell execution in `exec` reintroduces secrets from shell startup files",
+      "url": "https://github.com/HKUDS/nanobot/issues/4518",
+      "desc": "### Advisory Details\n\n**Title**: Default login-shell execution in `exec` reintroduces secrets from shell startup files\n\n**Description**:\n\n### Summary\n\n`nanobot`'s built-in `exec` tool tries to run child commands with a curated Unix environment, but it also defaults to login-shell execution for `bash` and `zsh`. Because login shells read startup files such as `~/.bash_profile`, an attacker who can trigger a normal `exec` tool call can recover secrets that those startup files export, even though t...",
+      "source": "GitHub Issues",
+      "repo": "HKUDS/nanobot",
+      "product": "NanoBot",
+      "type": [
+        "远程代码执行",
+        "信息泄露",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-06-25T09:13:28Z",
+      "updated_at": "2026-06-25T09:13:28Z",
+      "state": "open"
+    },
+    {
       "title": "[Security] tools.exec.applyPatch.workspaceOnly=false allows arbitrary file write outside agent workspace (B-02)",
       "url": "https://github.com/openclaw/openclaw/issues/96491",
       "desc": "## Summary\n\nSetting `tools.exec.applyPatch.workspaceOnly=false` removes the restriction that limits the `apply-patch` tool to files within the agent's workspace directory. With this flag an AI agent can apply patches to **any file** the OS user has write access to. The current audit severity for this flag (`INFO`/`WARN`) is too low given the potential impact.\n\n## Location\n\n`src/security/core-dangerous-config-flags.ts:22`\n\n```ts\nif (cfg.tools?.exec?.applyPatch?.workspaceOnly === false) {\n  enable...",
@@ -5439,30 +5863,6 @@
       ],
       "created_at": "2026-06-25T05:48:17Z",
       "updated_at": "2026-06-26T14:03:54Z",
-      "state": "open"
-    },
-    {
-      "title": "security(gateway): scope /resume and /sessions to the caller's origin (IDOR)",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/52355",
-      "desc": "/resume resolved a persisted session id/title with no ownership check on any\nadapter except Matrix, so an authorized caller could bind their gateway session\nto another user's/room's transcript and read it. The titled-session listing and\nnumeric index were also globally enumerable on non-Matrix platforms, exposing\nthe ids and previews needed to target the IDOR.\n\nGeneralize the Matrix-only room guard to an adapter-agnostic ownership check\n(live origin when active; DB row source + user_id for persi...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/gateway",
-        "area/auth",
-        "P1",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-06-25T05:48:19Z",
-      "updated_at": "2026-06-26T14:03:43Z",
       "state": "open"
     },
     {
