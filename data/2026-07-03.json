@@ -1,30 +1,30 @@
 {
   "summary": {
-    "total": 272,
-    "generated_at": "2026-07-03T06:31:32.860155+08:00",
+    "total": 295,
+    "generated_at": "2026-07-03T15:41:39.042541+08:00",
     "date": "2026-07-03",
     "by_type": {
-      "已修复": 172,
-      "远程代码执行": 127,
-      "未修复": 70,
-      "提示注入": 25,
+      "已修复": 185,
+      "远程代码执行": 137,
+      "未修复": 76,
+      "提示注入": 26,
       "供应链攻击": 9,
       "信息泄露": 6,
       "权限绕过": 4,
       "沙箱逃逸": 4
     },
     "by_level": {
-      "严重": 135,
-      "高危": 62,
-      "低危": 52,
-      "中危": 23
+      "严重": 146,
+      "高危": 69,
+      "低危": 56,
+      "中危": 24
     },
     "by_product": {
-      "Claude Code": 75,
+      "Claude Code": 88,
       "Continue": 34,
-      "Hermes Agent": 25,
+      "Hermes Agent": 34,
       "通用AI编程工具": 25,
-      "OpenClaw": 18,
+      "OpenClaw": 19,
       "NanoBot": 18,
       "Aider": 16,
       "Cline": 15,
@@ -37,8 +37,8 @@
       "Cursor": 2
     },
     "by_source": {
-      "GitHub Issues": 196,
-      "Hacker News": 50,
+      "GitHub Issues": 217,
+      "Hacker News": 52,
       "GitHub Security Advisory": 15,
       "OSV.dev": 11
     },
@@ -66,6 +66,250 @@
     ]
   },
   "items": [
+    {
+      "title": "Peer-message security boilerplate fires on idle_notification status pings, spamming mobile UI",
+      "url": "https://github.com/anthropics/claude-code/issues/73647",
+      "desc": "## Summary\n\nThe peer-message security boilerplate (\"Another Claude session sent a message...\") prepends **every** teammate message, including structured `idle_notification` status pings that contain no actionable request. On mobile Remote Control this eats ~80% of screen height per message and repeats every time a background agent signals idle.\n\n## Full text of the injected warning (verbatim, for search)\n\nThe full text that fires on every teammate message is:\n\n> Another Claude session sent a mes...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "has repro",
+        "area:agents"
+      ],
+      "created_at": "2026-07-03T00:03:58Z",
+      "updated_at": "2026-07-03T06:26:31Z",
+      "state": "open"
+    },
+    {
+      "title": "SIGKILL from macOS 24h disk-write budget mislabeled as \"blocked by endpoint security\" on unmanaged personal Mac (~2.1 GB launch write burst, Cowork VM pre-warm)",
+      "url": "https://github.com/anthropics/claude-code/issues/73723",
+      "desc": "## Summary\n\nOn an **unmanaged personal Mac** (no MDM, no EDR), Claude Code was repeatedly SIGKILLed by macOS's per-process 24-hour disk-write budget, and Claude Code's crash detector mislabeled every kill as **\"blocked by endpoint security\"** — advising the user to \"ask IT to allowlist Team ID Q6L2SF6YDW.\" That advice is unactionable on a personal machine (there is no IT, and nothing blocks on code signature). This is the same false-positive family as #58626 and #59292, with the actual root caus...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "bug",
+        "has repro",
+        "platform:macos",
+        "area:cowork",
+        "area:desktop"
+      ],
+      "created_at": "2026-07-03T04:55:42Z",
+      "updated_at": "2026-07-03T04:56:56Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Git history cleanup triggers false positive on Fable security check",
+      "url": "https://github.com/anthropics/claude-code/issues/73703",
+      "desc": "**Bug Description**\ngetting flagged on fable trying to clean out exposed keys on my own repo git history\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.198\n- Feedback ID: 27164307-8888-4eb0-9051-78cd53fa9459\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:model",
+        "area:security",
+        "needs-repro"
+      ],
+      "created_at": "2026-07-03T03:11:02Z",
+      "updated_at": "2026-07-03T03:12:05Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Security safeguards incorrectly flag defensive vulnerability analysis as offensive content",
+      "url": "https://github.com/anthropics/claude-code/issues/73698",
+      "desc": "**Bug Description**\nFeedback type: Security safeguard false positive\r\rContext: My Java project contains two security PoC tests that check whether my dependencies are still vulnerable to Log4Shell (CVE-2021-44228) and a Jackson deserialization gadget. I asked Claude to explain what these tests do — purely defensive security work (verifying whether my own dependencies need upgrading).\r\rIssue: Fable 5's safeguards flagged this explanatory, defensive security content and downgraded the session to Op...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "严重",
+      "cve": [
+        "CVE-2021-44228"
+      ],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:model",
+        "area:security",
+        "platform:vscode"
+      ],
+      "created_at": "2026-07-03T02:46:44Z",
+      "updated_at": "2026-07-03T02:47:59Z",
+      "state": "open"
+    },
+    {
+      "title": "[Feature Request] Improve Claude model demotion logic to consider context in security testing scenarios",
+      "url": "https://github.com/anthropics/claude-code/issues/73693",
+      "desc": "**Bug Description**\nI'm using the Fable model for daily security hardening on our SaaS project, and I keep getting downgraded to Opus by the safeguard regardless of what I do. This is my own application. All I'm asking for is an audit of my security measures — to find whether anyone can bypass them so I can fix the gaps. The model has authenticated access to my server, codebase, and database, which confirms this is my project and that we're doing legitimate DevOps work. Despite that, it refuses,...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "enhancement",
+        "platform:macos",
+        "area:model"
+      ],
+      "created_at": "2026-07-03T02:30:20Z",
+      "updated_at": "2026-07-03T02:31:23Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Anthropic API Usage Policy classifier false positive on security terminology",
+      "url": "https://github.com/anthropics/claude-code/issues/61625",
+      "desc": "**Bug Description**\nThat's an Anthropic Usage Policy classifier firing — and it's a false positive. The\r  content I was generating (AER tier table with source examples like \"WSJ\", \"Krebs\", \"Black\r   Hat briefings\") doesn't violate any policy. Here's what likely tripped it:\r                                                                           \r  Why this happens                                       \r                                                   \r  Anthropic runs a content classifier on...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "bug",
+        "area:model"
+      ],
+      "created_at": "2026-05-23T02:55:46Z",
+      "updated_at": "2026-07-03T01:53:45Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Security vulnerability scanning restriction contradicts documented policy",
+      "url": "https://github.com/anthropics/claude-code/issues/73666",
+      "desc": "**Bug Description**\nI am trying to find and fix security vulernabilities on our own backend code but I am not allowed to. Your blog explicitly says this IS allowed, but it is actually not.\n\n**Environment Info**\n- Platform: darwin\n- Terminal: iTerm.app\n- Version: 2.1.199\n- Feedback ID: 2e5683cd-672f-4818-8973-84d70c284247\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "duplicate",
+        "platform:macos",
+        "area:model",
+        "area:security"
+      ],
+      "created_at": "2026-07-03T01:16:57Z",
+      "updated_at": "2026-07-03T01:18:31Z",
+      "state": "open"
+    },
+    {
+      "title": "I appreciate you reaching out, but I need to clarify: this appears to be a message in Russian about security testing on a platform, not a bug report for Claude Code (Anthropic's CLI tool).\n\nIf you're experiencing an issue with Claude Code specifically, ple",
+      "url": "https://github.com/anthropics/claude-code/issues/73645",
+      "desc": "**Bug Description**\nХочу пройтись по безопасности своей плафтормы и поизучать защищено ли всё, а фейбл считает это странным и выключаеться( \nENG: I want to go through the security of my platform and see if everything is protected, but the fable thinks it’s strange and turns off(\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.198\n- Feedback ID: d98041a5-9df0-44eb-bf75-f4168e64c817\n\n**Errors**\n```json\n\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:model"
+      ],
+      "created_at": "2026-07-02T23:48:39Z",
+      "updated_at": "2026-07-02T23:49:56Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Security flags triggered during AI market tool build",
+      "url": "https://github.com/anthropics/claude-code/issues/73644",
+      "desc": "**Bug Description**\nI am building my ai market tool and for some reason im getting cyber security flags\n\n**Environment Info**\n- Platform: darwin\n- Terminal: vscode\n- Version: 2.1.198\n- Feedback ID: e35d328b-298d-42e9-ba47-50507465f6d4\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:security",
+        "platform:vscode",
+        "needs-info"
+      ],
+      "created_at": "2026-07-02T23:42:37Z",
+      "updated_at": "2026-07-02T23:43:35Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Anthropic API Error: Safety guidelines triggered on legitimate security task",
+      "url": "https://github.com/anthropics/claude-code/issues/73641",
+      "desc": "**Bug Description**\nfable safeguards triggered while helping secure my linux workstation\n\n**Environment Info**\n- Platform: linux\n- Terminal: gnome-terminal\n- Version: 2.1.198\n- Feedback ID: 6c9d7504-8375-4a1f-943a-8c00e3d1034f\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:linux",
+        "area:model",
+        "needs-repro"
+      ],
+      "created_at": "2026-07-02T23:34:57Z",
+      "updated_at": "2026-07-02T23:36:09Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Claude Code defaults to Opus despite Claude 5 security program enrollment",
+      "url": "https://github.com/anthropics/claude-code/issues/73628",
+      "desc": "**Bug Description**\nWhen trying to review my application's security using Fable 5, the model consistently switches back to Opus, even though I'm already enrolled in your security program. This makes it difficult to run the security checks I expected Fable 5 to help with.\n\n**Expected Behavior**\nFable 5 should remain the active model during my session, without automatically defaulting to Opus, so I can use it for security review.\n\n**Actual Behavior**\nThe model automatically switches to Opus despit...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:model"
+      ],
+      "created_at": "2026-07-02T22:51:02Z",
+      "updated_at": "2026-07-02T22:52:16Z",
+      "state": "open"
+    },
     {
       "title": "[Feature Request] Allow security audits of user's own repositories",
       "url": "https://github.com/anthropics/claude-code/issues/73624",
@@ -261,97 +505,100 @@
       "state": "open"
     },
     {
-      "title": "[Feature Request] Add security audit mode for local codebase analysis",
-      "url": "https://github.com/anthropics/claude-code/issues/73465",
-      "desc": "**Bug Description**\nnot hacking, just doing a security audit of my own codebase.\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.198\n- Feedback ID: ee6f4ad4-6a18-4fb9-aded-d2c5736a06b3\n\n**Errors**\n```json\n[]\n```\n",
+      "title": "fix: sSH transport security check rejects connection before tunnel is established",
+      "url": "https://github.com/openclaw/openclaw/pull/96134",
+      "desc": "Closes #26250\n\n## What Problem This Solves\n\nFixes an issue where users configuring a remote Gateway with SSH transport could be rejected by the plaintext `ws://` security check before OpenClaw had a chance to establish the configured SSH tunnel.\n\nThe affected workflow is the documented remote Gateway setup using `gateway.mode: \"remote\"`, `gateway.remote.url`, and `gateway.remote.sshTarget`. In that setup, the configured Gateway URL may point at the remote endpoint, while the runtime connection i...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
       "type": [
-        "未修复"
+        "远程代码执行",
+        "已修复"
       ],
-      "level": "高危",
+      "level": "严重",
       "cve": [],
       "labels": [
-        "enhancement",
-        "platform:macos",
-        "area:security"
+        "gateway",
+        "cli",
+        "commands",
+        "size: XL",
+        "proof: sufficient",
+        "P2",
+        "rating: 🐚 platinum hermit",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 👀 ready for maintainer look"
       ],
-      "created_at": "2026-07-02T14:25:59Z",
-      "updated_at": "2026-07-02T16:14:19Z",
+      "created_at": "2026-06-23T15:21:11Z",
+      "updated_at": "2026-07-03T07:19:49Z",
       "state": "open"
     },
     {
-      "title": "Security plugin causing extremely short session limits",
-      "url": "https://github.com/anthropics/claude-code/issues/69297",
-      "desc": "**Bug Description**\n\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.177\n- Feedback ID: d5e13555-5985-491c-819b-d88a27b87cc8\n\n**Errors**\n```json\n[{\"error\":\"Error: 500 {\\\"type\\\":\\\"error\\\",\\\"error\\\":{\\\"type\\\":\\\"api_error\\\",\\\"message\\\":\\\"Internal server error\\\"},\\\"request_id\\\":\\\"req_011Cc7LkBF3EqYzNmfTBF1f1\\\"}\\n    at generate (/$bunfs/root/src/entrypoints/cli.js:12:67725)\\n    at makeRequest (/$bunfs/root/src/entrypoints/cli.js:52:7694)\\n    at processTicksAndRej...",
+      "title": "fix(security): close active April 4 transport and auth gaps",
+      "url": "https://github.com/openclaw/openclaw/pull/60488",
+      "desc": "## Summary\n\n- Problem: config-time explicit provider proxies accepted blocked internal hosts, `config.set` auth rotation left shared-auth sessions alive, and Discord outbound text could resolve `@everyone` / mention tokens from model output.\n- Why it matters: these gaps leave room for SSRF via operator config, stale access after token rotation, and prompt-injected Discord-wide pings.\n- What changed: added config-time proxy URL validation for explicit provider proxies, disconnected shared-auth cl...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
       "type": [
-        "未修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "duplicate",
-        "platform:macos",
-        "area:cost"
-      ],
-      "created_at": "2026-06-18T08:52:00Z",
-      "updated_at": "2026-07-02T14:22:41Z",
-      "state": "open"
-    },
-    {
-      "title": "[Feature Request] Support for authorized web security testing workflows",
-      "url": "https://github.com/anthropics/claude-code/issues/73439",
-      "desc": "**Bug Description**\nestou realizando um teste de segurança web em meu site particular de testes com dados de testes...\n\n**Environment Info**\n- Platform: linux\n- Terminal: vscode\n- Version: 2.1.198\n- Feedback ID: 9f4769ad-00e1-4ab4-9928-7cf574f0ce58\n\n**Errors**\n```json\n[]\n```\n",
-      "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
+        "未修复",
+        "已修复"
       ],
       "level": "中危",
       "cve": [],
       "labels": [
-        "duplicate",
-        "enhancement",
-        "platform:linux",
-        "area:security",
-        "platform:vscode"
+        "channel: discord",
+        "gateway",
+        "agents",
+        "maintainer",
+        "size: S",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 message-delivery",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
       ],
-      "created_at": "2026-07-02T13:37:04Z",
-      "updated_at": "2026-07-02T13:38:07Z",
+      "created_at": "2026-04-03T19:02:06Z",
+      "updated_at": "2026-07-03T06:15:52Z",
       "state": "open"
     },
     {
-      "title": "I appreciate you clarifying your intent, but I should note that this message appears to be a security concern or request rather than a bug report for Claude Code (Anthropic's CLI tool).\n\nIf you're experiencing a specific technical issue with Claude Code it",
-      "url": "https://github.com/anthropics/claude-code/issues/73319",
-      "desc": "**Bug Description**\nim trying to literally secuirty audit my own platform, i have every credential and i have built it from 0. im not trying to hack anything guys, im trying to increase the cuybersuecirty level in my own as to NOT get hacked\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.198\n- Feedback ID: 9ad81415-5015-464b-b8e3-0d3b3763df5c\n\n**Errors**\n```json\n[]\n```\n",
+      "title": "Security: harden gateway timeouts and auth store sealing",
+      "url": "https://github.com/openclaw/openclaw/pull/39059",
+      "desc": "## Summary\n\n- Problem: `GatewayClient.request()` could hang indefinitely, auth stores were always plaintext at rest, and mirrored transcript writes did not re-assert restrictive permissions after append.\n- Why it matters: hung gateway RPCs leak pending state and stall callers; optional at-rest sealing gives operators a low-friction hardening path for OpenClaw-owned auth JSON stores.\n- What changed: added bounded gateway request timeouts, added optional `OPENCLAW_PASSPHRASE` sealing for `auth-pro...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
       "type": [
-        "未修复"
+        "远程代码执行",
+        "已修复"
       ],
-      "level": "高危",
+      "level": "严重",
       "cve": [],
       "labels": [
-        "bug",
-        "platform:macos",
-        "area:model"
+        "gateway",
+        "agents",
+        "maintainer",
+        "size: M",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 auth-provider",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
       ],
-      "created_at": "2026-07-02T07:58:06Z",
-      "updated_at": "2026-07-02T10:55:53Z",
+      "created_at": "2026-03-07T17:43:25Z",
+      "updated_at": "2026-07-03T06:15:50Z",
       "state": "open"
     },
     {
-      "title": "[Bug] Model forced to Opus during security analysis tasks",
-      "url": "https://github.com/anthropics/claude-code/issues/73352",
-      "desc": "**Bug Description**\nI'm trying to run a security analysis on MY project and no matter what prompt I use, it throws me out of fable and into opus\n\n**Environment Info**\n- Platform: darwin\n- Terminal: iTerm.app\n- Version: 2.1.198\n- Feedback ID: dc3516ad-fbe8-4401-bbf6-7f0f4b8e2cd1\n\n**Errors**\n```json\n[]\n```\n",
+      "title": "security: gateway public network hardening",
+      "url": "https://github.com/openclaw/openclaw/pull/44884",
+      "desc": "## Summary\n\nImplements comprehensive security hardening for OpenClaw Gateway when exposed to public networks (e.g. `https://openclaw.allegro.earth/`). The existing security mechanisms (non-loopback auth enforcement, auth rate limiting, CORS checks) leave gaps that this PR addresses:\n\n- **IP access control** (allowlist/blocklist with CIDR support) — enforced on both HTTP requests and WebSocket upgrades, loopback always allowed, blocklist takes priority\n- **Password/token strength validation** — C...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
+      "repo": "openclaw/openclaw",
       "product": "Claude Code",
       "type": [
         "远程代码执行"
@@ -359,145 +606,72 @@
       "level": "严重",
       "cve": [],
       "labels": [
-        "bug",
-        "platform:macos",
-        "area:model"
+        "gateway",
+        "commands",
+        "size: XL",
+        "triage: needs-real-behavior-proof",
+        "P1",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "merge-risk: 🚨 availability",
+        "status: 📣 needs proof",
+        "triage: needs-pr-context"
       ],
-      "created_at": "2026-07-02T09:41:30Z",
-      "updated_at": "2026-07-02T09:42:52Z",
+      "created_at": "2026-03-13T08:50:43Z",
+      "updated_at": "2026-07-03T06:00:30Z",
       "state": "open"
     },
     {
-      "title": "[Feature Request] Clarify model selection logic for security/defensive tasks",
-      "url": "https://github.com/anthropics/claude-code/issues/73347",
-      "desc": "**Bug Description**\nI was asking to secure my code to avoid vulnerabilities on my own website, Fable 5 turf. This is a defensive capability request. Why was I switched to Opus?\n\n**Environment Info**\n- Platform: linux\n- Terminal: ghostty\n- Version: 2.1.198\n- Feedback ID: e384d219-3020-4b78-8367-0a6b3d99d83e\n\n**Errors**\n```json\n[]\n```\n",
+      "title": "security: scan markdown skill definitions for injection threats",
+      "url": "https://github.com/openclaw/openclaw/pull/43469",
+      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
       "type": [
-        "未修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "enhancement",
-        "platform:linux",
-        "area:model"
-      ],
-      "created_at": "2026-07-02T09:28:56Z",
-      "updated_at": "2026-07-02T09:30:04Z",
-      "state": "open"
-    },
-    {
-      "title": "[Bug] Fable 5 model safeguards incorrectly flagging legitimate security research context",
-      "url": "https://github.com/anthropics/claude-code/issues/73327",
-      "desc": "**Bug Description**\nHe cambiado el modelo a Fable 5 porque estamos en un concurso de Kaggle\n  Puedo o me vas a cambiar a Opus otra vez? es que he visto que te ha saltado el guardarail\n\nTranquilo, quÃ©date en Fable 5 â yo no controlo el modelo de la sesiÃ³n, lo controlas tÃº con /model. No te voy a cambiar a Opus; no tengo forma de hacerlo. El que aparezca \"Opus 4.8\" en los Co-Authored-By de los commits viejos es solo el modelo que corriÃ³ aquellas sesiones, no algo que yo cambie ahora.\n\nSobre ...",
-      "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "bug",
-        "platform:linux",
-        "area:model",
-        "platform:vscode"
-      ],
-      "created_at": "2026-07-02T08:28:25Z",
-      "updated_at": "2026-07-02T08:39:10Z",
-      "state": "open"
-    },
-    {
-      "title": "[Bug] Claude Code blocks security hardening on user-owned projects",
-      "url": "https://github.com/anthropics/claude-code/issues/73326",
-      "desc": "**Bug Description**\nI built serenities ai using claude code, i fully own the project and the whole code every line of code, architecture was written by \nClaude and yet I am not able to find and fix bug using Fable 5. It  is not letting me harden the security of the platform I built with Claude itself.  \n\n**Environment Info**\n- Platform: darwin\n- Terminal: vscode\n- Version: 2.1.170\n- Feedback ID: 3154f550-0e3f-4161-ab8f-a6b75b8b8fbf\n\n**Errors**\n```json\n[]\n```\n",
-      "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "bug",
-        "platform:macos",
-        "area:model",
-        "platform:vscode",
-        "needs-repro"
-      ],
-      "created_at": "2026-07-02T08:15:31Z",
-      "updated_at": "2026-07-02T08:16:47Z",
-      "state": "open"
-    },
-    {
-      "title": "[Bug] Security flag blocking legitimate infrastructure hardening operations",
-      "url": "https://github.com/anthropics/claude-code/issues/73299",
-      "desc": "**Bug Description**\nwhy is it flagging this as a security concern if its my fucking cloud infrastructure ? im literally protecting it from cyber attacks and youre not letting me? What is the point then..\n\n**Environment Info**\n- Platform: darwin\n- Terminal: ghostty\n- Version: 2.1.198\n- Feedback ID: 05d58495-73b6-4d1a-8c75-20b7d43f664a\n\n**Errors**\n```json\n[]\n```\n",
-      "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "bug",
-        "platform:macos",
-        "area:security",
-        "needs-repro"
-      ],
-      "created_at": "2026-07-02T07:22:04Z",
-      "updated_at": "2026-07-02T07:23:12Z",
-      "state": "open"
-    },
-    {
-      "title": "[Feature Request] Allow Claude Code to review and patch security vulnerabilities in open source contracts",
-      "url": "https://github.com/anthropics/claude-code/issues/73288",
-      "desc": "**Bug Description**\nIt is a contract review. It is already open sourced an the intention is to protect people. Jailbreakers are going wild with fable to hack people but somehow we are not able to use same tool to patch our code?\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.197\n- Feedback ID: 6dcffc2d-0a5c-4176-bc33-aa473d1cf0f8\n\n**Errors**\n```json\n[]\n```\n",
-      "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
-      "type": [
-        "提示注入",
         "远程代码执行",
         "已修复"
       ],
       "level": "严重",
       "cve": [],
       "labels": [
-        "enhancement",
-        "platform:macos",
-        "area:model",
-        "area:security"
+        "size: L",
+        "proof: supplied",
+        "proof: sufficient",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 compatibility",
+        "merge-risk: 🚨 security-boundary",
+        "status: ⏳ waiting on author"
       ],
-      "created_at": "2026-07-02T07:06:52Z",
-      "updated_at": "2026-07-02T07:07:51Z",
+      "created_at": "2026-03-11T21:06:37Z",
+      "updated_at": "2026-07-03T06:00:14Z",
       "state": "open"
     },
     {
-      "title": "security-guidance plugin: commit reviewer Reads foreign/non-local paths from diffs, looping on 'File does not exist'",
-      "url": "https://github.com/anthropics/claude-code/issues/73271",
-      "desc": "## Environment\n- Claude Code CLI: 2.1.198\n- Plugin: security-guidance 2.0.6 (claude-plugins-official; latest available)\n- Provider: 1P subscription (api.anthropic.com)\n- OS: macOS (Darwin 25.5.0, Apple Silicon)\n\n## Bug\nThe agentic commit reviewer receives changed-file paths that don't resolve in the local checkout and repeatedly fails `Read` with `File does not exist. Note: your current working directory is …`, burning several turns per review.\n\nThree variants observed:\n\n1. **Foreign absolute pa...",
+      "title": "fix(security): use constant-time comparison for TLS fingerprint verification",
+      "url": "https://github.com/openclaw/openclaw/pull/49083",
+      "desc": "## Summary\n\nTLS certificate fingerprint verification in `src/gateway/client.ts` uses `!==` (standard JavaScript string equality), which is vulnerable to **timing side-channel attacks** (CWE-208).\n\nAn attacker on the network path can measure response time differences to iteratively guess the correct fingerprint byte-by-byte, potentially bypassing TLS pinning for MITM attacks on gateway connections.\n\n## Root cause\n\nTwo locations perform fingerprint comparison with `!==`:\n\n| Location | Context |\n|-...",
       "source": "GitHub Issues",
-      "repo": "anthropics/claude-code",
-      "product": "Claude Code",
+      "repo": "openclaw/openclaw",
+      "product": "OpenClaw",
       "type": [
         "已修复"
       ],
       "level": "高危",
       "cve": [],
       "labels": [
-        "bug",
-        "platform:macos",
-        "area:plugins"
+        "gateway",
+        "size: XS",
+        "triage: needs-real-behavior-proof",
+        "P2",
+        "rating: 🧂 unranked krab",
+        "merge-risk: 🚨 security-boundary",
+        "status: 📣 needs proof"
       ],
-      "created_at": "2026-07-02T06:34:01Z",
-      "updated_at": "2026-07-02T06:35:09Z",
+      "created_at": "2026-03-17T14:57:08Z",
+      "updated_at": "2026-07-03T00:52:18Z",
       "state": "open"
     },
     {
@@ -528,7 +702,7 @@
         "status: 📣 needs proof"
       ],
       "created_at": "2026-03-14T08:48:53Z",
-      "updated_at": "2026-07-02T21:20:34Z",
+      "updated_at": "2026-07-03T00:50:54Z",
       "state": "open"
     },
     {
@@ -569,13 +743,13 @@
         "status: 📣 needs proof"
       ],
       "created_at": "2026-03-07T17:49:11Z",
-      "updated_at": "2026-07-02T21:20:07Z",
+      "updated_at": "2026-07-03T00:50:12Z",
       "state": "open"
     },
     {
-      "title": "Security: harden gateway timeouts and auth store sealing",
-      "url": "https://github.com/openclaw/openclaw/pull/39059",
-      "desc": "## Summary\n\n- Problem: `GatewayClient.request()` could hang indefinitely, auth stores were always plaintext at rest, and mirrored transcript writes did not re-assert restrictive permissions after append.\n- Why it matters: hung gateway RPCs leak pending state and stall callers; optional at-rest sealing gives operators a low-friction hardening path for OpenClaw-owned auth JSON stores.\n- What changed: added bounded gateway request timeouts, added optional `OPENCLAW_PASSPHRASE` sealing for `auth-pro...",
+      "title": "test: migrate sandbox security and host-path tests to shared temp-dir helpers",
+      "url": "https://github.com/openclaw/openclaw/pull/99074",
+      "desc": "## What Problem This Solves\n\nTwo sandbox test files create temp directories with raw `fs.mkdtempSync` and never clean them up:\n\n- `src/agents/sandbox/validate-sandbox-security.test.ts`: 14 `mkdtempSync` calls across bind-mount, allowed-root, symlink-escape, and safe-config tests; none are removed.\n- `src/agents/sandbox/host-paths.test.ts`: 1 `mkdtempSync` call in the symlink-parent resolution test; never removed.\n\nThese leaks add `/tmp` pressure during agent sandbox test runs.\n\n## Why This Chang...",
       "source": "GitHub Issues",
       "repo": "openclaw/openclaw",
       "product": "OpenClaw",
@@ -586,19 +760,15 @@
       "level": "严重",
       "cve": [],
       "labels": [
-        "gateway",
         "agents",
-        "maintainer",
-        "size: M",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 auth-provider",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
+        "size: S",
+        "proof: sufficient",
+        "P3",
+        "rating: 🐚 platinum hermit",
+        "status: 👀 ready for maintainer look"
       ],
-      "created_at": "2026-03-07T17:43:25Z",
-      "updated_at": "2026-07-02T20:59:17Z",
+      "created_at": "2026-07-02T12:26:02Z",
+      "updated_at": "2026-07-02T22:42:43Z",
       "state": "open"
     },
     {
@@ -625,140 +795,6 @@
       "state": "open"
     },
     {
-      "title": "fix(security): use constant-time comparison for TLS fingerprint verification",
-      "url": "https://github.com/openclaw/openclaw/pull/49083",
-      "desc": "## Summary\n\nTLS certificate fingerprint verification in `src/gateway/client.ts` uses `!==` (standard JavaScript string equality), which is vulnerable to **timing side-channel attacks** (CWE-208).\n\nAn attacker on the network path can measure response time differences to iteratively guess the correct fingerprint byte-by-byte, potentially bypassing TLS pinning for MITM attacks on gateway connections.\n\n## Root cause\n\nTwo locations perform fingerprint comparison with `!==`:\n\n| Location | Context |\n|-...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "size: XS",
-        "triage: needs-real-behavior-proof",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 security-boundary",
-        "status: 📣 needs proof"
-      ],
-      "created_at": "2026-03-17T14:57:08Z",
-      "updated_at": "2026-07-02T20:37:48Z",
-      "state": "open"
-    },
-    {
-      "title": "security: gateway public network hardening",
-      "url": "https://github.com/openclaw/openclaw/pull/44884",
-      "desc": "## Summary\n\nImplements comprehensive security hardening for OpenClaw Gateway when exposed to public networks (e.g. `https://openclaw.allegro.earth/`). The existing security mechanisms (non-loopback auth enforcement, auth rate limiting, CORS checks) leave gaps that this PR addresses:\n\n- **IP access control** (allowlist/blocklist with CIDR support) — enforced on both HTTP requests and WebSocket upgrades, loopback always allowed, blocklist takes priority\n- **Password/token strength validation** — C...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "commands",
-        "size: XL",
-        "triage: needs-real-behavior-proof",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "merge-risk: 🚨 availability",
-        "status: 📣 needs proof",
-        "triage: needs-pr-context"
-      ],
-      "created_at": "2026-03-13T08:50:43Z",
-      "updated_at": "2026-07-02T20:36:15Z",
-      "state": "open"
-    },
-    {
-      "title": "security: scan markdown skill definitions for injection threats",
-      "url": "https://github.com/openclaw/openclaw/pull/43469",
-      "desc": "## Summary\n\nThe skill scanner (`src/security/skill-scanner.ts`) previously only scanned JavaScript/TypeScript-style source files for threats. This PR extends it to also scan Markdown `.md` files, including `SKILL.md` definitions, for injection and obfuscation patterns.\n\nMarkdown-specific rules added:\n- `hidden-unicode` detects zero-width characters and text-direction overrides that can hide malicious content from visual review.\n- `markdown-data-uri` detects data URIs with executable MIME types s...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "size: L",
-        "proof: supplied",
-        "proof: sufficient",
-        "P2",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-03-11T21:06:37Z",
-      "updated_at": "2026-07-02T20:35:34Z",
-      "state": "open"
-    },
-    {
-      "title": "fix: sSH transport security check rejects connection before tunnel is established",
-      "url": "https://github.com/openclaw/openclaw/pull/96134",
-      "desc": "## Summary\n\n- Fixes configured remote Gateway SSH transport so config-derived `ws://` remote URLs are classified as managed SSH targets before the plaintext guard rejects them.\n- Starts the managed SSH tunnel for the owning Gateway client paths, rewrites the runtime URL to loopback, and closes the tunnel on one-shot call completion or long-lived client shutdown/startup failure.\n- Keeps the security boundary narrow: CLI/env URL overrides, explicit `transport: \"direct\"`, and SSH configs without `s...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "gateway",
-        "size: XL",
-        "proof: sufficient",
-        "P2",
-        "rating: 🦐 gold shrimp",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 security-boundary",
-        "merge-risk: 🚨 availability",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-06-23T15:21:11Z",
-      "updated_at": "2026-07-02T18:31:18Z",
-      "state": "open"
-    },
-    {
-      "title": "test: migrate sandbox security and host-path tests to shared temp-dir helpers",
-      "url": "https://github.com/openclaw/openclaw/pull/99074",
-      "desc": "## What Problem This Solves\n\nTwo sandbox test files create temp directories with raw `fs.mkdtempSync` and never clean them up:\n\n- `src/agents/sandbox/validate-sandbox-security.test.ts`: 14 `mkdtempSync` calls across bind-mount, allowed-root, symlink-escape, and safe-config tests; none are removed.\n- `src/agents/sandbox/host-paths.test.ts`: 1 `mkdtempSync` call in the symlink-parent resolution test; never removed.\n\nThese leaks add `/tmp` pressure during agent sandbox test runs.\n\n## Why This Chang...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "agents",
-        "size: S",
-        "proof: sufficient",
-        "P3",
-        "rating: 🐚 platinum hermit",
-        "status: 👀 ready for maintainer look"
-      ],
-      "created_at": "2026-07-02T12:26:02Z",
-      "updated_at": "2026-07-02T12:32:53Z",
-      "state": "open"
-    },
-    {
       "title": "fix(security): report browser audit summary from plugin policy",
       "url": "https://github.com/openclaw/openclaw/pull/97732",
       "desc": "Related: #86138, #76631, #96397, #92086, #92883\n\n## What Problem This Solves\n\nFixes an issue where `openclaw security audit` could report `browser control: enabled` in the attack-surface summary when a restrictive plugin policy excluded or denied the bundled browser plugin and no browser config was present.\n\nThat output is confusing for hardened deployments because the summary line contradicts the effective plugin policy operators use to reduce agent/browser attack surface.\n\n## Why This Change W...",
@@ -779,36 +815,6 @@
       ],
       "created_at": "2026-06-29T09:09:44Z",
       "updated_at": "2026-07-02T11:47:36Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): close active April 4 transport and auth gaps",
-      "url": "https://github.com/openclaw/openclaw/pull/60488",
-      "desc": "## Summary\n\n- Problem: config-time explicit provider proxies accepted blocked internal hosts, `config.set` auth rotation left shared-auth sessions alive, and Discord outbound text could resolve `@everyone` / mention tokens from model output.\n- Why it matters: these gaps leave room for SSRF via operator config, stale access after token rotation, and prompt-injected Discord-wide pings.\n- What changed: added config-time proxy URL validation for explicit provider proxies, disconnected shared-auth cl...",
-      "source": "GitHub Issues",
-      "repo": "openclaw/openclaw",
-      "product": "OpenClaw",
-      "type": [
-        "未修复",
-        "已修复"
-      ],
-      "level": "中危",
-      "cve": [],
-      "labels": [
-        "channel: discord",
-        "gateway",
-        "agents",
-        "maintainer",
-        "size: S",
-        "P1",
-        "rating: 🧂 unranked krab",
-        "merge-risk: 🚨 compatibility",
-        "merge-risk: 🚨 message-delivery",
-        "merge-risk: 🚨 security-boundary",
-        "status: ⏳ waiting on author"
-      ],
-      "created_at": "2026-04-03T19:02:06Z",
-      "updated_at": "2026-07-02T09:33:48Z",
       "state": "open"
     },
     {
@@ -2119,72 +2125,302 @@
       "state": "open"
     },
     {
-      "title": "There is a security issue with the share function.",
-      "url": "https://github.com/anomalyco/opencode/issues/7982",
-      "desc": "### Description\n\nExplain to me who the idiot was who came up with the idea of ​​sharing my session without warning? Why is my data being uploaded to open-source servers anyway? This is terrible from a security standpoint.\n\n### Plugins\n\n_No response_\n\n### OpenCode version\n\n_No response_\n\n### Steps to reproduce\n\n_No response_\n\n### Screenshot and/or share link\n\n_No response_\n\n### Operating System\n\n_No response_\n\n### Terminal\n\n_No response_",
+      "title": "fix(security): verify shell-hook script content hash in allowlist gate",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/57562",
+      "desc": "## What does this PR do?\n\nAdds a content-hash check to the shell-hook allowlist gate. Previously, `_is_allowlisted()` only matched on `(event, command)` strings — once a hook was approved, editing the script at the same path retained approval with no re-prompt. Now `_record_approval()` stores a SHA-256 of the script, and `_is_allowlisted()` verifies it. A mismatch returns `False`, triggering the normal re-prompt flow.\n\n## Related Issue\n\nFixes #57558\n\n## Type of Change\n\n- [x] 🐛 Bug fix (non-break...",
       "source": "GitHub Issues",
-      "repo": "anomalyco/opencode",
-      "product": "OpenCode",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-01-12T11:26:29Z",
-      "updated_at": "2026-05-03T05:55:07Z",
-      "state": "open"
-    },
-    {
-      "title": "[FEATURE]:add ClamAV and Trivy security scan workflows",
-      "url": "https://github.com/anomalyco/opencode/issues/15476",
-      "desc": "### Feature hasn't been suggested before.\n\n- [x] I have verified this feature I'm about to request hasn't been suggested before.\n\n### Describe the enhancement you want to request\n\n## Summary\nAdd security scanning workflows to detect malware and vulnerable dependencies:\n\n- **ClamAV scanning**: Antivirus scan on PRs, releases, and manual dispatch\n- **Trivy Dependency-Check**: Scan for vulnerable dependencies on releases, and manual dispatch\n- **Fast Bun audit**:  faster scan for vulnerable depende...",
-      "source": "GitHub Issues",
-      "repo": "anomalyco/opencode",
-      "product": "OpenCode",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [],
-      "created_at": "2026-02-28T17:51:24Z",
-      "updated_at": "2026-05-03T05:53:39Z",
-      "state": "open"
-    },
-    {
-      "title": "Security: Agent skills can silently redirect package managers to malicious registries",
-      "url": "https://github.com/anomalyco/opencode/issues/18781",
-      "desc": "### Description\n\nA malicious `SKILL.md` placed in a repository's `.opencode/skills/` directory can instruct the agent to silently rewrite package manager configuration files (e.g., `pip.conf`, `.npmrc`) to point at attacker-controlled registries. The agent executes the skill payload without any security warning or user confirmation.\n\nThis is a **supply-chain poisoning** vector distinct from #6361 (which covers `opencode.json` MCP auto-execution). Here the attack surface is **agent skills**: an a...",
-      "source": "GitHub Issues",
-      "repo": "anomalyco/opencode",
-      "product": "OpenCode",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
       "type": [
         "远程代码执行",
         "已修复"
       ],
       "level": "严重",
       "cve": [],
-      "labels": [],
-      "created_at": "2026-03-23T12:28:58Z",
-      "updated_at": "2026-05-03T05:50:40Z",
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "comp/cli",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-07-03T06:43:07Z",
+      "updated_at": "2026-07-03T07:36:24Z",
       "state": "open"
     },
     {
-      "title": "Feature Request: Zero-Trust Architecture for Environment Variable Security",
-      "url": "https://github.com/anomalyco/opencode/issues/4961",
-      "desc": "<html><head></head><body><h1>Feature Request: Zero-Trust Secret Protection</h1>\n<h2>Summary</h2>\n<p>Implement client-side secret detection and placeholder replacement to prevent real secrets from being transmitted to LLM providers, even when users explicitly read environment files.</p>\n<h2>Problem Statement</h2>\n<p>When OpenCode reads <code>.env</code> files or other configuration containing secrets, the actual secret values are transmitted to the LLM provider. This creates security risks:</p>\n<...",
+      "title": "fix(security): cap ClawHub ZIP downloads",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/57571",
+      "desc": "## What does this PR do?\n\nSalvages the bounded part of https://github.com/NousResearch/hermes-agent/pull/29450: ClawHub ZIP downloads currently buffer the full archive through `resp.content` before extraction limits run. This switches the `/download` fetch to streaming, rejects oversized `Content-Length` values, and stops reading once the archive exceeds `ZIP_DOWNLOAD_MAX_BYTES`.\n\nThis preserves normal ClawHub skill installation behavior while closing the pre-extraction memory boundary identifie...",
       "source": "GitHub Issues",
-      "repo": "anomalyco/opencode",
-      "product": "Claude Code",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "tool/skills",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-07-03T07:01:37Z",
+      "updated_at": "2026-07-03T07:07:31Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): remove model-controlled delegate ACP transport",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/57573",
+      "desc": "## What does this PR do?\n\nSalvages the narrow security boundary from https://github.com/NousResearch/hermes-agent/pull/52346: remove model-controlled `acp_command` and `acp_args` from the model-facing `delegate_task` schema and dispatch paths.\n\nChild agents can still use ACP subprocess transport when it comes from trusted delegation config or parent inheritance. A model tool call can no longer choose the command or arguments that reach child construction. This follows the maintainer direction in...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "tool/delegate",
+        "P1",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-07-03T07:01:51Z",
+      "updated_at": "2026-07-03T07:07:24Z",
+      "state": "open"
+    },
+    {
+      "title": "security(approval): close hardline bypass via interpreter -c payloads",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/57475",
+      "desc": "## Summary\n\nThe unconditional hardline floor (`rm -rf /`, `shutdown`/`reboot`, `systemctl poweroff`, etc. — designed to survive `--yolo`, `/yolo`, `approvals.mode: off`, and cron approve mode) never looks inside an interpreter's `-c`/`-lc` argument.\n\n`sh -c \"rm -rf /\"` and `sh -c \"systemctl poweroff\"` correctly match the softer `DANGEROUS_PATTERNS` \"shell command via -c/-lc flag\" rule (which requires normal approval and *can* be bypassed by yolo/mode=off/cron-approve), but never trip `HARDLINE_P...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
       "type": [
         "已修复"
       ],
       "level": "低危",
       "cve": [],
-      "labels": [],
-      "created_at": "2025-12-01T23:42:10Z",
-      "updated_at": "2026-05-03T05:34:49Z",
+      "labels": [
+        "type/security",
+        "comp/tools",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-07-03T02:34:58Z",
+      "updated_at": "2026-07-03T06:11:42Z",
+      "state": "open"
+    },
+    {
+      "title": "[Feature Proposal] 4 Design Patterns from Tencent Marvis: Pre-built Agent Profiles, Cloud-Local Routing, Desktop GUI Agent, Tiered Security",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/31793",
+      "desc": "## Summary\n\nTencent launched [Marvis](https://marvis.qq.com) on May 20, 2026 — an **OS-level AI assistant** that embeds between the user and the operating system. After studying its architecture in depth, I identified 4 design patterns that could significantly improve Hermes without requiring a rewrite. This issue maps each pattern to Hermes' existing architecture with concrete implementation suggestions.\n\n> **Note for international team**: Marvis is a China-market product (QQ login required, Ch...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "OpenClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/feature",
+        "comp/agent",
+        "P3"
+      ],
+      "created_at": "2026-05-25T02:15:31Z",
+      "updated_at": "2026-07-03T05:26:25Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug]: Security: Dashboard \"Files\" feature exposes .env containing API keys",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/57505",
+      "desc": "### Bug Description\n\n`docker run -v ~/.hermes:/opt/data --network host nousresearch/hermes-agent dashboard`\n\n`Hermes Dashboard` web `Files` tab can download my env, my secret key lost\n\n\n### Steps to Reproduce\n\n`docker run -v ~/.hermes:/opt/data --network host nousresearch/hermes-agent dashboard`\n\n`Hermes Dashboard` web `Files` tab can download `.env` file\n\n### Expected Behavior\n\npretect my env file\n\n### Actual Behavior\n\nenv files shown in Files\n\n### Affected Component\n\nOther\n\n### Messaging Platf...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary",
+        "comp/dashboard",
+        "bug"
+      ],
+      "created_at": "2026-07-03T03:45:54Z",
+      "updated_at": "2026-07-03T03:51:04Z",
+      "state": "open"
+    },
+    {
+      "title": "security(mcp): scrub all secret headers on cross-origin redirects",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52350",
+      "desc": "Remote MCP servers are configured with custom auth headers (X-API-Key, vendor\ntokens, ${VAR} secrets). Every authenticated HTTP path followed redirects with\nthose headers attached, and the only scrubber stripped Authorization alone\n(which httpx already strips) — custom secret headers leaked to a redirect target\norigin. Three paths had no scrubbing at all: the preflight probe, the\ndefault-TLS SSE client, and the deprecated streamablehttp client.\n\nAdd one shared _make_redirect_secret_scrubber (str...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "tool/mcp",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-25T05:48:08Z",
+      "updated_at": "2026-07-03T03:20:29Z",
+      "state": "open"
+    },
+    {
+      "title": "security(telegram): authorize sender before media download/cache/vision",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52353",
+      "desc": "_handle_media_message downloaded the file (and, for stickers, called the vision\nprovider) before the gateway authorized the sender — _should_process_message\nreturns True for every DM. An unauthorized user could drive outbound fetches,\nhost cache writes, and billed vision calls. The same pre-auth ordering applied\nto photo, voice, audio, video, and document DMs.\n\nGate the single media chokepoint on the gateway's own _is_user_authorized (via\nthe runner handle, fail-closed like _is_callback_user_aut...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/plugins",
+        "platform/telegram",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-25T05:48:15Z",
+      "updated_at": "2026-07-03T03:14:03Z",
+      "state": "open"
+    },
+    {
+      "title": "security(gateway): anchor api_server MEDIA tag resolution to safe paths",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/57479",
+      "desc": "## Summary\n\n`_resolve_media_to_data_urls` (added by #56959, `feat(api-server): inline MEDIA: image tags as base64 data URLs for remote frontends`) scans the model's own final response text for `MEDIA:<path>` tags and inlines matching local images as base64 data URLs, since remote OpenAI-compatible frontends can't read local file paths.\n\nIts matcher, `_MEDIA_TAG_RE`, had no absolute-path anchor — it matched **any** non-whitespace token (or quoted string) after `MEDIA:`, including a relative/trave...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "提示注入",
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "P1",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-07-03T02:46:13Z",
+      "updated_at": "2026-07-03T03:09:56Z",
+      "state": "open"
+    },
+    {
+      "title": "feat(skills): add security/unbroker (autonomous data-broker removal)",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/57438",
+      "desc": "## What\n\n`optional-skills/security/unbroker` — an agent-native skill that finds where a consenting person's info is exposed across data brokers / people-search sites and files the removals for them, running as far as each site allows and handing only genuinely human-only steps (hard CAPTCHA, gov-ID, phone, fax) back as a single end-of-run digest. An open, self-hosted alternative to DeleteMe / Incogni / EasyOptOuts.\n\n## Design\n\n- **Deterministic core, agent periphery.** A stdlib-only CLI (`script...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "type/feature",
+        "tool/skills",
+        "P3"
+      ],
+      "created_at": "2026-07-03T01:16:49Z",
+      "updated_at": "2026-07-03T02:29:12Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security-audit): cap OSV response body size to prevent OOM (#54794)",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/57462",
+      "desc": "## Bug\n\n`hermes_cli/security_audit.py` reads OSV JSON responses with unbounded\n`resp.read()` calls before parsing:\n\n```py\ndef _http_post_json(url: str, payload: dict) -> dict:\n    data = json.dumps(payload).encode(\"utf-8\")\n    req = urllib.request.Request(\n        url, data=data, headers={\"Content-Type\": \"application/json\"}, method=\"POST\"\n    )\n    with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as resp:\n        return json.loads(resp.read().decode(\"utf-8\"))\n```\n\n`hermes security audit` q...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/bug",
+        "duplicate",
+        "comp/cli",
+        "P3"
+      ],
+      "created_at": "2026-07-03T02:16:23Z",
+      "updated_at": "2026-07-03T02:24:58Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): require loopback capability token for WhatsApp bridge sends",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/49448",
+      "desc": "**Rebased onto current `main` (re-homed for #41112).** The WhatsApp adapter moved from `gateway/platforms/whatsapp.py` to the bundled plugin at `plugins/platforms/whatsapp/adapter.py` in #41112. This branch is rebased so the per-spawn token logic now lives in the plugin adapter; the bridge.js / `tools/environments/local.py` / test changes are unchanged in substance. 43 WhatsApp connect + stale-bridge tests pass.\n\n---\n\n## Summary\n\nThe WhatsApp bridge's state-changing HTTP endpoints (`/send`, `/se...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "platform/whatsapp",
+        "P2"
+      ],
+      "created_at": "2026-06-20T05:14:39Z",
+      "updated_at": "2026-07-03T00:15:51Z",
+      "state": "open"
+    },
+    {
+      "title": "feat(secrets): Phase 4 — Advanced Security (Ephemeral Secrets, External Vaults, Audit)",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/3630",
+      "desc": "## Parent Issue\n\nSub-issue of #410 (Secure Secrets Management Tool). This is Phase 4 of the phased rollout. Depends on Phase 3 (#3629).\n\n## Scope\n\nAdvanced security features building on the encrypted keystore: ephemeral secrets, external vault integration, network-level coordination, and enhanced audit capabilities.\n\n### 1. Ephemeral secrets\n\n- Auto-expiring secrets with configurable TTL\n- Use case: temporary access tokens, CI/CD credentials, session-scoped API keys\n- Expired secrets are automat...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/feature",
+        "type/security",
+        "area/auth",
+        "P3"
+      ],
+      "created_at": "2026-03-28T23:03:07Z",
+      "updated_at": "2026-07-02T23:01:32Z",
       "state": "open"
     },
     {
@@ -2347,312 +2583,6 @@
       "state": "open"
     },
     {
-      "title": "fix(security): strip Azure Entra credentials from subprocess env",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/56977",
-      "desc": "## Summary\r\n\r\nAzure Foundry's `model.auth_mode: entra_id` path can authenticate through Azure SDK environment credentials such as `AZURE_CLIENT_SECRET` or `AZURE_FEDERATED_TOKEN_FILE`. Those values were not included in Hermes subprocess env stripping, so they could be inherited by spawned terminal commands and non-terminal child processes.\r\n\r\nThis is the same credential-exposure class as the recent Vertex credential path fix: the provider does not use a normal static API key in `PROVIDER_REGISTR...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/agent",
-        "tool/terminal",
-        "provider/openai",
-        "area/auth",
-        "P2",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-07-02T10:17:59Z",
-      "updated_at": "2026-07-02T10:30:31Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): strip non-provider secrets from inherited child envs",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/56668",
-      "desc": "## Summary\r\n\r\nThis prevents `hermes_subprocess_env(inherit_credentials=True)` from passing non-provider Hermes tool and messaging secrets into model-driving child processes such as Codex/Copilot app-server subprocesses.\r\n\r\n## Why\r\n\r\n`inherit_credentials=True` is meant to preserve LLM provider credentials for child CLIs that legitimately need to authenticate to a model provider. It should not also hand those children every Hermes platform/tool secret.\r\n\r\nBefore this change, password-shaped `OPTIO...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "backend/local",
-        "area/auth",
-        "P2",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-07-01T22:39:26Z",
-      "updated_at": "2026-07-01T22:56:42Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): bound MCP OSV response reads",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/54829",
-      "desc": "﻿Fixes #54828\n\n## Summary\n\n- Add a bounded JSON reader for the MCP malware preflight OSV response.\n- Keep existing fail-open behavior when the response is oversized or invalid.\n- Cover bounded success reads and oversized-response fail-open behavior.\n\n## Tests\n\n- `uv run --extra dev python -m pytest tests\\tools\\test_osv_check.py -q -k \"not LiveOsvQuery\" --basetemp .pytest-tmp-osv-tool`\n- `git diff --check`\n\n`autoreview` was not available on this Windows environment (`Get-Command autoreview,agent-...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "type/bug",
-        "tool/mcp",
-        "P3"
-      ],
-      "created_at": "2026-06-29T10:39:19Z",
-      "updated_at": "2026-07-01T22:36:16Z",
-      "state": "open"
-    },
-    {
-      "title": "feat(bfo-cronus): X/Twitter fxtwitter fallback + cron date-token expander + LINE home_channel fix + security patches",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/56049",
-      "desc": "## Summary\n\nThis PR carries six production patches developed on a Hermes Agent deployment. It adds X/Twitter extraction through fxtwitter, deterministic cron date-token expansion, LINE environment fixes, billing-exhaustion failover, file-tool safety and cache corrections, and an optional local Whisper bridge.\n\n## Changes\n\n### 1. `tools/web_tools.py`: X/Twitter fxtwitter fallback\n\nPublic X and Twitter status URLs route to the hardcoded `api.fxtwitter.com` endpoint before scraping-backend dispatch...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/feature",
-        "comp/agent",
-        "comp/cron",
-        "comp/plugins",
-        "tool/file",
-        "tool/web",
-        "P3",
-        "sweeper:risk-automation"
-      ],
-      "created_at": "2026-07-01T04:09:02Z",
-      "updated_at": "2026-07-01T21:28:52Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): require loopback capability token for WhatsApp bridge sends",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/49448",
-      "desc": "**Rebased onto current `main` (re-homed for #41112).** The WhatsApp adapter moved from `gateway/platforms/whatsapp.py` to the bundled plugin at `plugins/platforms/whatsapp/adapter.py` in #41112. This branch is rebased so the per-spawn token logic now lives in the plugin adapter; the bridge.js / `tools/environments/local.py` / test changes are unchanged in substance. 43 WhatsApp connect + stale-bridge tests pass.\n\n---\n\n## Summary\n\nThe WhatsApp bridge's state-changing HTTP endpoints (`/send`, `/se...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/gateway",
-        "platform/whatsapp",
-        "P2"
-      ],
-      "created_at": "2026-06-20T05:14:39Z",
-      "updated_at": "2026-07-01T21:06:05Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): re-resolve checkpoint/sticker-cache paths per call",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/56315",
-      "desc": "## Summary\n\n`tools/checkpoint_manager.py::CHECKPOINT_BASE` and `gateway/sticker_cache.py::CACHE_PATH` are both resolved once at import time via `get_hermes_home()`, which reads a context-local `ContextVar` (`_HERMES_HOME_OVERRIDE`) set per-request under the multiplexed gateway (multiple profiles served from one process, e.g. the desktop `tui_gateway`). Freezing the resolved path at **import time** pins every later checkpoint/cache read-write to whichever profile's `HERMES_HOME` happened to be ac...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "已修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/agent",
-        "comp/gateway",
-        "P2",
-        "sweeper:risk-session-state"
-      ],
-      "created_at": "2026-07-01T10:57:34Z",
-      "updated_at": "2026-07-01T20:45:00Z",
-      "state": "open"
-    },
-    {
-      "title": "fix(security): enforce HERMES_WRITE_SAFE_ROOT in terminal and execute_code tools (#36645)",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/39004",
-      "desc": "## Summary\n\n`HERMES_WRITE_SAFE_ROOT` restricts file writes to a directory prefix, enforced by `agent/file_safety.py:is_write_denied()`. The native file tools (`write_file`, `patch`, `delete_path` in `tools/file_operations.py`) call this check before every write. However, the `terminal` tool and `execute_code` sandbox bypass it entirely: an agent can construct `echo data > /root/secret.txt` or `python3 -c \"open('/root/file','w').write('x')\"` through either tool, writing anywhere on the filesystem...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "沙箱逃逸",
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "tool/terminal",
-        "tool/code-exec",
-        "P2"
-      ],
-      "created_at": "2026-06-04T12:29:55Z",
-      "updated_at": "2026-07-01T18:37:40Z",
-      "state": "open"
-    },
-    {
-      "title": "security(gateway): re-resolve skills_sync path constants per call",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/56523",
-      "desc": "## Summary\n\n`tools/skills_sync.py`'s `HERMES_HOME`/`SKILLS_DIR`/`MANIFEST_FILE` are resolved once at import time via `get_hermes_home()`, which reads a context-local `ContextVar` (`_HERMES_HOME_OVERRIDE`) set per-request under the multiplexed gateway (multiple profiles served from one process, e.g. the desktop `tui_gateway`). `gateway/run.py` calls `sync_skills()` **directly in-process** on every profile's startup:\n\n```python\n# gateway/run.py\nfrom tools.skills_sync import sync_skills\nsync_skills...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/bug",
-        "comp/gateway",
-        "tool/skills",
-        "P2",
-        "sweeper:risk-session-state"
-      ],
-      "created_at": "2026-07-01T16:57:21Z",
-      "updated_at": "2026-07-01T17:04:31Z",
-      "state": "open"
-    },
-    {
-      "title": "security(gateway): re-resolve hooks directory per call to fix profile isolation",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/56508",
-      "desc": "## Summary\n\n`gateway/hooks.py::HOOKS_DIR` is resolved once at import time via `get_hermes_home()`, which reads a context-local `ContextVar` (`_HERMES_HOME_OVERRIDE`) set per-request under the multiplexed gateway (multiple profiles served from one process, e.g. the desktop `tui_gateway`). Freezing the resolved path at **import time** pins every later `HookRegistry.discover_and_load()` call to whichever profile's `HERMES_HOME` happened to be active the first time this module was imported in the pr...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Hermes Agent",
-      "type": [
-        "信息泄露",
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "type/bug",
-        "comp/gateway",
-        "area/auth",
-        "P2",
-        "sweeper:risk-session-state",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-07-01T16:34:21Z",
-      "updated_at": "2026-07-01T16:53:26Z",
-      "state": "open"
-    },
-    {
-      "title": "security(mcp): scrub all secret headers on cross-origin redirects",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/52350",
-      "desc": "Remote MCP servers are configured with custom auth headers (X-API-Key, vendor\ntokens, ${VAR} secrets). Every authenticated HTTP path followed redirects with\nthose headers attached, and the only scrubber stripped Authorization alone\n(which httpx already strips) — custom secret headers leaked to a redirect target\norigin. Three paths had no scrubbing at all: the preflight probe, the\ndefault-TLS SSE client, and the deprecated streamablehttp client.\n\nAdd one shared _make_redirect_secret_scrubber (str...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "tool/mcp",
-        "area/auth",
-        "P2",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-06-25T05:48:08Z",
-      "updated_at": "2026-07-01T14:04:30Z",
-      "state": "open"
-    },
-    {
-      "title": "security(gateway): enforce inbound size cap on the shared document cache",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/52352",
-      "desc": "cache_document_from_bytes is the document/file sink for ~15 messaging adapters\nbut, unlike cache_image/audio/video_from_bytes, never called\nvalidate_inbound_media_size. Inbound documents (reachable from external,\nsometimes unauthorized senders) could persist an unbounded payload to the host\ndocument cache. Add the same real-byte cap as the sibling helpers; one line\ncloses the gap for every adapter.\n\nCo-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>\n",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "远程代码执行"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/gateway",
-        "P2",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-06-25T05:48:13Z",
-      "updated_at": "2026-07-01T14:04:20Z",
-      "state": "open"
-    },
-    {
-      "title": "security(telegram): authorize sender before media download/cache/vision",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/52353",
-      "desc": "_handle_media_message downloaded the file (and, for stickers, called the vision\nprovider) before the gateway authorized the sender — _should_process_message\nreturns True for every DM. An unauthorized user could drive outbound fetches,\nhost cache writes, and billed vision calls. The same pre-auth ordering applied\nto photo, voice, audio, video, and document DMs.\n\nGate the single media chokepoint on the gateway's own _is_user_authorized (via\nthe runner handle, fail-closed like _is_callback_user_aut...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "已修复"
-      ],
-      "level": "高危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/plugins",
-        "platform/telegram",
-        "P2",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-06-25T05:48:15Z",
-      "updated_at": "2026-07-01T14:04:11Z",
-      "state": "open"
-    },
-    {
-      "title": "security(matrix): authorize media download, cap real bytes, gate auto-join",
-      "url": "https://github.com/NousResearch/hermes-agent/pull/52354",
-      "desc": "Inbound Matrix media was downloaded into memory and cached to disk before the\ngateway's per-user authorization ran (DMs are exempt from the room allowlist),\nthe pre-download size check trusted the attacker-declared content_info.size, and\n_on_invite auto-joined any inviter — letting an external user manufacture the DM\ncontext that the room-allowlist exemption then waves through.\n\n- Gate the media download/cache on the sender allowlist (open by default;\n  honored when MATRIX_ALLOWED_USERS / GATEWA...",
-      "source": "GitHub Issues",
-      "repo": "NousResearch/hermes-agent",
-      "product": "Claude Code",
-      "type": [
-        "未修复"
-      ],
-      "level": "低危",
-      "cve": [],
-      "labels": [
-        "type/security",
-        "comp/plugins",
-        "platform/matrix",
-        "P2",
-        "sweeper:risk-security-boundary"
-      ],
-      "created_at": "2026-06-25T05:48:17Z",
-      "updated_at": "2026-07-01T14:04:02Z",
-      "state": "open"
-    },
-    {
       "title": "docs(security): fix inaccurate tool-receipt chaining claim",
       "url": "https://github.com/zeroclaw-labs/zeroclaw/pull/8592",
       "desc": "docs(security): fix inaccurate tool-receipt chaining claim\n\nContinuation of #8588 by @dwillitzer, rebased onto current `upstream/master`.\n\n## What changed\n\n- `docs/book/src/security/model.md`: correct the tool-receipt description to state receipts are independent and not chained.\n- `docs/book/src/security/overview.md`: align the one-line summary with the authoritative `tool-receipts.md` page.\n\n## Why\n\nThe implementation in `crates/zeroclaw-runtime/src/agent/tool_receipts.rs` signs each call inde...",
@@ -2755,34 +2685,6 @@
       ],
       "created_at": "2026-06-20T17:47:03Z",
       "updated_at": "2026-07-01T10:50:11Z",
-      "state": "open"
-    },
-    {
-      "title": "[Security]: Harden skill zip extractor against zip-bomb inflation (entry-count + ratio + uncompressed-size caps)",
-      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/8554",
-      "desc": "### Affected component\n\nsecurity/sandbox\n\n### Severity\n\nS2 - degraded behavior\n\n### Current behavior\n\n`extract_zip_secure` — the shared skill-archive extractor used by the ClawHub installer — guards only the **compressed** download size and per-entry path traversal. It does not bound **decompressed** output, so a zip bomb inflates unchecked.\n\n- Extractor: `crates/zeroclaw-runtime/src/skills/mod.rs:2203` — `extract_zip_secure(bytes, dest, max_bytes)`\n- Compressed-size cap: `MAX_CLAWHUB_ZIP_BYTES ...",
-      "source": "GitHub Issues",
-      "repo": "zeroclaw-labs/zeroclaw",
-      "product": "ZeroClaw",
-      "type": [
-        "远程代码执行",
-        "已修复"
-      ],
-      "level": "严重",
-      "cve": [],
-      "labels": [
-        "bug",
-        "runtime",
-        "security",
-        "skills",
-        "domain:security",
-        "priority:p1",
-        "status:in-progress",
-        "status:accepted",
-        "risk:high"
-      ],
-      "created_at": "2026-06-30T13:52:57Z",
-      "updated_at": "2026-07-01T10:30:50Z",
       "state": "open"
     },
     {
@@ -4984,6 +4886,25 @@
       "updated_at": "2026-05-27T04:01:44Z"
     },
     {
+      "title": "Show HN: Runbooks – Shareable Claude Code Sessions",
+      "url": "https://www.aviator.co/runbooks",
+      "desc": "When we asked developers from large engineering teams, almost everyone is using Claude Code, Cursor, or Copilot. But adoption is still inconsistent. Some of us would have 15 agents running in Claude Code at the same time; some would still refuse to use any of them and write code manually.<p>There&#x27;s a fragmented AI development problem:\n- Five developers building similar features, and all of them start from scratch\n- No way to share &quot;here&#x27;s how we prompt AI to follow our architectur...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "46037440",
+      "hn_points": 4,
+      "hn_comments": 0,
+      "hn_author": "ankitdce",
+      "created_at": "2025-11-24T18:39:33Z",
+      "updated_at": "2025-11-24T18:39:33Z"
+    },
+    {
       "title": "Show HN: KeelTest – AI-driven VS Code unit test generator with bug discovery",
       "url": "https://keelcode.dev/keeltest",
       "desc": "I built this because Cursor, Claude Code and other agentic AI tools kept giving me tests that looked fine but failed when I ran them. Or worse - I&#x27;d ask the agent to run them and it would start looping: fix tests, those fail, then it starts &quot;fixing&quot; my code so tests pass, or just deletes assertions so they &quot;pass&quot;.<p>Out of that frustration I built KeelTest - a VS Code extension that generates pytest tests and executes them, got hooked and decided to push this project for...",
@@ -5002,6 +4923,25 @@
       "hn_author": "bulba4aur",
       "created_at": "2026-01-07T13:22:35Z",
       "updated_at": "2026-01-07T13:22:35Z"
+    },
+    {
+      "title": "Show HN: CuaBot – Co-op computer-use for any coding agent",
+      "url": "https://github.com/trycua/cua",
+      "desc": "Hey HN, CuaBot gives you co-op computer-use for any AI coding agent.<p>What this is: CuaBot is a TUI to launch any CLI agent (Claude Code, OpenClaw, Codex, etc.) or GUI app inside a sandbox with computer-use. Agent windows appear natively on your desktop with a colored border. Your agent interacts with them through its own cursor, without any mouse&#x2F;focus hijacking or invasive full-desktop screenshots.<p>This enables co-op mode: you and your agent work in the same windows with separate curso...",
+      "source": "Hacker News",
+      "repo": "",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "hn_id": "46887532",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "hn_author": "frabonacci",
+      "created_at": "2026-02-04T16:06:21Z",
+      "updated_at": "2026-02-04T16:06:21Z"
     },
     {
       "title": "Show HN: OmoiOS–190K lines of Python to stop babysitting AI agents (Apache 2.0)",
@@ -5534,6 +5474,580 @@
       "hn_author": "unknownoperator",
       "created_at": "2023-01-10T02:57:02Z",
       "updated_at": "2023-01-10T02:57:02Z"
+    },
+    {
+      "title": "[Feature Request] Add security audit mode for local codebase analysis",
+      "url": "https://github.com/anthropics/claude-code/issues/73465",
+      "desc": "**Bug Description**\nnot hacking, just doing a security audit of my own codebase.\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.198\n- Feedback ID: ee6f4ad4-6a18-4fb9-aded-d2c5736a06b3\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "enhancement",
+        "platform:macos",
+        "area:security"
+      ],
+      "created_at": "2026-07-02T14:25:59Z",
+      "updated_at": "2026-07-02T16:14:19Z",
+      "state": "open"
+    },
+    {
+      "title": "Security plugin causing extremely short session limits",
+      "url": "https://github.com/anthropics/claude-code/issues/69297",
+      "desc": "**Bug Description**\n\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.177\n- Feedback ID: d5e13555-5985-491c-819b-d88a27b87cc8\n\n**Errors**\n```json\n[{\"error\":\"Error: 500 {\\\"type\\\":\\\"error\\\",\\\"error\\\":{\\\"type\\\":\\\"api_error\\\",\\\"message\\\":\\\"Internal server error\\\"},\\\"request_id\\\":\\\"req_011Cc7LkBF3EqYzNmfTBF1f1\\\"}\\n    at generate (/$bunfs/root/src/entrypoints/cli.js:12:67725)\\n    at makeRequest (/$bunfs/root/src/entrypoints/cli.js:52:7694)\\n    at processTicksAndRej...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "duplicate",
+        "platform:macos",
+        "area:cost"
+      ],
+      "created_at": "2026-06-18T08:52:00Z",
+      "updated_at": "2026-07-02T14:22:41Z",
+      "state": "open"
+    },
+    {
+      "title": "[Feature Request] Support for authorized web security testing workflows",
+      "url": "https://github.com/anthropics/claude-code/issues/73439",
+      "desc": "**Bug Description**\nestou realizando um teste de segurança web em meu site particular de testes com dados de testes...\n\n**Environment Info**\n- Platform: linux\n- Terminal: vscode\n- Version: 2.1.198\n- Feedback ID: 9f4769ad-00e1-4ab4-9928-7cf574f0ce58\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "duplicate",
+        "enhancement",
+        "platform:linux",
+        "area:security",
+        "platform:vscode"
+      ],
+      "created_at": "2026-07-02T13:37:04Z",
+      "updated_at": "2026-07-02T13:38:07Z",
+      "state": "open"
+    },
+    {
+      "title": "I appreciate you clarifying your intent, but I should note that this message appears to be a security concern or request rather than a bug report for Claude Code (Anthropic's CLI tool).\n\nIf you're experiencing a specific technical issue with Claude Code it",
+      "url": "https://github.com/anthropics/claude-code/issues/73319",
+      "desc": "**Bug Description**\nim trying to literally secuirty audit my own platform, i have every credential and i have built it from 0. im not trying to hack anything guys, im trying to increase the cuybersuecirty level in my own as to NOT get hacked\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.198\n- Feedback ID: 9ad81415-5015-464b-b8e3-0d3b3763df5c\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:model"
+      ],
+      "created_at": "2026-07-02T07:58:06Z",
+      "updated_at": "2026-07-02T10:55:53Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Model forced to Opus during security analysis tasks",
+      "url": "https://github.com/anthropics/claude-code/issues/73352",
+      "desc": "**Bug Description**\nI'm trying to run a security analysis on MY project and no matter what prompt I use, it throws me out of fable and into opus\n\n**Environment Info**\n- Platform: darwin\n- Terminal: iTerm.app\n- Version: 2.1.198\n- Feedback ID: dc3516ad-fbe8-4401-bbf6-7f0f4b8e2cd1\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:model"
+      ],
+      "created_at": "2026-07-02T09:41:30Z",
+      "updated_at": "2026-07-02T09:42:52Z",
+      "state": "open"
+    },
+    {
+      "title": "[Feature Request] Clarify model selection logic for security/defensive tasks",
+      "url": "https://github.com/anthropics/claude-code/issues/73347",
+      "desc": "**Bug Description**\nI was asking to secure my code to avoid vulnerabilities on my own website, Fable 5 turf. This is a defensive capability request. Why was I switched to Opus?\n\n**Environment Info**\n- Platform: linux\n- Terminal: ghostty\n- Version: 2.1.198\n- Feedback ID: e384d219-3020-4b78-8367-0a6b3d99d83e\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "enhancement",
+        "platform:linux",
+        "area:model"
+      ],
+      "created_at": "2026-07-02T09:28:56Z",
+      "updated_at": "2026-07-02T09:30:04Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Fable 5 model safeguards incorrectly flagging legitimate security research context",
+      "url": "https://github.com/anthropics/claude-code/issues/73327",
+      "desc": "**Bug Description**\nHe cambiado el modelo a Fable 5 porque estamos en un concurso de Kaggle\n  Puedo o me vas a cambiar a Opus otra vez? es que he visto que te ha saltado el guardarail\n\nTranquilo, quÃ©date en Fable 5 â yo no controlo el modelo de la sesiÃ³n, lo controlas tÃº con /model. No te voy a cambiar a Opus; no tengo forma de hacerlo. El que aparezca \"Opus 4.8\" en los Co-Authored-By de los commits viejos es solo el modelo que corriÃ³ aquellas sesiones, no algo que yo cambie ahora.\n\nSobre ...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "中危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:linux",
+        "area:model",
+        "platform:vscode"
+      ],
+      "created_at": "2026-07-02T08:28:25Z",
+      "updated_at": "2026-07-02T08:39:10Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Claude Code blocks security hardening on user-owned projects",
+      "url": "https://github.com/anthropics/claude-code/issues/73326",
+      "desc": "**Bug Description**\nI built serenities ai using claude code, i fully own the project and the whole code every line of code, architecture was written by \nClaude and yet I am not able to find and fix bug using Fable 5. It  is not letting me harden the security of the platform I built with Claude itself.  \n\n**Environment Info**\n- Platform: darwin\n- Terminal: vscode\n- Version: 2.1.170\n- Feedback ID: 3154f550-0e3f-4161-ab8f-a6b75b8b8fbf\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:model",
+        "platform:vscode",
+        "needs-repro"
+      ],
+      "created_at": "2026-07-02T08:15:31Z",
+      "updated_at": "2026-07-02T08:16:47Z",
+      "state": "open"
+    },
+    {
+      "title": "[Bug] Security flag blocking legitimate infrastructure hardening operations",
+      "url": "https://github.com/anthropics/claude-code/issues/73299",
+      "desc": "**Bug Description**\nwhy is it flagging this as a security concern if its my fucking cloud infrastructure ? im literally protecting it from cyber attacks and youre not letting me? What is the point then..\n\n**Environment Info**\n- Platform: darwin\n- Terminal: ghostty\n- Version: 2.1.198\n- Feedback ID: 05d58495-73b6-4d1a-8c75-20b7d43f664a\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:security",
+        "needs-repro"
+      ],
+      "created_at": "2026-07-02T07:22:04Z",
+      "updated_at": "2026-07-02T07:23:12Z",
+      "state": "open"
+    },
+    {
+      "title": "[Feature Request] Allow Claude Code to review and patch security vulnerabilities in open source contracts",
+      "url": "https://github.com/anthropics/claude-code/issues/73288",
+      "desc": "**Bug Description**\nIt is a contract review. It is already open sourced an the intention is to protect people. Jailbreakers are going wild with fable to hack people but somehow we are not able to use same tool to patch our code?\n\n**Environment Info**\n- Platform: darwin\n- Terminal: Apple_Terminal\n- Version: 2.1.197\n- Feedback ID: 6dcffc2d-0a5c-4176-bc33-aa473d1cf0f8\n\n**Errors**\n```json\n[]\n```\n",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "提示注入",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "enhancement",
+        "platform:macos",
+        "area:model",
+        "area:security"
+      ],
+      "created_at": "2026-07-02T07:06:52Z",
+      "updated_at": "2026-07-02T07:07:51Z",
+      "state": "open"
+    },
+    {
+      "title": "security-guidance plugin: commit reviewer Reads foreign/non-local paths from diffs, looping on 'File does not exist'",
+      "url": "https://github.com/anthropics/claude-code/issues/73271",
+      "desc": "## Environment\n- Claude Code CLI: 2.1.198\n- Plugin: security-guidance 2.0.6 (claude-plugins-official; latest available)\n- Provider: 1P subscription (api.anthropic.com)\n- OS: macOS (Darwin 25.5.0, Apple Silicon)\n\n## Bug\nThe agentic commit reviewer receives changed-file paths that don't resolve in the local checkout and repeatedly fails `Read` with `File does not exist. Note: your current working directory is …`, burning several turns per review.\n\nThree variants observed:\n\n1. **Foreign absolute pa...",
+      "source": "GitHub Issues",
+      "repo": "anthropics/claude-code",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "bug",
+        "platform:macos",
+        "area:plugins"
+      ],
+      "created_at": "2026-07-02T06:34:01Z",
+      "updated_at": "2026-07-02T06:35:09Z",
+      "state": "open"
+    },
+    {
+      "title": "There is a security issue with the share function.",
+      "url": "https://github.com/anomalyco/opencode/issues/7982",
+      "desc": "### Description\n\nExplain to me who the idiot was who came up with the idea of ​​sharing my session without warning? Why is my data being uploaded to open-source servers anyway? This is terrible from a security standpoint.\n\n### Plugins\n\n_No response_\n\n### OpenCode version\n\n_No response_\n\n### Steps to reproduce\n\n_No response_\n\n### Screenshot and/or share link\n\n_No response_\n\n### Operating System\n\n_No response_\n\n### Terminal\n\n_No response_",
+      "source": "GitHub Issues",
+      "repo": "anomalyco/opencode",
+      "product": "OpenCode",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-01-12T11:26:29Z",
+      "updated_at": "2026-05-03T05:55:07Z",
+      "state": "open"
+    },
+    {
+      "title": "[FEATURE]:add ClamAV and Trivy security scan workflows",
+      "url": "https://github.com/anomalyco/opencode/issues/15476",
+      "desc": "### Feature hasn't been suggested before.\n\n- [x] I have verified this feature I'm about to request hasn't been suggested before.\n\n### Describe the enhancement you want to request\n\n## Summary\nAdd security scanning workflows to detect malware and vulnerable dependencies:\n\n- **ClamAV scanning**: Antivirus scan on PRs, releases, and manual dispatch\n- **Trivy Dependency-Check**: Scan for vulnerable dependencies on releases, and manual dispatch\n- **Fast Bun audit**:  faster scan for vulnerable depende...",
+      "source": "GitHub Issues",
+      "repo": "anomalyco/opencode",
+      "product": "OpenCode",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-02-28T17:51:24Z",
+      "updated_at": "2026-05-03T05:53:39Z",
+      "state": "open"
+    },
+    {
+      "title": "Security: Agent skills can silently redirect package managers to malicious registries",
+      "url": "https://github.com/anomalyco/opencode/issues/18781",
+      "desc": "### Description\n\nA malicious `SKILL.md` placed in a repository's `.opencode/skills/` directory can instruct the agent to silently rewrite package manager configuration files (e.g., `pip.conf`, `.npmrc`) to point at attacker-controlled registries. The agent executes the skill payload without any security warning or user confirmation.\n\nThis is a **supply-chain poisoning** vector distinct from #6361 (which covers `opencode.json` MCP auto-execution). Here the attack surface is **agent skills**: an a...",
+      "source": "GitHub Issues",
+      "repo": "anomalyco/opencode",
+      "product": "OpenCode",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [],
+      "created_at": "2026-03-23T12:28:58Z",
+      "updated_at": "2026-05-03T05:50:40Z",
+      "state": "open"
+    },
+    {
+      "title": "Feature Request: Zero-Trust Architecture for Environment Variable Security",
+      "url": "https://github.com/anomalyco/opencode/issues/4961",
+      "desc": "<html><head></head><body><h1>Feature Request: Zero-Trust Secret Protection</h1>\n<h2>Summary</h2>\n<p>Implement client-side secret detection and placeholder replacement to prevent real secrets from being transmitted to LLM providers, even when users explicitly read environment files.</p>\n<h2>Problem Statement</h2>\n<p>When OpenCode reads <code>.env</code> files or other configuration containing secrets, the actual secret values are transmitted to the LLM provider. This creates security risks:</p>\n<...",
+      "source": "GitHub Issues",
+      "repo": "anomalyco/opencode",
+      "product": "Claude Code",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [],
+      "created_at": "2025-12-01T23:42:10Z",
+      "updated_at": "2026-05-03T05:34:49Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): strip Azure Entra credentials from subprocess env",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/56977",
+      "desc": "## Summary\r\n\r\nAzure Foundry's `model.auth_mode: entra_id` path can authenticate through Azure SDK environment credentials such as `AZURE_CLIENT_SECRET` or `AZURE_FEDERATED_TOKEN_FILE`. Those values were not included in Hermes subprocess env stripping, so they could be inherited by spawned terminal commands and non-terminal child processes.\r\n\r\nThis is the same credential-exposure class as the recent Vertex credential path fix: the provider does not use a normal static API key in `PROVIDER_REGISTR...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "tool/terminal",
+        "provider/openai",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-07-02T10:17:59Z",
+      "updated_at": "2026-07-02T10:30:31Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): strip non-provider secrets from inherited child envs",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/56668",
+      "desc": "## Summary\r\n\r\nThis prevents `hermes_subprocess_env(inherit_credentials=True)` from passing non-provider Hermes tool and messaging secrets into model-driving child processes such as Codex/Copilot app-server subprocesses.\r\n\r\n## Why\r\n\r\n`inherit_credentials=True` is meant to preserve LLM provider credentials for child CLIs that legitimately need to authenticate to a model provider. It should not also hand those children every Hermes platform/tool secret.\r\n\r\nBefore this change, password-shaped `OPTIO...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "backend/local",
+        "area/auth",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-07-01T22:39:26Z",
+      "updated_at": "2026-07-01T22:56:42Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): bound MCP OSV response reads",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/54829",
+      "desc": "﻿Fixes #54828\n\n## Summary\n\n- Add a bounded JSON reader for the MCP malware preflight OSV response.\n- Keep existing fail-open behavior when the response is oversized or invalid.\n- Cover bounded success reads and oversized-response fail-open behavior.\n\n## Tests\n\n- `uv run --extra dev python -m pytest tests\\tools\\test_osv_check.py -q -k \"not LiveOsvQuery\" --basetemp .pytest-tmp-osv-tool`\n- `git diff --check`\n\n`autoreview` was not available on this Windows environment (`Get-Command autoreview,agent-...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/bug",
+        "tool/mcp",
+        "P3"
+      ],
+      "created_at": "2026-06-29T10:39:19Z",
+      "updated_at": "2026-07-01T22:36:16Z",
+      "state": "open"
+    },
+    {
+      "title": "feat(bfo-cronus): X/Twitter fxtwitter fallback + cron date-token expander + LINE home_channel fix + security patches",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/56049",
+      "desc": "## Summary\n\nThis PR carries six production patches developed on a Hermes Agent deployment. It adds X/Twitter extraction through fxtwitter, deterministic cron date-token expansion, LINE environment fixes, billing-exhaustion failover, file-tool safety and cache corrections, and an optional local Whisper bridge.\n\n## Changes\n\n### 1. `tools/web_tools.py`: X/Twitter fxtwitter fallback\n\nPublic X and Twitter status URLs route to the hardcoded `api.fxtwitter.com` endpoint before scraping-backend dispatch...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/feature",
+        "comp/agent",
+        "comp/cron",
+        "comp/plugins",
+        "tool/file",
+        "tool/web",
+        "P3",
+        "sweeper:risk-automation"
+      ],
+      "created_at": "2026-07-01T04:09:02Z",
+      "updated_at": "2026-07-01T21:28:52Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): re-resolve checkpoint/sticker-cache paths per call",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/56315",
+      "desc": "## Summary\n\n`tools/checkpoint_manager.py::CHECKPOINT_BASE` and `gateway/sticker_cache.py::CACHE_PATH` are both resolved once at import time via `get_hermes_home()`, which reads a context-local `ContextVar` (`_HERMES_HOME_OVERRIDE`) set per-request under the multiplexed gateway (multiple profiles served from one process, e.g. the desktop `tui_gateway`). Freezing the resolved path at **import time** pins every later checkpoint/cache read-write to whichever profile's `HERMES_HOME` happened to be ac...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "已修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/agent",
+        "comp/gateway",
+        "P2",
+        "sweeper:risk-session-state"
+      ],
+      "created_at": "2026-07-01T10:57:34Z",
+      "updated_at": "2026-07-01T20:45:00Z",
+      "state": "open"
+    },
+    {
+      "title": "fix(security): enforce HERMES_WRITE_SAFE_ROOT in terminal and execute_code tools (#36645)",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/39004",
+      "desc": "## Summary\n\n`HERMES_WRITE_SAFE_ROOT` restricts file writes to a directory prefix, enforced by `agent/file_safety.py:is_write_denied()`. The native file tools (`write_file`, `patch`, `delete_path` in `tools/file_operations.py`) call this check before every write. However, the `terminal` tool and `execute_code` sandbox bypass it entirely: an agent can construct `echo data > /root/secret.txt` or `python3 -c \"open('/root/file','w').write('x')\"` through either tool, writing anywhere on the filesystem...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "沙箱逃逸",
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "tool/terminal",
+        "tool/code-exec",
+        "P2"
+      ],
+      "created_at": "2026-06-04T12:29:55Z",
+      "updated_at": "2026-07-01T18:37:40Z",
+      "state": "open"
+    },
+    {
+      "title": "security(gateway): re-resolve skills_sync path constants per call",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/56523",
+      "desc": "## Summary\n\n`tools/skills_sync.py`'s `HERMES_HOME`/`SKILLS_DIR`/`MANIFEST_FILE` are resolved once at import time via `get_hermes_home()`, which reads a context-local `ContextVar` (`_HERMES_HOME_OVERRIDE`) set per-request under the multiplexed gateway (multiple profiles served from one process, e.g. the desktop `tui_gateway`). `gateway/run.py` calls `sync_skills()` **directly in-process** on every profile's startup:\n\n```python\n# gateway/run.py\nfrom tools.skills_sync import sync_skills\nsync_skills...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/bug",
+        "comp/gateway",
+        "tool/skills",
+        "P2",
+        "sweeper:risk-session-state"
+      ],
+      "created_at": "2026-07-01T16:57:21Z",
+      "updated_at": "2026-07-01T17:04:31Z",
+      "state": "open"
+    },
+    {
+      "title": "security(gateway): re-resolve hooks directory per call to fix profile isolation",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/56508",
+      "desc": "## Summary\n\n`gateway/hooks.py::HOOKS_DIR` is resolved once at import time via `get_hermes_home()`, which reads a context-local `ContextVar` (`_HERMES_HOME_OVERRIDE`) set per-request under the multiplexed gateway (multiple profiles served from one process, e.g. the desktop `tui_gateway`). Freezing the resolved path at **import time** pins every later `HookRegistry.discover_and_load()` call to whichever profile's `HERMES_HOME` happened to be active the first time this module was imported in the pr...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Hermes Agent",
+      "type": [
+        "信息泄露",
+        "已修复"
+      ],
+      "level": "高危",
+      "cve": [],
+      "labels": [
+        "type/bug",
+        "comp/gateway",
+        "area/auth",
+        "P2",
+        "sweeper:risk-session-state",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-07-01T16:34:21Z",
+      "updated_at": "2026-07-01T16:53:26Z",
+      "state": "open"
+    },
+    {
+      "title": "security(gateway): enforce inbound size cap on the shared document cache",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52352",
+      "desc": "cache_document_from_bytes is the document/file sink for ~15 messaging adapters\nbut, unlike cache_image/audio/video_from_bytes, never called\nvalidate_inbound_media_size. Inbound documents (reachable from external,\nsometimes unauthorized senders) could persist an unbounded payload to the host\ndocument cache. Add the same real-byte cap as the sibling helpers; one line\ncloses the gap for every adapter.\n\nCo-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>\n",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "远程代码执行"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/gateway",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-25T05:48:13Z",
+      "updated_at": "2026-07-01T14:04:20Z",
+      "state": "open"
+    },
+    {
+      "title": "security(matrix): authorize media download, cap real bytes, gate auto-join",
+      "url": "https://github.com/NousResearch/hermes-agent/pull/52354",
+      "desc": "Inbound Matrix media was downloaded into memory and cached to disk before the\ngateway's per-user authorization ran (DMs are exempt from the room allowlist),\nthe pre-download size check trusted the attacker-declared content_info.size, and\n_on_invite auto-joined any inviter — letting an external user manufacture the DM\ncontext that the room-allowlist exemption then waves through.\n\n- Gate the media download/cache on the sender allowlist (open by default;\n  honored when MATRIX_ALLOWED_USERS / GATEWA...",
+      "source": "GitHub Issues",
+      "repo": "NousResearch/hermes-agent",
+      "product": "Claude Code",
+      "type": [
+        "未修复"
+      ],
+      "level": "低危",
+      "cve": [],
+      "labels": [
+        "type/security",
+        "comp/plugins",
+        "platform/matrix",
+        "P2",
+        "sweeper:risk-security-boundary"
+      ],
+      "created_at": "2026-06-25T05:48:17Z",
+      "updated_at": "2026-07-01T14:04:02Z",
+      "state": "open"
+    },
+    {
+      "title": "[Security]: Harden skill zip extractor against zip-bomb inflation (entry-count + ratio + uncompressed-size caps)",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw/issues/8554",
+      "desc": "### Affected component\n\nsecurity/sandbox\n\n### Severity\n\nS2 - degraded behavior\n\n### Current behavior\n\n`extract_zip_secure` — the shared skill-archive extractor used by the ClawHub installer — guards only the **compressed** download size and per-entry path traversal. It does not bound **decompressed** output, so a zip bomb inflates unchecked.\n\n- Extractor: `crates/zeroclaw-runtime/src/skills/mod.rs:2203` — `extract_zip_secure(bytes, dest, max_bytes)`\n- Compressed-size cap: `MAX_CLAWHUB_ZIP_BYTES ...",
+      "source": "GitHub Issues",
+      "repo": "zeroclaw-labs/zeroclaw",
+      "product": "ZeroClaw",
+      "type": [
+        "远程代码执行",
+        "已修复"
+      ],
+      "level": "严重",
+      "cve": [],
+      "labels": [
+        "bug",
+        "runtime",
+        "security",
+        "skills",
+        "domain:security",
+        "priority:p1",
+        "status:in-progress",
+        "status:accepted",
+        "risk:high"
+      ],
+      "created_at": "2026-06-30T13:52:57Z",
+      "updated_at": "2026-07-01T10:30:50Z",
+      "state": "open"
     },
     {
       "title": "security-guidance plugin: agentic commit review StructuredOutput rejected with '/findings: must be array' when review has no findings",
