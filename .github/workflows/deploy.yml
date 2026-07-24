@@ -1,14 +1,9 @@
-name: 每日安全扫描部署
+name: 每日安全扫描 & 痛点日报部署
 
 on:
   schedule:
-    # 北京时间 ~5:23 (UTC+8 → UTC 21:23，避开整点高峰)
-    - cron: '23 21 * * *'
-    # 北京时间 ~12:23 (UTC+8 → UTC 4:23)
-    - cron: '23 4 * * *'
-    # 北京时间 ~22:23 (UTC+8 → UTC 14:23)
-    - cron: '23 14 * * *'
-  # 允许手动触发
+    # 北京时间 ~8:00 (UTC+8 → UTC 0:00)
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -99,7 +94,7 @@ jobs:
           today = '$TODAY'
           os.makedirs('data', exist_ok=True)
 
-          for ext in ['.json', '.js']:
+          for ext in ['.json', '.js', '-pain.json', '-pain.js']:
               cos_key = f'data/{today}{ext}'
               local_path = f'data/{today}{ext}'
               try:
@@ -112,8 +107,8 @@ jobs:
                   print(f'  ⏭️  {cos_key} 不存在（今日首次运行）')
           "
 
-      - name: 运行爬虫
-        id: crawl
+      - name: 运行安全爬虫
+        id: sec_crawl
         env:
           ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
         run: |
@@ -130,16 +125,41 @@ jobs:
           if [ -f "data/${TODAY}.json" ]; then
             SIZE=$(wc -c < "data/${TODAY}.json")
             ITEMS=$(python3 -c "import json; print(len(json.load(open('data/${TODAY}.json')).get('items',[])))")
-            echo "📊 数据文件: ${SIZE} bytes, ${ITEMS} 条"
-            echo "items_count=${ITEMS}" >> $GITHUB_OUTPUT
-            echo "data_exists=true" >> $GITHUB_OUTPUT
+            echo "📊 安全数据: ${SIZE} bytes, ${ITEMS} 条"
+            echo "sec_items=${ITEMS}" >> $GITHUB_OUTPUT
+            echo "sec_exists=true" >> $GITHUB_OUTPUT
           else
-            echo "::warning::数据文件未生成"
-            echo "data_exists=false" >> $GITHUB_OUTPUT
+            echo "::warning::安全数据文件未生成"
+            echo "sec_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 运行痛点爬虫
+        id: pain_crawl
+        env:
+          ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
+        run: |
+          set +e
+          python3 crawl_pain.py
+          PAIN_EXIT=$?
+          set -e
+
+          TODAY=$(date '+%Y-%m-%d')
+          if [ $PAIN_EXIT -ne 0 ]; then
+            echo "::warning::crawl_pain.py 退出码 $PAIN_EXIT"
+          fi
+
+          if [ -f "data/${TODAY}-pain.json" ]; then
+            PAIN_ITEMS=$(python3 -c "import json; print(len(json.load(open('data/${TODAY}-pain.json')).get('top10',[])))")
+            echo "📊 痛点数据: Top ${PAIN_ITEMS}"
+            echo "pain_top10=${PAIN_ITEMS}" >> $GITHUB_OUTPUT
+            echo "pain_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::痛点数据文件未生成"
+            echo "pain_exists=false" >> $GITHUB_OUTPUT
           fi
 
       - name: 上传到 COS
-        if: steps.crawl.outputs.data_exists == 'true'
+        if: steps.sec_crawl.outputs.sec_exists == 'true' || steps.pain_crawl.outputs.pain_exists == 'true'
         env:
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
@@ -217,7 +237,7 @@ jobs:
           "
 
       - name: 数据备份到 Git 仓库
-        if: steps.crawl.outputs.data_exists == 'true'
+        if: steps.sec_crawl.outputs.sec_exists == 'true' || steps.pain_crawl.outputs.pain_exists == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -247,7 +267,7 @@ jobs:
           exit 1
 
       - name: 发送告警（失败时）
-        if: failure() || steps.crawl.outputs.data_exists != 'true'
+        if: failure() || (steps.sec_crawl.outputs.sec_exists != 'true' && steps.pain_crawl.outputs.pain_exists != 'true')
         env:
           ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
         run: |

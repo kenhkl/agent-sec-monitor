@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Agent 安全监控面板</title>
+<title>AI Agent 安全监控 & 痛点日报</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233b82f6'/%3E%3Cstop offset='100%25' style='stop-color:%232563eb'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='6' fill='%231e293b'/%3E%3Cpath d='M16 3L5 8v11c0 6.5 11 10 11 10s11-3.5 11-10V8L16 3z' fill='url(%23g)'/%3E%3Cpath d='M16 12a2 2 0 100 4 2 2 0 000-4zm0-2a4 4 0 110 8 4 4 0 010-8z' fill='%23e2e8f0'/%3E%3Ccircle cx='16' cy='14' r='1' fill='%23fff'/%3E%3C/svg%3E"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -117,6 +117,108 @@
   }
   .freshness .dot.stale { background: #eab308; }
   .freshness .dot.error { background: #ef4444; }
+
+  /* Tab Bar */
+  .tab-bar {
+    display: flex; gap: 0; margin-bottom: 24px;
+    border-bottom: 2px solid #1e293b;
+  }
+  .tab-btn {
+    padding: 10px 24px; font-size: 14px; font-weight: 600;
+    cursor: pointer; border: none; background: none;
+    color: #64748b; position: relative; transition: all .2s;
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+  }
+  .tab-btn:hover { color: #94a3b8; }
+  .tab-btn.active { color: #60a5fa; border-bottom-color: #60a5fa; }
+  .tab-btn .tab-count {
+    font-size: 11px; background: #334155; color: #94a3b8;
+    padding: 1px 8px; border-radius: 10px; margin-left: 6px;
+  }
+  .tab-btn.active .tab-count { background: rgba(59,130,246,.2); color: #60a5fa; }
+  .tab-view { display: none; }
+  .tab-view.active { display: block; }
+
+  /* Pain Points Styles */
+  .trend-summary {
+    background: linear-gradient(135deg, rgba(99,102,241,.1), rgba(168,85,247,.1));
+    border: 1px solid #334155; border-radius: 10px;
+    padding: 16px 20px; margin-bottom: 20px;
+  }
+  .trend-summary h3 { font-size: 13px; color: #818cf8; margin-bottom: 6px; }
+  .trend-summary p { font-size: 13px; color: #94a3b8; line-height: 1.6; }
+
+  .pain-card {
+    background: #1e293b; border: 1px solid #334155; border-radius: 10px;
+    margin-bottom: 14px; overflow: hidden; transition: all .2s;
+  }
+  .pain-card:hover { border-color: #475569; }
+  .pain-card-header {
+    padding: 18px 20px; cursor: pointer; display: flex; align-items: flex-start; gap: 14px;
+  }
+  .pain-card-header:hover { background: #1a2332; }
+  .pain-rank {
+    width: 40px; height: 40px; border-radius: 10px; display: flex;
+    align-items: center; justify-content: center; font-size: 16px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .pain-rank.r1 { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
+  .pain-rank.r2 { background: linear-gradient(135deg, #8b8fa8, #6366f1); color: #fff; }
+  .pain-rank.r3 { background: linear-gradient(135deg, #92400e, #f59e0b); color: #fff; }
+  .pain-rank.rn { background: #0f172a; color: #64748b; border: 1px solid #334155; }
+  .pain-card-info { flex: 1; min-width: 0; }
+  .pain-card-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .pain-card-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .pain-card-body { display: none; padding: 0 20px 20px; border-top: 1px solid #334155; }
+  .pain-card.expanded .pain-card-body { display: block; }
+  .pain-expand-arrow { color: #64748b; font-size: 12px; transition: transform .2s; flex-shrink: 0; margin-top: 2px; }
+  .pain-card.expanded .pain-expand-arrow { transform: rotate(180deg); }
+
+  .badge-pain-severe { background: rgba(239,68,68,.2); color: #fca5a5; }
+  .badge-pain-high { background: rgba(249,115,22,.2); color: #fdba74; }
+  .badge-pain-medium { background: rgba(234,179,8,.2); color: #fde047; }
+  .badge-pain-low { background: rgba(34,197,94,.2); color: #86efac; }
+  .badge-pain-cat { background: rgba(59,130,246,.15); color: #93c5fd; }
+  .badge-pain-score { background: rgba(168,85,247,.15); color: #c4b5fd; }
+  .badge-pain-hot { background: rgba(6,182,212,.15); color: #67e8f9; }
+
+  .pain-detail-section { margin-top: 18px; }
+  .pain-detail-section h4 {
+    font-size: 12px; font-weight: 700; color: #818cf8;
+    text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px;
+  }
+  .pain-detail-section p { font-size: 13px; color: #94a3b8; line-height: 1.7; }
+
+  .pain-solution-list { display: grid; gap: 10px; }
+  .pain-solution-item {
+    background: #0f172a; border: 1px solid #334155; border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .pain-solution-item h5 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .pain-solution-item p { font-size: 12px; color: #94a3b8; }
+  .pain-solution-meta { display: flex; gap: 6px; margin-top: 6px; font-size: 11px; }
+  .pain-solution-meta span { padding: 2px 6px; border-radius: 4px; background: #1e293b; color: #64748b; }
+
+  .pain-benefit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pain-benefit-box {
+    background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px 14px;
+  }
+  .pain-benefit-box h5 { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .pain-benefit-box.industry h5 { color: #60a5fa; }
+  .pain-benefit-box.academia h5 { color: #a78bfa; }
+  .pain-benefit-box p { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .pain-source-links { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pain-source-link {
+    font-size: 11px; color: #818cf8; text-decoration: none;
+    padding: 2px 8px; border-radius: 4px; background: rgba(99,102,241,.1);
+    max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .pain-source-link:hover { background: rgba(99,102,241,.3); }
+
+  @media (max-width: 768px) {
+    .pain-benefit-grid { grid-template-columns: 1fr; }
+  }
 
   /* Stats Dashboard */
   .stats {
@@ -343,6 +445,23 @@
     .stat-card .stat-value { font-size: 22px; }
     .header-title h1 { font-size: 18px; }
   }
+
+  /* Scroll buttons */
+  .scroll-btns {
+    position: fixed; right: 20px; bottom: 80px; z-index: 999;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .scroll-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #1e293b; border: 1px solid #334155; color: #94a3b8;
+    cursor: pointer; font-size: 18px; display: flex; align-items: center;
+    justify-content: center; transition: all .2s; opacity: .7;
+  }
+  .scroll-btn:hover { background: #334155; color: #e2e8f0; opacity: 1; }
+  @media (max-width: 768px) {
+    .scroll-btns { right: 10px; bottom: 60px; }
+    .scroll-btn { width: 36px; height: 36px; font-size: 16px; }
+  }
 </style>
 </head>
 <body>
@@ -354,7 +473,7 @@
       <div class="header-logo"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 3L5 8v11c0 6.5 11 10 11 10s11-3.5 11-10V8L16 3z" fill="white" opacity=".95"/><circle cx="18" cy="12.5" r="1" fill="#60a5fa"/><circle cx="14" cy="12.5" r="1" fill="#60a5fa"/><circle cx="16" cy="16" r="1.5" fill="#60a5fa"/><circle cx="16" cy="20.5" r="1" fill="#60a5fa" opacity=".7"/></svg></div>
       <div class="header-title">
         <h1>AI Agent 安全风险监控</h1>
-        <div class="subtitle">每日自动汇总主流 AI Agent 安全漏洞与可复现攻击</div>
+        <div class="subtitle">每日自动汇总 AI Agent 安全漏洞 & 痛点分析 Top 10</div>
       </div>
     </div>
     <div class="header-right">
@@ -378,6 +497,15 @@
       </div>
     </div>
   </header>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="security">安全漏洞 <span class="tab-count" id="tabSecCount">--</span></button>
+    <button class="tab-btn" data-tab="pain">Agent痛点 <span class="tab-count" id="tabPainCount">--</span></button>
+  </div>
+
+  <!-- Security View -->
+  <div class="tab-view active" id="securityView">
 
   <!-- Stats -->
   <div class="stats" id="statsContainer">
@@ -463,6 +591,54 @@
     <p id="noDataMsg">该日期暂无可用安全监控数据。</p>
     <button class="retry-btn" id="retryBtn">重试加载</button>
   </div>
+
+  </div><!-- /securityView -->
+
+  <!-- Pain Points View -->
+  <div class="tab-view" id="painView">
+    <div class="stats" id="painStatsContainer">
+      <div class="stat-card total"><div class="stat-label">原始数据</div><div class="stat-value" id="painStatTotal">--</div></div>
+      <div class="stat-card total"><div class="stat-label">Top 10</div><div class="stat-value" id="painStatTop10" style="color:#818cf8">--</div></div>
+      <div class="stat-card severity-critical"><div class="stat-label">严重</div><div class="stat-value" id="painStatSevere">0</div></div>
+      <div class="stat-card severity-high"><div class="stat-label">高危</div><div class="stat-value" id="painStatHigh">0</div></div>
+      <div class="stat-card severity-medium"><div class="stat-label">中危</div><div class="stat-value" id="painStatMedium">0</div></div>
+      <div class="stat-card severity-low"><div class="stat-label">低危</div><div class="stat-value" id="painStatLow">0</div></div>
+    </div>
+    <div id="painTrendSummary"></div>
+
+    <div class="filter-bar" style="margin-bottom:16px">
+      <div class="filter-group"><label>分类</label>
+        <div class="type-filter" id="painCategoryFilter"></div>
+      </div>
+      <div class="search-bar">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" id="painSearchInput" placeholder="搜索痛点...">
+      </div>
+      <button class="filter-reset" id="painResetFilters">重置</button>
+    </div>
+
+    <div class="results-info">
+      <span class="count">Top 10 痛点排行榜</span>
+      <span id="painDataDateInfo"></span>
+    </div>
+
+    <div id="painCardGrid"></div>
+
+    <div id="painLoadingState" class="loading" style="display:none;">
+      <div class="spinner"></div><p>正在加载痛点数据...</p>
+    </div>
+    <div id="painNoDataState" class="no-data" style="display:none;">
+      <div class="icon">&#128221;</div>
+      <h3>暂无痛点数据</h3>
+      <p id="painNoDataMsg">该日期暂无可用痛点分析数据。</p>
+    </div>
+  </div><!-- /painView -->
+</div>
+
+<!-- Scroll buttons -->
+<div class="scroll-btns">
+  <button class="scroll-btn" id="scrollToTop" title="回到顶部">&#9650;</button>
+  <button class="scroll-btn" id="scrollToBottom" title="去到底部">&#9660;</button>
 </div>
 
 <div style="text-align:center;padding:15px 0;font-size:13px;color:#999;">
@@ -822,6 +998,8 @@
     freshnessDot.className = 'dot';
     freshnessText.textContent = '数据已加载 (' + items.length + ' 条)';
 
+    document.getElementById('tabSecCount').textContent = items.length;
+
     updateStats(items);
     updateFilters(items);
     activeFilters.product = '';
@@ -840,90 +1018,21 @@
 
     render();
     updateDateNav();
+    // 自动预加载痛点的数据
+    loadPainData(dateStr);
   }
 
   function onDataFailed(dateStr) {
     loadingState.style.display = 'none';
-    // 尝试寻找附近有数据的日期
-    tryFallbackDates(dateStr, 1);
-  }
-
-  // 尝试加载某个日期的数据（先 fetch JSON，再 script 方式），通过 callback 通知结果
-  function tryLoadDate(dateStr, callback) {
-    // 方式1: fetch JSON
-    fetch('data/' + dateStr + '.json')
-      .then(function(r) {
-        if (!r.ok) return Promise.reject('Not found');
-        return r.json();
-      })
-      .then(function(data) {
-        onFallbackDataLoaded(dateStr, data);
-        callback(true);
-      })
-      .catch(function() {
-        // 方式2: 动态加载 JS 脚本
-        tryLoadDateViaScript(dateStr, callback);
-      });
-  }
-
-  function tryLoadDateViaScript(dateStr, callback) {
-    var oldScript = document.getElementById('data-script');
-    if (oldScript) oldScript.remove();
-    delete window.__agentSecData;
-
-    var script = document.createElement('script');
-    script.id = 'data-script';
-    script.src = 'data/' + dateStr + '.js';
-    script.onload = function() {
-      if (window.__agentSecData) {
-        onFallbackDataLoaded(dateStr, window.__agentSecData);
-        callback(true);
-      } else {
-        callback(false);
-      }
-    };
-    script.onerror = function() {
-      callback(false);
-    };
-    document.head.appendChild(script);
-  }
-
-  function onFallbackDataLoaded(dateStr, data) {
-    onDataLoaded(dateStr, data);
-    freshnessDot.className = 'dot stale';
-    freshnessText.textContent = '使用 ' + dateStr + ' 数据';
-  }
-
-  function tryFallbackDates(baseStr, depth) {
-    if (depth > 14) {
-      // 前后都找不到数据
-      noDataState.style.display = 'block';
-      noDataMsg.textContent = '未找到可用的安全数据（已搜索 ' + baseStr + ' 前后 14 天）。';
-      freshnessDot.className = 'dot error';
-      freshnessText.textContent = '无可用数据';
-      dateLabel.textContent = baseStr;
-      return;
-    }
-
-    // 尝试之前日期（优先）
-    var dPrev = new Date(baseStr.replace(/-/g, '/'));
-    dPrev.setDate(dPrev.getDate() - depth);
-    var prevStr = formatDate(dPrev);
-
-    // 尝试之后日期
-    var dNext = new Date(baseStr.replace(/-/g, '/'));
-    dNext.setDate(dNext.getDate() + depth);
-    var nextStr = formatDate(dNext);
-
-    tryLoadDate(prevStr, function(found) {
-      if (found) return;
-      // 之前方向没找到，尝试之后方向
-      tryLoadDate(nextStr, function(found2) {
-        if (found2) return;
-        // 两个方向都没找到，增加 depth 继续搜索
-        tryFallbackDates(baseStr, depth + 1);
-      });
-    });
+    noDataState.style.display = 'block';
+    noDataMsg.textContent = dateStr + ' 暂无安全数据。';
+    freshnessDot.className = 'dot error';
+    freshnessText.textContent = '无可用数据';
+    dateLabel.textContent = dateStr;
+    document.getElementById('statTotal').textContent = 0;
+    document.getElementById('statTypes').textContent = 0;
+    document.getElementById('statSevere').textContent = 0;
+    document.getElementById('tabSecCount').textContent = '--';
   }
 
   function updateDateNav() {
@@ -938,6 +1047,7 @@
     var ds = formatDate(d);
     dateLabel.textContent = '加载中...';
     loadData(ds);
+    loadPainData(ds);
   }
 
   // Reset filters
@@ -999,12 +1109,275 @@
   function fillAvailableDates(manifest) {
     var dates = manifest.available_dates || [];
     for (var i = 0; i < dates.length; i++) {
-      availableDates.add(dates[i]);
+      var d = dates[i];
+      availableDates.add(d);
+      // 如果日期是 "2026-07-24-pain" 格式，也添加 "2026-07-24" 基础日期
+      if (d.indexOf('-pain') > 0) {
+        availableDates.add(d.replace('-pain', ''));
+      }
     }
     console.log('✅ Manifest 已加载: ' + dates.length + ' 个可用日期');
   }
 
   // Init
+  // ============================================================
+  // Pain Points Data
+  // ============================================================
+  var painData = null;
+  var painActiveCategory = null;
+  var painSearchQuery = '';
+
+  function loadPainData(dateStr) {
+    var painLoading = document.getElementById('painLoadingState');
+    var painNoData = document.getElementById('painNoDataState');
+    painLoading.style.display = 'block';
+    painNoData.style.display = 'none';
+    document.getElementById('painCardGrid').innerHTML = '';
+
+    // Try fetch JSON
+    fetch('data/' + dateStr + '-pain.json')
+      .then(function(resp) {
+        if (!resp.ok) throw new Error('Not found');
+        return resp.json();
+      })
+      .then(function(data) {
+        onPainDataLoaded(dateStr, data);
+      })
+      .catch(function() {
+        // Try .js fallback
+        loadPainViaScript(dateStr);
+      });
+  }
+
+  function loadPainViaScript(dateStr) {
+    var oldScript = document.getElementById('pain-data-script');
+    if (oldScript) oldScript.remove();
+    delete window.__agentPainData;
+
+    var script = document.createElement('script');
+    script.id = 'pain-data-script';
+    script.src = 'data/' + dateStr + '-pain.js';
+    script.onload = function() {
+      if (window.__agentPainData) {
+        onPainDataLoaded(dateStr, window.__agentPainData);
+      } else {
+        onPainDataFailed(dateStr);
+      }
+    };
+    script.onerror = function() { onPainDataFailed(dateStr); };
+    document.head.appendChild(script);
+  }
+
+  function onPainDataLoaded(dateStr, data) {
+    painData = data;
+    document.getElementById('painLoadingState').style.display = 'none';
+    document.getElementById('painDataDateInfo').textContent = '数据日期: ' + dateStr;
+    updatePainStats(data);
+    updatePainFilters(data);
+    renderPainCards();
+  }
+
+  function onPainDataFailed(dateStr) {
+    document.getElementById('painLoadingState').style.display = 'none';
+    document.getElementById('painNoDataState').style.display = 'block';
+    document.getElementById('painNoDataMsg').textContent = dateStr + ' 暂无痛点分析数据。';
+    document.getElementById('painStatTotal').textContent = 0;
+    document.getElementById('painStatTop10').textContent = 0;
+    document.getElementById('painStatSevere').textContent = 0;
+    document.getElementById('painStatHigh').textContent = 0;
+    document.getElementById('painStatMedium').textContent = 0;
+    document.getElementById('painStatLow').textContent = 0;
+    document.getElementById('tabPainCount').textContent = '--';
+  }
+
+  function updatePainStats(data) {
+    var summary = data.summary || {};
+    var top10 = data.top10 || [];
+    var bySeverity = summary.by_severity || {};
+
+    document.getElementById('painStatTotal').textContent = summary.total || 0;
+    document.getElementById('painStatTop10').textContent = top10.length;
+    document.getElementById('painStatSevere').textContent = bySeverity['严重'] || 0;
+    document.getElementById('painStatHigh').textContent = bySeverity['高'] || 0;
+    document.getElementById('painStatMedium').textContent = bySeverity['中'] || 0;
+    document.getElementById('painStatLow').textContent = bySeverity['低'] || 0;
+    document.getElementById('tabPainCount').textContent = top10.length;
+
+    // Trend summary
+    var trendEl = document.getElementById('painTrendSummary');
+    if (data.trend_summary) {
+      trendEl.innerHTML = '<div class="trend-summary"><h3>📊 今日趋势</h3><p>' + esc(data.trend_summary) + '</p></div>';
+    } else {
+      trendEl.innerHTML = '';
+    }
+  }
+
+  function updatePainFilters(data) {
+    var top10 = data.top10 || [];
+    var cats = {};
+    top10.forEach(function(item) {
+      if (item.category) cats[item.category] = true;
+    });
+    var catKeys = Object.keys(cats).sort();
+    var filterEl = document.getElementById('painCategoryFilter');
+    filterEl.innerHTML = '<span class="type-badge-filter active" data-pcat="" style="opacity:1;border-color:#64748b;color:#94a3b8">全部</span>';
+    catKeys.forEach(function(cat) {
+      var span = document.createElement('span');
+      span.className = 'type-badge-filter badge-type-default';
+      span.textContent = cat;
+      span.setAttribute('data-pcat', cat);
+      if (painActiveCategory === cat) span.classList.add('active');
+      filterEl.appendChild(span);
+    });
+
+    // Bind category filter
+    filterEl.onclick = function(e) {
+      var badge = e.target.closest('.type-badge-filter');
+      if (!badge) return;
+      var cat = badge.getAttribute('data-pcat') || '';
+      document.querySelectorAll('#painCategoryFilter .type-badge-filter').forEach(function(b) { b.classList.remove('active'); });
+      badge.classList.add('active');
+      painActiveCategory = cat || null;
+      renderPainCards();
+    };
+  }
+
+  function renderPainCards() {
+    if (!painData) return;
+    var top10 = painData.top10 || [];
+    var filtered = top10.filter(function(item) {
+      if (painActiveCategory && item.category !== painActiveCategory) return false;
+      if (painSearchQuery) {
+        var q = painSearchQuery.toLowerCase();
+        var text = (item.title + ' ' + (item.description || '') + ' ' + (item.root_cause || '') + ' ' + (item.affected_products || []).join(' ')).toLowerCase();
+        if (text.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    var grid = document.getElementById('painCardGrid');
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="no-data" style="padding:40px 20px"><div class="icon">🔍</div><h3>无匹配结果</h3><p>尝试调整筛选条件</p></div>';
+      return;
+    }
+
+    var html = '';
+    filtered.forEach(function(item) {
+      var rank = item.rank || 0;
+      var rankClass = rank === 1 ? 'r1' : rank === 2 ? 'r2' : rank === 3 ? 'r3' : 'rn';
+      var sevBadge = item.severity === '严重' ? 'badge-pain-severe' : item.severity === '高' ? 'badge-pain-high' : item.severity === '低' ? 'badge-pain-low' : 'badge-pain-medium';
+
+      html += '<div class="pain-card"><div class="pain-card-header" onclick="this.parentElement.classList.toggle(\'expanded\')">';
+      html += '<div class="pain-rank ' + rankClass + '">' + (rank || '?') + '</div>';
+      html += '<div class="pain-card-info">';
+      html += '<div class="pain-card-title">' + esc(item.title) + '</div>';
+      html += '<div class="pain-card-meta">';
+      html += '<span class="badge ' + sevBadge + '">' + esc(item.severity || '中') + '</span>';
+      html += '<span class="badge badge-pain-cat">' + esc(item.category || '') + '</span>';
+      html += '<span class="badge badge-pain-score">评分 ' + (item.score || '?') + '</span>';
+      if (item.hotness) html += '<span class="badge badge-pain-hot">热度 ' + esc(item.hotness) + '</span>';
+      html += '</div></div><span class="pain-expand-arrow">▼</span></div>';
+
+      html += '<div class="pain-card-body">';
+      html += '<div class="pain-detail-section"><h4>问题描述</h4><p>' + esc(item.description || '暂无') + '</p></div>';
+      if (item.root_cause) html += '<div class="pain-detail-section"><h4>根因分析</h4><p>' + esc(item.root_cause) + '</p></div>';
+
+      if (item.solutions && item.solutions.length > 0) {
+        html += '<div class="pain-detail-section"><h4>可能的解决方案</h4><div class="pain-solution-list">';
+        item.solutions.forEach(function(sol) {
+          html += '<div class="pain-solution-item"><h5>' + esc(sol.title) + '</h5><p>' + esc(sol.description) + '</p>';
+          html += '<div class="pain-solution-meta">';
+          if (sol.difficulty) html += '<span>难度: ' + esc(sol.difficulty) + '</span>';
+          if (sol.timeframe) html += '<span>周期: ' + esc(sol.timeframe) + '</span>';
+          html += '</div></div>';
+        });
+        html += '</div></div>';
+      }
+
+      if (item.industry_benefit || item.academia_benefit) {
+        html += '<div class="pain-detail-section"><h4>预期收益</h4><div class="pain-benefit-grid">';
+        html += '<div class="pain-benefit-box industry"><h5>🏭 产业界</h5><p>' + esc(item.industry_benefit || '暂无评估') + '</p></div>';
+        html += '<div class="pain-benefit-box academia"><h5>🎓 学术界</h5><p>' + esc(item.academia_benefit || '暂无评估') + '</p></div>';
+        html += '</div></div>';
+      }
+
+      // 已有解决方案 & 论文
+      if (item.existing_solutions && item.existing_solutions.length > 0) {
+        html += '<div class="pain-detail-section"><h4>🔍 社区已有方案 / 相关研究</h4>';
+        html += '<div class="pain-solution-list">';
+        item.existing_solutions.forEach(function(sol) {
+          var typeLabel = sol.source_type === '论文' ? '📄' : sol.source_type === '开源项目' ? '💻' : '💬';
+          html += '<div class="pain-solution-item"><h5>' + typeLabel + ' ' + esc(sol.title) + '</h5>';
+          html += '<p>' + esc(sol.description || '') + '</p>';
+          html += '<div class="pain-solution-meta">';
+          html += '<span>' + esc(sol.source_type || '') + '</span>';
+          if (sol.source_url) html += '<a href="' + esc(sol.source_url) + '" target="_blank" style="color:#818cf8;font-size:11px">查看来源 →</a>';
+          html += '</div></div>';
+        });
+        html += '</div>';
+        if (item.research_status) html += '<p style="font-size:12px;color:#64748b;margin-top:8px"><strong>学术界：</strong>' + esc(item.research_status) + '</p>';
+        if (item.industry_status) html += '<p style="font-size:12px;color:#64748b;margin-top:4px"><strong>产业界：</strong>' + esc(item.industry_status) + '</p>';
+        html += '</div>';
+      }
+
+      // 相关论文
+      if (item.related_papers && item.related_papers.length > 0) {
+        html += '<div class="pain-detail-section"><h4>📚 相关论文</h4><div class="pain-solution-list">';
+        item.related_papers.forEach(function(paper) {
+          html += '<div class="pain-solution-item">';
+          html += '<h5><a href="' + esc(paper.url) + '" target="_blank" style="color:#93c5fd">' + esc(paper.title) + '</a></h5>';
+          if (paper.authors && paper.authors.length > 0) html += '<p style="font-size:11px;color:#64748b">' + esc(paper.authors.join(', ')) + ' · ' + esc(paper.published || '') + '</p>';
+          if (paper.summary) html += '<p style="font-size:12px;color:#94a3b8">' + esc(paper.summary) + '</p>';
+          html += '</div>';
+        });
+        html += '</div></div>';
+      }
+
+      if (item.affected_products && item.affected_products.length > 0) {
+        html += '<div class="pain-detail-section"><h4>受影响产品</h4><div class="pain-card-meta">';
+        item.affected_products.forEach(function(p) {
+          html += '<span class="badge badge-product">' + esc(p) + '</span>';
+        });
+        html += '</div></div>';
+      }
+
+      if (item.sources && item.sources.length > 0) {
+        html += '<div class="pain-detail-section"><h4>相关来源</h4><div class="pain-source-links">';
+        item.sources.forEach(function(url) {
+          var short = url.replace(/^https?:\/\//, '').slice(0, 50);
+          html += '<a href="' + esc(url) + '" target="_blank" class="pain-source-link" title="' + esc(url) + '">' + esc(short) + '</a>';
+        });
+        html += '</div></div>';
+      }
+
+      html += '</div></div>';
+    });
+
+    grid.innerHTML = html;
+  }
+
+  // Pain search
+  var painSearchTimer;
+  document.getElementById('painSearchInput').addEventListener('input', function() {
+    clearTimeout(painSearchTimer);
+    var self = this;
+    painSearchTimer = setTimeout(function() {
+      painSearchQuery = self.value;
+      renderPainCards();
+    }, 250);
+  });
+
+  // Pain reset
+  document.getElementById('painResetFilters').addEventListener('click', function() {
+    painActiveCategory = null;
+    painSearchQuery = '';
+    document.getElementById('painSearchInput').value = '';
+    document.querySelectorAll('#painCategoryFilter .type-badge-filter').forEach(function(b) { b.classList.remove('active'); });
+    var allBtn = document.querySelector('#painCategoryFilter [data-pcat=""]');
+    if (allBtn) allBtn.classList.add('active');
+    renderPainCards();
+  });
+
   function init() {
     var today = formatDate(new Date());
 
@@ -1188,6 +1561,7 @@
           (function(ds) {
             el.addEventListener('click', function() {
               loadData(ds);
+              loadPainData(ds);
               calendarPopup.style.display = 'none';
             });
           })(dateStr);
@@ -1201,7 +1575,41 @@
 
     retryBtn.addEventListener('click', function() {
       loadData(formatDate(new Date()));
+      loadPainData(formatDate(new Date()));
     });
+
+    // ============================================================
+    // Tab Switching
+    // ============================================================
+    var tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tab = this.getAttribute('data-tab');
+        tabBtns.forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        document.querySelectorAll('.tab-view').forEach(function(v) { v.classList.remove('active'); });
+        if (tab === 'security') {
+          document.getElementById('securityView').classList.add('active');
+        } else if (tab === 'pain') {
+          document.getElementById('painView').classList.add('active');
+          loadPainData(formatDate(currentDate));
+        }
+      });
+    });
+
+    // ============================================================
+    // Scroll to top / bottom buttons
+    // ============================================================
+    document.getElementById('scrollToTop').addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    document.getElementById('scrollToBottom').addEventListener('click', function() {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    });
+
+    // ============================================================
+    // Init
+    // ============================================================
 
     // 先加载 manifest（让日历知道哪些日期有数据），再加载今日数据
     loadManifest(function() {
