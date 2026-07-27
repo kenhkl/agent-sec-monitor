@@ -4,14 +4,21 @@ on:
   schedule:
     # 北京时间 ~8:11 (UTC+8 → UTC 0:11，避开整点高峰)
     - cron: '11 0 * * *'
+    # 兜底：北京时间 ~8:41，第一个没被调度/失败时补救（GitHub schedule 会丢任务）
+    - cron: '41 0 * * *'
   workflow_dispatch:
 
 jobs:
   crawl-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # 历史单次实跑 ~45m，贴旧 45min 顶常被杀在 git 备份前 → 当日无提交。提到 90 留余量。
+    timeout-minutes: 90
     permissions:
       contents: write
+    # 双 cron 下，第二个若在第一个跑满时触发会并发，争抢 git push 互推
+    concurrency:
+      group: crawl-deploy-${{ github.ref }}
+      cancel-in-progress: false
 
     steps:
       - name: 检出代码
