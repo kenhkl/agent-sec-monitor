@@ -192,10 +192,11 @@ jobs:
               log('COS 凭证未配置，跳过上传')
               exit(0)
 
-          # 给所有 COS 请求设 60s 超时，单文件卡住时快速失败而非拖到 45min
-          config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, timeout=60)
-          client = CosS3Client(config)
+          # 给所有 COS 请求设 60s 超时，单文件卡住时快速失败而非拖到 45min。
+          # 注意：CosConfig 不接受 timeout 参数，超时通过 socket.setdefaulttimeout 设置。
+          config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key)
           socket.setdefaulttimeout(60)
+          client = CosS3Client(config)
 
           CC = 'max-age=60'
           CT_MAP = {
