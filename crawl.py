@@ -929,7 +929,17 @@ def _process_batch(url, batch, batch_start, batch_results):
 
 # ─── 主流程 ──────────────────────────────────────────────────────────────
 
-def crawl_all(force=False):
+def crawl_all(force=False, date_override=None):
+    # date_override: 指定历史日期补采（格式 YYYY-MM-DD），不传则用今日。
+    # NOW/TIMESTAMP 仍取真实时间，只覆盖数据文件名和 summary.date。
+    global TODAY_STR
+    if date_override:
+        import re
+        if not re.match(r'^\d{4}-\d{2}-\d{2}$', date_override):
+            print(f"❌ --date 格式错误，应为 YYYY-MM-DD，收到: {date_override}")
+            sys.exit(2)
+        TODAY_STR = date_override
+        print(f"  📅 补采模式: 指定日期 {TODAY_STR}（NOW/时间戳仍为真实时间 {TIMESTAMP}）")
     print(f"\n{'='*60}")
     print(f"  AI Agent 安全风险监控爬虫")
     print(f"  运行时间: {TIMESTAMP}")
@@ -1045,7 +1055,13 @@ def crawl_all(force=False):
 
 def _update_manifest():
     """扫描 data/ 目录，生成 manifest.json 和 manifest.js（供前端日历高亮）"""
-    files = [f for f in os.listdir(DATA_DIR) if f.endswith('.json') and f != 'manifest.json']
+    files = [
+        f for f in os.listdir(DATA_DIR)
+        if f.endswith('.json')
+        and f != 'manifest.json'
+        and f != 'manifest-pain.json'
+        and not f.endswith('-pain.json')   # 痛点数据走 manifest-pain，不混入安全日历
+    ]
     dates = sorted([f.replace('.json', '') for f in files])
     manifest = {"available_dates": dates, "updated_at": NOW.isoformat()}
 
@@ -1059,4 +1075,11 @@ def _update_manifest():
 
 if __name__ == "__main__":
     force = "--force" in sys.argv or "-f" in sys.argv
-    crawl_all(force=force)
+    date_override = None
+    if "--date" in sys.argv:
+        i = sys.argv.index("--date")
+        if i + 1 >= len(sys.argv):
+            print("❌ --date 需要参数，用法: crawl.py --date YYYY-MM-DD")
+            sys.exit(2)
+        date_override = sys.argv[i + 1]
+    crawl_all(force=force, date_override=date_override)
