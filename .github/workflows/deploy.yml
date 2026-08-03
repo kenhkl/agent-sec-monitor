@@ -3,9 +3,10 @@ name: 每日安全扫描 & 痛点日报部署
 on:
   schedule:
     # 北京时间 ~8:11 (UTC+8 → UTC 0:11，避开整点高峰)
+    # 单 cron：双 cron 会并发争抢 git push 产生 add/add 冲突（见 2026-08-02 #216），
+    # 且 GitHub schedule 在并发组繁忙时丢任务、起不到兜底作用。
+    # 失败靠 step 的告警通知 + 手动 workflow_dispatch 重跑。
     - cron: '11 0 * * *'
-    # 兜底：北京时间 ~8:41，第一个没被调度/失败时补救（GitHub schedule 会丢任务）
-    - cron: '41 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -15,7 +16,7 @@ jobs:
     timeout-minutes: 90
     permissions:
       contents: write
-    # 双 cron 下，第二个若在第一个跑满时触发会并发，争抢 git push 互推
+    # 防手动触发和定时触发撞车；单 cron 后并发概率极低
     concurrency:
       group: crawl-deploy-${{ github.ref }}
       cancel-in-progress: false
@@ -119,51 +120,41 @@ jobs:
         env:
           ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
         run: |
-          set +e
-          python3 crawl.py
-          CRAWL_EXIT=$?
           set -e
+          python3 crawl.py
 
           TODAY=$(date '+%Y-%m-%d')
-          if [ $CRAWL_EXIT -ne 0 ]; then
-            echo "::warning::crawl.py 退出码 $CRAWL_EXIT"
+          if [ ! -f "data/${TODAY}.json" ]; then
+            echo "::error::安全数据文件未生成: data/${TODAY}.json"
+            echo "sec_exists=false" >> $GITHUB_OUTPUT
+            exit 1
           fi
 
-          if [ -f "data/${TODAY}.json" ]; then
-            SIZE=$(wc -c < "data/${TODAY}.json")
-            ITEMS=$(python3 -c "import json; print(len(json.load(open('data/${TODAY}.json')).get('items',[])))")
-            echo "📊 安全数据: ${SIZE} bytes, ${ITEMS} 条"
-            echo "sec_items=${ITEMS}" >> $GITHUB_OUTPUT
-            echo "sec_exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "::warning::安全数据文件未生成"
-            echo "sec_exists=false" >> $GITHUB_OUTPUT
-          fi
+          SIZE=$(wc -c < "data/${TODAY}.json")
+          ITEMS=$(python3 -c "import json; print(len(json.load(open('data/${TODAY}.json')).get('items',[])))")
+          echo "📊 安全数据: ${SIZE} bytes, ${ITEMS} 条"
+          echo "sec_items=${ITEMS}" >> $GITHUB_OUTPUT
+          echo "sec_exists=true" >> $GITHUB_OUTPUT
 
       - name: 运行痛点爬虫
         id: pain_crawl
         env:
           ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
         run: |
-          set +e
-          python3 crawl_pain.py
-          PAIN_EXIT=$?
           set -e
+          python3 crawl_pain.py
 
           TODAY=$(date '+%Y-%m-%d')
-          if [ $PAIN_EXIT -ne 0 ]; then
-            echo "::warning::crawl_pain.py 退出码 $PAIN_EXIT"
+          if [ ! -f "data/${TODAY}-pain.json" ]; then
+            echo "::error::痛点数据文件未生成: data/${TODAY}-pain.json"
+            echo "pain_exists=false" >> $GITHUB_OUTPUT
+            exit 1
           fi
 
-          if [ -f "data/${TODAY}-pain.json" ]; then
-            PAIN_ITEMS=$(python3 -c "import json; print(len(json.load(open('data/${TODAY}-pain.json')).get('top10',[])))")
-            echo "📊 痛点数据: Top ${PAIN_ITEMS}"
-            echo "pain_top10=${PAIN_ITEMS}" >> $GITHUB_OUTPUT
-            echo "pain_exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "::warning::痛点数据文件未生成"
-            echo "pain_exists=false" >> $GITHUB_OUTPUT
-          fi
+          PAIN_ITEMS=$(python3 -c "import json; print(len(json.load(open('data/${TODAY}-pain.json')).get('top10',[])))")
+          echo "📊 痛点数据: Top ${PAIN_ITEMS}"
+          echo "pain_top10=${PAIN_ITEMS}" >> $GITHUB_OUTPUT
+          echo "pain_exists=true" >> $GITHUB_OUTPUT
 
       - name: 上传到 COS
         if: steps.sec_crawl.outputs.sec_exists == 'true' || steps.pain_crawl.outputs.pain_exists == 'true'
@@ -268,22 +259,43 @@ jobs:
           git add data/
           git commit -m "data: 自动备份 $(TZ='Asia/Shanghai' date '+%Y-%m-%d') 安全数据"
 
-          # 拉取远程最新 + 重试 push（应对 GitHub 服务端瞬时错误）
-          # GIT_EDITOR=true 防止 rebase 冲突时等待交互输入导致 CI 卡死
-          GIT_EDITOR=true git pull --rebase origin master || true
+          # 数据文件每天独立、幂等，不存在「需保留远程旧版本」的场景。
+          # 先试普通 push；失败（non-fast-forward，通常因并发构建）则拉取远程，
+          # 以 theirs 策略 rebase（本地新数据覆盖冲突），再不行 force-with-lease 强推。
+          # 即使这步失败，COS 已在前一步上传，网站不受影响，仅 git 备份缺失。
+          if git push origin master 2>&1; then
+            echo "✅ 已备份到 Git 仓库"
+            exit 0
+          fi
+          echo "⚠️  push non-fast-forward，拉取远程并以本地为准合并..."
+          git fetch origin master
+          if git rebase --strategy-option=theirs origin/master; then
+            for i in 1 2 3; do
+              if git push origin master 2>&1; then
+                echo "✅ 已备份到 Git 仓库（rebase 后第 ${i} 次成功）"
+                exit 0
+              fi
+              echo "⚠️  push 失败（rebase 后第 ${i} 次），10 秒后重试..."
+              sleep 10
+            done
+          else
+            echo "⚠️  rebase 仍冲突，放弃 rebase，回退后用 force-with-lease"
+            git rebase --abort 2>/dev/null || true
+          fi
           for i in 1 2 3; do
-            if git push origin master 2>&1; then
-              echo "✅ 已备份到 Git 仓库"
+            if git push --force-with-lease origin master 2>&1; then
+              echo "✅ 已备份到 Git 仓库（force-with-lease 第 ${i} 次成功）"
               exit 0
             fi
-            echo "⚠️  push 失败（第 ${i} 次），10 秒后重试..."
+            echo "⚠️  push 失败（force-with-lease 第 ${i} 次），10 秒后重试..."
             sleep 10
           done
-          echo "❌ push 失败 3 次，放弃"
+          echo "❌ push 失败 6 次，放弃（数据已在 COS，不影响网站）"
           exit 1
 
       - name: 发送告警（失败时）
-        if: failure() || (steps.sec_crawl.outputs.sec_exists != 'true' && steps.pain_crawl.outputs.pain_exists != 'true')
+        # 任一缺失或任何 step 失败都告警：不再被 pain 数据「救活」而漏报安全失败
+        if: failure() || steps.sec_crawl.outcome == 'failure' || steps.pain_crawl.outcome == 'failure' || steps.sec_crawl.outputs.sec_exists != 'true' || steps.pain_crawl.outputs.pain_exists != 'true'
         env:
           ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
         run: |

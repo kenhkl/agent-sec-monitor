@@ -731,8 +731,19 @@ def _call_llm_simple(prompt):
 # 主流程
 # ============================================================
 
-def crawl_all(force=False):
-    today = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
+def crawl_all(force=False, date_override=None):
+    # date_override: 指定历史日期补采（格式 YYYY-MM-DD），不传则用今日。
+    # now/updated_at 仍取真实时间。
+    if date_override:
+        import re
+        if not re.match(r'^\d{4}-\d{2}-\d{2}$', date_override):
+            print(f"❌ --date 格式错误，应为 YYYY-MM-DD，收到: {date_override}")
+            sys.exit(2)
+        today = date_override
+        now_ts = datetime.now(timezone(timedelta(hours=8))).isoformat()
+        print(f"  📅 补采模式: 指定日期 {today}（时间戳仍为真实时间 {now_ts}）")
+    else:
+        today = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
     print(f"\n{'='*60}")
     print(f"  Agent 痛点日报 - {today}")
     print(f"{'='*60}\n")
@@ -840,4 +851,11 @@ def _update_manifest(data_dir):
 
 if __name__ == "__main__":
     force = "--force" in sys.argv or "-f" in sys.argv
-    crawl_all(force=force)
+    date_override = None
+    if "--date" in sys.argv:
+        i = sys.argv.index("--date")
+        if i + 1 >= len(sys.argv):
+            print("❌ --date 需要参数，用法: crawl_pain.py --date YYYY-MM-DD")
+            sys.exit(2)
+        date_override = sys.argv[i + 1]
+    crawl_all(force=force, date_override=date_override)
