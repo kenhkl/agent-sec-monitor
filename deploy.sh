@@ -1,10 +1,9 @@
 #!/bin/bash
 # deploy.sh — AI Agent 安全监控每日部署脚本
 # 用法: ./deploy.sh
-# 配合 cron 使用:
-#   0 5 * * * cd /home/hkl/github/agent-sec-monitor && bash deploy.sh >> logs/deploy.log 2>&1
-#   0 12 * * * cd /home/hkl/github/agent-sec-monitor && bash deploy.sh >> logs/deploy.log 2>&1
-#   0 22 * * * cd /home/hkl/github/agent-sec-monitor && bash deploy.sh >> logs/deploy.log 2>&1
+# 定时触发实际由 GitHub Actions 执行，见 .github/workflows/deploy.yml：
+#   北京时间 ~3:07 凌晨触发（避开 DeepSeek 高峰期 9-12 / 14-18，费用翻倍）
+#   本地等价 cron: 7 19 * * * cd /home/hkl/github/agent-sec-monitor && bash deploy.sh >> logs/deploy.log 2>&1
 
 set -euo pipefail
 

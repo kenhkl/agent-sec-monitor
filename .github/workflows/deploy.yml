@@ -2,11 +2,12 @@ name: 每日安全扫描 & 痛点日报部署
 
 on:
   schedule:
-    # 北京时间 ~8:11 (UTC+8 → UTC 0:11，避开整点高峰)
+    # 北京时间 ~3:07 凌晨 (UTC+8 → UTC 前一日 19:07，避开整点高峰)
+    # 选凌晨 3 点：避开 DeepSeek API 高峰期（北京时间 9-12 / 14-18，费用翻倍）。
     # 单 cron：双 cron 会并发争抢 git push 产生 add/add 冲突（见 2026-08-02 #216），
     # 且 GitHub schedule 在并发组繁忙时丢任务、起不到兜底作用。
     # 失败靠 step 的告警通知 + 手动 workflow_dispatch 重跑。
-    - cron: '11 0 * * *'
+    - cron: '7 19 * * *'
   workflow_dispatch:
 
 jobs:
