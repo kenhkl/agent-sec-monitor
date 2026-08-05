@@ -470,6 +470,22 @@ def analyze_with_llm(items, force=False):
             for item in items:
                 item["llm_analysis"] = "done"
             return top10_result
+        # 排名/深度分析失败：降级为按热度/评分排序的前 10，避免 top10 静默为空
+        print("[LLM] ⚠️ Top10 排名/深度分析失败，降级为按 score 排序兜底")
+        ordered = sorted(
+            all_pain_points,
+            key=lambda p: (p.get("hotness_score") or p.get("score") or 0),
+            reverse=True,
+        )[:10]
+        for i, p in enumerate(ordered, 1):
+            p.setdefault("rank", i)
+            p.setdefault("title", p.get("pain_point", ""))
+            p.setdefault("severity", p.get("severity", "中"))
+            p.setdefault("score", p.get("hotness_score", p.get("score", 0)))
+            p.setdefault("sources", p.get("source_urls", []))
+            p.setdefault("solutions", [])
+            p.setdefault("affected_products", [])
+        return {"top10": ordered, "trend_summary": "", "category_distribution": {}}
     return None
 
 def _process_batch(batch):
@@ -505,7 +521,7 @@ def _call_llm(prompt, expect_array=False):
     payload = {"model": LLM_MODEL, "messages": [
         {"role": "system", "content": ANALYSIS_SYSTEM_PROMPT},
         {"role": "user", "content": prompt}],
-        "temperature": 0.3, "max_tokens": 8192}
+        "temperature": 0.3, "max_tokens": 16384}
     for attempt in range(3):
         try:
             r = session.post(f"{LLM_API_BASE}/chat/completions", headers=headers, json=payload, timeout=120)
